@@ -39,5 +39,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
+    "redux": "^4.2.1",
+    "sass": "^1.60.0"
   }
 }

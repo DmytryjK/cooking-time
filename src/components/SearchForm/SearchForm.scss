@@ -1,0 +1,47 @@
+.searchForm {
+    &__top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    &__input-wrapper {
+        position: relative;
+        display: inline-block;
+        border-radius: 10px;
+    }
+    &__searchByName {
+        padding: 5px 60px 5px 20px;
+        min-width: 350px;
+        border: none;
+        border-radius: 10px;
+        outline-color: rgb(177, 177, 177);
+        font-size: 20px;
+        color: black;
+        &::placeholder {
+            font-style: 14px;
+            font-weight: 300;
+        }
+    }
+    &__searchBtn {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0px;
+        width: 40px;
+        border: none;
+        border-radius: 0 10px 10px 0;
+        background-color: transparent;
+        border-left: 2px solid rgb(177, 177, 177);
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        &:hover {
+            background-color: black;
+            border-color: black;
+            .searchForm__searchBtn-icon {
+                fill: white;
+                transition: fill 0.3s ease;
+            }
+        }
+    }
+}
