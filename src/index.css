@@ -17,3 +17,19 @@ body {
 	padding: 30px;
 	margin: 0 auto;
 }
+
+input {
+	outline-color: transparent;
+	border-radius: 10px;
+	border: none;
+	padding: 5px 20px;
+	min-height: 34px;
+	transition: 0.3s ease outline-color;
+}
+input:focus {
+	outline-color: rgb(146, 146, 146);
+}
+
+ul, li {
+	list-style-type: none;
+}

@@ -1,0 +1,33 @@
+{
+"dishes":
+    [
+        {
+            "id": "1",
+            "title": "Алкогольный коктейль",
+            "time": 20,
+            "ingredients": ["Лимон", "Апельсин", "Лайм", "Вода"],
+            "img": "https://c4.wallpaperflare.com/wallpaper/153/359/713/coctail-lime-carambola-wallpaper-preview.jpg"
+        },
+        {
+            "id": "2",
+            "title": "Алкогольный коктейль",
+            "time": 20,
+            "ingredients": ["Лимон", "Апельсин", "Лайм", "Вода"],
+            "img": "https://c4.wallpaperflare.com/wallpaper/153/359/713/coctail-lime-carambola-wallpaper-preview.jpg"
+        },
+        {
+            "id": "3",
+            "title": "Алкогольный коктейль",
+            "time": 20,
+            "ingredients": ["Лимон", "Апельсин", "Лайм", "Вода"],
+            "img": "https://c4.wallpaperflare.com/wallpaper/153/359/713/coctail-lime-carambola-wallpaper-preview.jpg"
+        },
+        {
+            "id": "4",
+            "title": "Алкогольный коктейль",
+            "time": 20,
+            "ingredients": ["Лимон", "Апельсин", "Лайм", "Вода"],
+            "img": "https://c4.wallpaperflare.com/wallpaper/153/359/713/coctail-lime-carambola-wallpaper-preview.jpg"
+        }
+    ]
+}

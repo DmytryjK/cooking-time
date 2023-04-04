@@ -1,9 +1,12 @@
-import SearchForm from "../components/SearchForm/SearchForm";
-
+import Filters from "../components/Filters/Filters";
+import RecipeLIst from "../components/RecipeList/RecipeLIst";
 const Main = () => {
     return (
         <div>
-            <SearchForm/>
+            <div className="container">
+                <Filters/>
+                <RecipeLIst/>
+            </div>
         </div>
     )
 }
