@@ -12,16 +12,27 @@ interface Recepies {
 	recepies: Recepie[];
 }
 
-const initialState: Recepies = {
-	recepies: []
+interface PostState {
+	loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+	error: null | string;
+}
+
+const initialState: Recepies & PostState = {
+	recepies: [],
+	loading: 'idle',
+	error: null
 }
 
 export const fetchRecepies = createAsyncThunk(
 	'recepiesList/fetchRecepies',
 	async function() {
-		const response = await fetch('http://localhost:3005/dishes');
-		const data = await response.json();
-		return data;
+		try{
+			const response = await fetch('http://localhost:3005/dishes');
+			const data: Recepie[] = await response.json();
+			return data;
+		} catch (error: any) {
+			throw(error);
+		}
 	}
 )
 
@@ -43,16 +54,23 @@ export const recepieListSlice = createSlice({
 		deleteRecepie: ({recepies}, action: PayloadAction<Recepie>) => {
 			recepies = recepies.filter(item => item.id !== action.payload.id)
 		}
-	}
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchRecepies.pending, (state) => {
+			state.loading = 'pending';
+			state.error = null;
+		})
+		builder.addCase(fetchRecepies.fulfilled, (state, action: PayloadAction<Recepie[]>) => {
+			state.loading = 'succeeded';
+			state.recepies = action.payload;
+		})
+		builder.addCase(fetchRecepies.rejected, (state) => {
+			state.loading = 'failed';
+			state.error = 'something went wrong';
+		})
+	},
 })
 
-// fetchingRecepies: ({recepies}, action: PayloadAction<Recepie>) => {
+export const { addNewRecepie, deleteRecepie } = recepieListSlice.actions;
 
-// },
-// fetchingRecepies: ({recepies}, action: PayloadAction<Recepie>) => {
-	
-// },
-
-export const { addNewRecepie, deleteRecepie } = recepieListSlice.actions
-
-export default recepieListSlice.reducer
+export default recepieListSlice.reducer;

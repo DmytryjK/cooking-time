@@ -3,28 +3,15 @@ import './RecipeLIst.scss';
 import { useAppSelector, useAppDispatch
  } from '../../hooks/hooks';
  import { addNewRecepie, deleteRecepie } from './RecepieListSlice';
+ import { fetchRecepies } from './RecepieListSlice';
 
 const RecipeLIst = () => {
-    // const [recepies, setRecepies] = useState<string[]>([]);
-
     const recepies = useAppSelector(state => state.recepies.recepies);
     const dispatch = useAppDispatch();
- 
-    const _URL = 'http://localhost:3005/dishes';
-
-    const getData = (url: string, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
-        try {
-            fetch(url, {method, body, headers})
-                .then(data => data.json())
-                .then(res => dispatch(addNewRecepie(res)));
-        } catch(e) {
-            throw(e);
-        }
-    }
 
     useEffect(() => {
-        getData(_URL);
-    }, []);
+        dispatch(fetchRecepies());
+    }, [])
 
     useEffect (() => {
         console.log(recepies);
