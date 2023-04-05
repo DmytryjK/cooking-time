@@ -5,7 +5,7 @@ const App = () => {
     return (
         <>
             <Main/>
-            {/* <AddRecepies/> */}
+            <AddRecepies/>
         </>
     )
     

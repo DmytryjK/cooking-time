@@ -1,13 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import nextId from "react-id-generator";
 
-import { createdTags } from '../../types/types';
+import { tagsType } from '../Filters/FiltersSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { filterRecepiesByTag } from '../Filters/FiltersSlice';
+
+import type { Recepie } from '../RecipeList/RecepieListSlice';
 
 import './TagsForm.scss';
 
 const TagsForm = () => {
     const [inputByTag, setInputByTag] = useState<string>('');
-    const [createdTags, setCreatedTags] = useState<createdTags[]>([]);
+    const [createdTags, setCreatedTags] = useState<tagsType[]>([]);
+    const dispatch = useAppDispatch();
+    const {recepies} = useAppSelector(state => state.recepies);
+
+    useEffect(() => {
+        const tags = createdTags.map(createdTag => createdTag.tagText);
+        dispatch(filterRecepiesByTag({recepies, tags}));
+    }, [createdTags]);
 
     const handleChangeTag = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -19,44 +30,52 @@ const TagsForm = () => {
                 ...createdTags,
                 {
                     id: nextId("createdTag"), 
-                    text: value.slice(0, value.length - 1)
+                    tagText: value.slice(0, value.length - 1)
                 }
             ]);
             setInputByTag(() => '');
-
+            
         }
     }
 
     const handleKeyPress = (e :React.KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Enter' && inputByTag.length > 0) {
-
             setCreatedTags(() => [
                 ...createdTags,
                 {
                     id: nextId("createdTag"), 
-                    text: inputByTag
+                    tagText: inputByTag
                 }
             ]);
             setInputByTag(() => '');
-
         }
         
     }
 
-    const closeBtnClicked = (id: string | number) => {
-        setCreatedTags(createdTags.filter(tag => tag.id !== id))
+    const delBtnClicked = (id: string | number) => {
+        const tagsAfterDelete = createdTags.filter(tag => tag.id !== id);
+        setCreatedTags(tagsAfterDelete);
     }
 
-    const createNewTag = (tags :createdTags[]) => {
+    const handleSearch = (recepies: Recepie[], createdTags: tagsType[]) => {
+        const tags = createdTags.map(createdTag => createdTag.tagText);
+        dispatch(filterRecepiesByTag({recepies, tags}));
+    }
+
+    const deleteAllTags = () => {
+        setCreatedTags([]);
+    }
+
+    const createNewTag = (tags: tagsType[]) => {
         const renderResult = tags.map(tag => {
-            const {id, text} = tag;
+            const {id, tagText} = tag;
 
             return (
                 <li className="tagsForm__createdTag" key={id}>
-                    {text}
+                    {tagText}
                     <button 
                         className="tagsForm__closeTag"
-                        onClick={() => closeBtnClicked(id)}>
+                        onClick={() => delBtnClicked(id)}>
                     </button>
                 </li>
             )
@@ -64,7 +83,7 @@ const TagsForm = () => {
         return renderResult;
     }
 
-    const renderedTags = createdTags.length > 0 ? createNewTag(createdTags) : null
+    const renderedTags = createdTags.length > 0 ? createNewTag(createdTags) : null;
 
     return (
         <fieldset className="tagsForm">          
@@ -78,11 +97,11 @@ const TagsForm = () => {
                 onKeyDown={handleKeyPress}/>
                 <button 
                     className="tagsForm__search-btn"
-                    onClick={() => console.log('click')}>
+                    onClick={() => handleSearch(recepies, createdTags)}>
                         Поиск</button>
                 <button 
                     className="tagsForm__delAll-btn"
-                    onClick={() => setCreatedTags([])}>
+                    onClick={() => deleteAllTags()}>
                         Удалить теги</button>
             </div>
             

@@ -1,20 +1,21 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 export interface Recepie {
-	id?: number | string;
-	title?: string;
+	id: number | string;
+	title: string;
 	time?: number;
 	ingredients?: string[];
 	img?: string;
 }
 
-interface Recepies {
+export interface Recepies {
 	recepies: Recepie[];
 }
 
 interface PostState {
 	loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-	error: null | string;
+	error: null | unknown;
 }
 
 const initialState: Recepies & PostState = {
@@ -25,25 +26,80 @@ const initialState: Recepies & PostState = {
 
 export const fetchRecepies = createAsyncThunk(
 	'recepiesList/fetchRecepies',
-	async function() {
-		try{
+	async function(_, { rejectWithValue }) {
+		try {
 			const response = await fetch('http://localhost:3005/dishes');
+
+			if (!response.ok) {
+				throw new Error('Something went wrong');
+			}
+
 			const data: Recepie[] = await response.json();
 			return data;
-		} catch (error: any) {
-			throw(error);
+		} catch (error: unknown) {
+			return rejectWithValue(error);
 		}
+		
 	}
 )
 
+export const delRecepie = createAsyncThunk(
+	'recepiesList/delRecepie',
+	async function(id: number | string, { rejectWithValue, dispatch }) {
+
+		try {
+			const response = await fetch(`http://localhost:3005/dishes/${id}`, {
+				method: 'DELETE'
+			});
+
+			if (!response.ok) {
+				throw new Error('Can`t delete this recepie');
+			}
+			dispatch(deleteRecepie(id));
+		} catch (error: unknown) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
+export const postRecepie = createAsyncThunk(
+	'recepiesList/postRecepie',
+	async function(newRecepie: Recepie, { rejectWithValue, dispatch }) {
+		const {id, title, time, ingredients, img} = newRecepie;
+		try {
+			
+			const response = await fetch('http://localhost:3005/dishes/', {
+				method: 'POST',
+				body: JSON.stringify({
+					id,
+					title,
+					time,
+					ingredients, 
+					img
+				}),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8',
+				},
+			})
+
+			if (!response.ok) {
+				throw new Error('Can`t delete this recepie');
+			}
+			
+			dispatch(addNewRecepie(newRecepie));
+		} catch (error: unknown) {
+			return rejectWithValue(error);
+		}
+	}
+);
 
 export const recepieListSlice = createSlice({
 	name: 'recepiesList',
 	initialState,
 	reducers: {
-		addNewRecepie: ({recepies}, action: PayloadAction<Recepie>) => {
+		addNewRecepie: (state, action: PayloadAction<Recepie>) => {
 			const {id, title, time, ingredients, img} = action.payload;
-			recepies.push({
+			state.recepies.push({
 				"id": id, 
 				"title": title, 
 				"time": time, 
@@ -51,8 +107,8 @@ export const recepieListSlice = createSlice({
 				"img": img
 			})
 		},
-		deleteRecepie: ({recepies}, action: PayloadAction<Recepie>) => {
-			recepies = recepies.filter(item => item.id !== action.payload.id)
+		deleteRecepie: (state, action: PayloadAction<number | string>) => {
+			state.recepies = state.recepies.filter(item => item.id !== action.payload);
 		}
 	},
 	extraReducers: (builder) => {
@@ -64,9 +120,9 @@ export const recepieListSlice = createSlice({
 			state.loading = 'succeeded';
 			state.recepies = action.payload;
 		})
-		builder.addCase(fetchRecepies.rejected, (state) => {
+		builder.addCase(fetchRecepies.rejected, (state, action: PayloadAction<unknown>) => {
 			state.loading = 'failed';
-			state.error = 'something went wrong';
+			state.error = action.payload;
 		})
 	},
 })
