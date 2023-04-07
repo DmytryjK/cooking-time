@@ -7,6 +7,7 @@ export interface Recepie {
 	time?: number;
 	ingredients?: string[];
 	img?: string;
+	description?: string;
 }
 
 export interface Recepies {
@@ -65,18 +66,11 @@ export const delRecepie = createAsyncThunk(
 export const postRecepie = createAsyncThunk(
 	'recepiesList/postRecepie',
 	async function(newRecepie: Recepie, { rejectWithValue, dispatch }) {
-		const {id, title, time, ingredients, img} = newRecepie;
 		try {
 			
 			const response = await fetch('http://localhost:3005/dishes/', {
 				method: 'POST',
-				body: JSON.stringify({
-					id,
-					title,
-					time,
-					ingredients, 
-					img
-				}),
+				body: JSON.stringify({...newRecepie}),
 				headers: {
 					'Content-type': 'application/json; charset=UTF-8',
 				},
@@ -98,14 +92,7 @@ export const recepieListSlice = createSlice({
 	initialState,
 	reducers: {
 		addNewRecepie: (state, action: PayloadAction<Recepie>) => {
-			const {id, title, time, ingredients, img} = action.payload;
-			state.recepies.push({
-				"id": id, 
-				"title": title, 
-				"time": time, 
-				"ingredients": ingredients, 
-				"img": img
-			})
+			state.recepies.push(action.payload);
 		},
 		deleteRecepie: (state, action: PayloadAction<number | string>) => {
 			state.recepies = state.recepies.filter(item => item.id !== action.payload);

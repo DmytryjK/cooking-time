@@ -3,7 +3,7 @@ import './RecipeLIst.scss';
 import { useAppSelector, useAppDispatch
  } from '../../hooks/hooks';
 
-import { fetchRecepies, delRecepie, postRecepie, addNewRecepie } from './RecepieListSlice';
+import { fetchRecepies, delRecepie } from './RecepieListSlice';
 import { cloneRecepies } from '../Filters/FiltersSlice';
 
 import type { Recepie } from './RecepieListSlice';
@@ -23,22 +23,10 @@ const RecipeLIst = () => {
         if (loading === 'succeeded') {
             dispatch(cloneRecepies(recepies));
         }
-    }, [loading])
+    }, [loading, recepies]);
 
     const handleClickDelete = (id: string | number) => {
         dispatch(delRecepie(id));
-    }
-
-    const addSomeone = () => {
-        dispatch(postRecepie(
-            {
-                id: 10, 
-                title: "Fry potato", 
-                time: 30, 
-                ingredients: ["potato", "oil"], 
-                img: "https://www.allrecipes.com/thmb/-Qlhx70a3HwawPd51kSIiGj-hpE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4488416-0627cab55d4e44ec80f974fbc67befb7.jpg"
-            }
-        ));
     }
 
     const renderItems = (items: Recepie[]) => {
@@ -64,15 +52,13 @@ const RecipeLIst = () => {
                             </li>
                             {renderedTags ? renderedTags : null}
                         </ul>
-                        <div className="recipe-list__img-wrapper">
-                            <img className="recipe-list__image" src={img} alt={title} />
+                        <div className="recipe-list__content-wrapper">
+                            <div className="recipe-list__img-wrapper">
+                                <img className="recipe-list__image" src={img} alt={title} />
+                            </div>
+                            <button className="recipe-list__more">Подробнее...</button>
                         </div>
-                        <button 
-                            className="recipe-list__more"
-                            onClick={() => handleClickDelete(id)}
-                        >Подробнее...</button>
-                        <button className="recipe-list__more"
-                        onClick={addSomeone}>add recepie</button>
+                        
                     </li>
                 )
             })
@@ -80,7 +66,6 @@ const RecipeLIst = () => {
         }
 
     }
-    
     
     const render = renderItems(filteredRecepies);
 

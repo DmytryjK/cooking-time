@@ -1,7 +1,7 @@
 .recipe-list {
     display: flex;
-    gap: 30px;
-    justify-content: space-between;
+    gap: 40px;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     padding: 50px 0;
     &__top {
@@ -30,6 +30,8 @@
         }
     }
     &__item {
+        display: flex;
+        flex-direction: column;
         padding: 20px;
         max-width: 30%;
         min-width: 360px;
@@ -57,6 +59,9 @@
             background-color: rgb(221, 221, 221);
             cursor: default;
         }
+    }
+    &__content-wrapper {
+        margin-top: auto;
     }
     &__img-wrapper {
         margin: 30px 0;

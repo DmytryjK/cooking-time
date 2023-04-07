@@ -18,7 +18,7 @@ body {
 	margin: 0 auto;
 }
 
-input {
+input, textarea {
 	outline-color: transparent;
 	border-radius: 10px;
 	border: none;
@@ -26,7 +26,11 @@ input {
 	min-height: 34px;
 	transition: 0.3s ease outline-color;
 }
-input:focus {
+
+textarea {
+	resize: none;
+}
+input:focus, textarea:focus {
 	outline-color: rgb(146, 146, 146);
 }
 
