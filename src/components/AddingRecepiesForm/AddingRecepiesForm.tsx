@@ -5,6 +5,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { postRecepie } from '../RecipeList/RecepieListSlice';
 import { tagsType } from '../Filters/FiltersSlice';
 
+import { storage } from '../../firebase/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+
 import './AddingRecepiesForm.scss';
 
 const AddingRecepiesForm = () => {
@@ -22,20 +25,34 @@ const AddingRecepiesForm = () => {
     const [tagName, setTagName] = useState<string>('');
     const [tags, setTags] = useState<tagsType[]>([]);
     const [description, setDescription] = useState<string>('');
-    const [uploadFile, setUploadFile] = useState<uploadFileType>({});
-    const [statusUploadedPhoto, setStatusUploadedPhoto] = useState<'' | 'error' | 'success'>('');
+    const [uploadFile, setUploadFile] = useState<uploadFileType | any>({});
+    const [statusUploadedPhoto, setStatusUploadedPhoto] = useState<'' | 'error' | 'success' | 'pending'>('');
+    const [imageRefFromStorage, setImageRefFromStorage] = useState<string>('');
+    const [imagesRefsFromStorage, setImagesRefsFromStorage] = useState<[]>([]);
 
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (uploadFile.name) {
+            const imageRef = ref(storage, `${uploadFile.name}${nextId('photo-id')}`);
+
+            uploadBytes(imageRef, uploadFile)
+                .then((snapshot) => {
+                    setStatusUploadedPhoto('success');
+                    getDownloadURL(snapshot.ref)
+                        .then(ref => setImageRefFromStorage(ref));
+            });
+        }
+    }, [uploadFile]);
 
     const handleUploadPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const files = e.target.files;
-        setStatusUploadedPhoto('');
+        setStatusUploadedPhoto('pending');
 
         if (files && files.length > 0) {
             if (files[0].type.indexOf("image") >= 0) {
                 setUploadFile(files[0]);
-                setStatusUploadedPhoto('success');
             } else {
                 setStatusUploadedPhoto('error');
                 alert('виберіть інший тип файлу для зображення')
@@ -94,7 +111,7 @@ const AddingRecepiesForm = () => {
                 time: 0,
                 ingredients: tags.map(tag => tag.tagText),
                 description: description,
-                img: ""
+                img: imageRefFromStorage
             }
         ));
         setNameValue('');
@@ -124,7 +141,10 @@ const AddingRecepiesForm = () => {
     const renderedTags = tagsRender(tags);
     
     let uploadInfo;
-    if (statusUploadedPhoto === 'success' && uploadFile) {
+    if (statusUploadedPhoto === 'pending') {
+        uploadInfo = 'loading...'
+    }
+    else if (statusUploadedPhoto === 'success' && uploadFile) {
         uploadInfo = uploadFile.name;
     } else if (statusUploadedPhoto === 'error') {
         uploadInfo = 'Sorry, try to load another type of image file' 
