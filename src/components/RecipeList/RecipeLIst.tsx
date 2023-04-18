@@ -3,10 +3,10 @@ import './RecipeLIst.scss';
 import { useAppSelector, useAppDispatch
  } from '../../hooks/hooks';
 
-import { fetchRecepies, delRecepie } from './RecepieListSlice';
+import { fetchRecepies } from './RecepieListSlice';
 import { cloneRecepies } from '../Filters/FiltersSlice';
 
-import type { Recepie } from './RecepieListSlice';
+import type { Recepie } from '../../types/type';
 import nextId from "react-id-generator";
 
 const RecipeLIst = () => {
@@ -25,21 +25,20 @@ const RecipeLIst = () => {
         }
     }, [loading, recepies]);
 
-    const handleClickDelete = (id: string | number) => {
-        dispatch(delRecepie(id));
-    }
-
     const renderItems = (items: Recepie[]) => {
+        
         if (items) {
             const renderedList = items.map(item => {
-                const {ingredients, id, title, time, img} = item;
+                
+                const {ingredients, id, title, time, img, description} = item;
+                const substrDescr = description ? description?.substring(0, 250) + '...' : '';
 
                 const renderedTags = ingredients?.map(item => {
                     return (
                         <li key={nextId("tag-id-")} className="product-tags__item">{item}</li>
                     )
                 });
-
+                
                 return(
                     <li key={id} className="recipe-list__item">
                         <div className="recipe-list__top">
@@ -54,9 +53,21 @@ const RecipeLIst = () => {
                         </ul>
                         <div className="recipe-list__content-wrapper">
                             <div className="recipe-list__img-wrapper">
-                                <img className="recipe-list__image" src={img} alt={title} />
+                                <img 
+                                    className="recipe-list__image"
+                                    src={img} 
+                                    alt={title} />
                             </div>
-                            <button className="recipe-list__more">Подробнее...</button>
+                            <div className="recipe-list__content-descr">
+                                {substrDescr}
+                            </div>
+                            <div className="recipe-list__more">
+                                <a 
+                                    className="recipe-list__more-link" 
+                                    href={`/about-recepie/${id}`}>
+                                    Подробнее...</a>
+                            </div>
+                            
                         </div>
                         
                     </li>
@@ -66,7 +77,6 @@ const RecipeLIst = () => {
         }
 
     }
-    
     const render = renderItems(filteredRecepies);
 
     return (

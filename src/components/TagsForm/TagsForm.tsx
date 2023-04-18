@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import nextId from "react-id-generator";
 
-import { tagsType } from '../Filters/FiltersSlice';
+import { tagsType } from '../../types/type';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { filterRecepiesByTag } from '../Filters/FiltersSlice';
 
-import type { Recepie } from '../RecipeList/RecepieListSlice';
+import type { Recepie } from '../../types/type';
 
 import './TagsForm.scss';
 

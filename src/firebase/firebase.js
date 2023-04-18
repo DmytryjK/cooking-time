@@ -1,8 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getStorage } from 'firebase/storage';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -11,9 +10,11 @@ const firebaseConfig = {
   projectId: "recepie-list-f00b1",
   storageBucket: "recepie-list-f00b1.appspot.com",
   messagingSenderId: "824684683804",
-  appId: "1:824684683804:web:10ed2a0609dc021a77b5d9"
+  appId: "1:824684683804:web:10ed2a0609dc021a77b5d9",
+  databaseURL: "https://recepie-list-f00b1-default-rtdb.europe-west1.firebasedatabase.app/"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
+export const database = getDatabase(app);

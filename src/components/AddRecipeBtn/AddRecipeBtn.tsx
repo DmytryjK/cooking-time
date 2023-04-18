@@ -3,7 +3,7 @@ import './AddRecipeBtn.scss';
 
 const AddRecipeBtn = ({text = ''}) => {
     return (
-        <button className="addRecipe-btn">{text}</button>
+        <a className="addRecipe-btn" href="/add-recepie">{text}</a>
     )
 }
 

@@ -1,24 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Recepie } from '../RecipeList/RecepieListSlice';
-import { useAppSelector } from '../../hooks/hooks';
-export interface tagsType {
-    id: number | string;
-    tagText: string;
-}
-
-interface filterRecepies {
-    filteredRecepies: Recepie[];
-}
-
-interface objectForFiltered {
-	recepies: Recepie[];
-	tags: string[];
-}
-
-interface objectForSearch {
-	recepies: Recepie[];
-	value: string;
-}
+import type { Recepie } from '../../types/type';
+import type {filterRecepies, objectForFiltered, objectForSearch} from '../../types/type';
 
 const initialState: filterRecepies = {
 	filteredRecepies: [],

@@ -1,41 +1,50 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { getDatabase, ref, child, get, push, update } from "firebase/database";
 
-export interface Recepie {
-	id: number | string;
-	title: string;
-	time?: number;
-	ingredients?: string[];
-	img?: string;
-	description?: string;
-}
+import type { Recepies, Recepie, PostState } from '../../types/type';
 
-export interface Recepies {
-	recepies: Recepie[];
-}
-
-interface PostState {
-	loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-	error: null | unknown;
-}
 
 const initialState: Recepies & PostState = {
 	recepies: [],
+	fetchedRecepieInfo: null,
 	loading: 'idle',
-	error: null
+	loadingForm: 'idle',
+	error: null,
 }
 
 export const fetchRecepies = createAsyncThunk(
 	'recepiesList/fetchRecepies',
 	async function(_, { rejectWithValue }) {
 		try {
-			const response = await fetch('http://localhost:3005/dishes');
+			const dbRef = ref(getDatabase());
+			const response = await get(child(dbRef, 'dishes'));
 
-			if (!response.ok) {
-				throw new Error('Something went wrong');
-			}
+			if (!response.exists()) throw new Error('Something went wrong');
 
-			const data: Recepie[] = await response.json();
+			const originalData: Recepie[] = await response.val();
+			const transformRecepiesToArr: Recepie[]= [];
+
+			for (const key in originalData) transformRecepiesToArr.push(originalData[key]);
+			return { 
+				recepies: transformRecepiesToArr,
+				originalFetchedRecepies: originalData
+			};
+		} catch (error: unknown) {
+			return rejectWithValue(error);
+		}
+		
+	}
+)
+
+export const fetchRecepie = createAsyncThunk(
+	'recepiesList/fetchRecepie',
+	async function(id: number | string | undefined, { rejectWithValue }) {
+		try {
+			const dbRef = ref(getDatabase());
+			const response = await get(child(dbRef, 'dishes/' + id));
+			
+			if (!response.exists()) throw new Error('Something went wrong');
+			const data: Recepie = await response.val();
 			return data;
 		} catch (error: unknown) {
 			return rejectWithValue(error);
@@ -44,43 +53,19 @@ export const fetchRecepies = createAsyncThunk(
 	}
 )
 
-export const delRecepie = createAsyncThunk(
-	'recepiesList/delRecepie',
-	async function(id: number | string, { rejectWithValue, dispatch }) {
-
-		try {
-			const response = await fetch(`http://localhost:3005/dishes/${id}`, {
-				method: 'DELETE'
-			});
-
-			if (!response.ok) {
-				throw new Error('Can`t delete this recepie');
-			}
-			dispatch(deleteRecepie(id));
-		} catch (error: unknown) {
-			return rejectWithValue(error);
-		}
-	}
-);
-
 export const postRecepie = createAsyncThunk(
 	'recepiesList/postRecepie',
-	async function(newRecepie: Recepie, { rejectWithValue, dispatch }) {
-		try {
-			
-			const response = await fetch('http://localhost:3005/dishes/', {
-				method: 'POST',
-				body: JSON.stringify({...newRecepie}),
-				headers: {
-					'Content-type': 'application/json; charset=UTF-8',
-				},
-			})
+	async function(newRecepie: Recepie, { rejectWithValue }) {
+		try{
+			const db = getDatabase();
+			const newPostKey = push(child(ref(db), 'dishes')).key;
+			const postData = {...newRecepie, id: newPostKey};
 
-			if (!response.ok) {
-				throw new Error('Can`t delete this recepie');
-			}
-			
-			dispatch(addNewRecepie(newRecepie));
+			const updates: any = {};
+			updates['/dishes/' + newPostKey] = postData;
+
+			update(ref(db), updates);
+			return postData;
 		} catch (error: unknown) {
 			return rejectWithValue(error);
 		}
@@ -93,9 +78,6 @@ export const recepieListSlice = createSlice({
 	reducers: {
 		addNewRecepie: (state, action: PayloadAction<Recepie>) => {
 			state.recepies.push(action.payload);
-		},
-		deleteRecepie: (state, action: PayloadAction<number | string>) => {
-			state.recepies = state.recepies.filter(item => item.id !== action.payload);
 		}
 	},
 	extraReducers: (builder) => {
@@ -103,17 +85,41 @@ export const recepieListSlice = createSlice({
 			state.loading = 'pending';
 			state.error = null;
 		})
-		builder.addCase(fetchRecepies.fulfilled, (state, action: PayloadAction<Recepie[]>) => {
+		builder.addCase(fetchRecepies.fulfilled, (state, action: PayloadAction<Recepies>) => {
 			state.loading = 'succeeded';
-			state.recepies = action.payload;
+			state.recepies = action.payload.recepies;
 		})
 		builder.addCase(fetchRecepies.rejected, (state, action: PayloadAction<unknown>) => {
 			state.loading = 'failed';
 			state.error = action.payload;
 		})
+		builder.addCase(fetchRecepie.pending, (state) => {
+			state.loading = 'pending';
+			state.error = null;
+		})
+		builder.addCase(fetchRecepie.fulfilled, (state, action: PayloadAction<Recepie>) => {
+			state.loading = 'succeeded';
+			state.fetchedRecepieInfo = action.payload;
+		})
+		builder.addCase(fetchRecepie.rejected, (state, action: PayloadAction<unknown>) => {
+			state.loading = 'failed';
+			state.error = action.payload;
+		})
+		builder.addCase(postRecepie.pending, (state) => {
+			state.loadingForm = 'pending';
+			state.error = null;
+		})
+		builder.addCase(postRecepie.fulfilled, (state, action: PayloadAction<Recepie>) => {
+			state.loadingForm = 'succeeded';
+			state.recepies = [...state.recepies, action.payload];
+		})
+		builder.addCase(postRecepie.rejected, (state, action: PayloadAction<unknown>) => {
+			state.loadingForm = 'failed';
+			state.error = action.payload;
+		})
 	},
 })
 
-export const { addNewRecepie, deleteRecepie } = recepieListSlice.actions;
+export const { addNewRecepie } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;

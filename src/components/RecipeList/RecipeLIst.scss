@@ -65,7 +65,7 @@
         margin-top: auto;
     }
     &__img-wrapper {
-        margin: 30px 0;
+        margin-top: 30px;
         height: 240px;
         max-width: 360px;
     }
@@ -75,15 +75,29 @@
         object-fit: cover;
         border-radius: 10px;
     }
-    &__more{
-        display: block;
-        margin: 0 auto;
-        padding: 5px 20px;
-        height: 34px;
+    &__content-descr {
+        padding: 20px 0;
+        line-height: 130%;
+        font-size: 18px;
+    }
+    &__more {
+        display: flex;
+        justify-content: center;
+    }
+    &__more-link{
+        padding: 7px 20px;
         border: none;
         border-radius: 10px;
         font-size: 16px;
         font-weight: 600;
+        text-decoration: none;
+        color: black;
+        background-color: white;
         cursor: pointer;
+        transition: 0.1s ease-in-out background-color, 0.1s ease-in-out color;
+        &:hover {
+            background-color: black;
+            color: white;
+        }
     }
 }

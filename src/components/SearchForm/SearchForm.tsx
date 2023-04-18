@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { filterRecepiesByName } from '../Filters/FiltersSlice';
 
-import type { Recepies } from '../RecipeList/RecepieListSlice';
+import type { Recepies } from '../../types/type';
 
 import AddRecipeBtn from '../AddRecipeBtn/AddRecipeBtn';
 import './SearchForm.scss';

@@ -1,36 +1,36 @@
 import { useState, useEffect } from 'react';
 import nextId from 'react-id-generator';
-
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { postRecepie } from '../RecipeList/RecepieListSlice';
-import { tagsType } from '../Filters/FiltersSlice';
-
 import { storage } from '../../firebase/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
+import type { tagsType, uploadFileType } from '../../types/type';
+
+import PopUp from '../PopUp/PopUp';
 import './AddingRecepiesForm.scss';
 
 const AddingRecepiesForm = () => {
 
-    interface uploadFileType {
-        lastModified?: number;
-        lastModifiedDate?: Date;
-        name?: string;
-        size?: number;
-        type?: string;
-        webkitRelativePath?: string;
-    }
-
+    const {error, loadingForm} = useAppSelector(state => state.recepies);
     const [nameValue, setNameValue] = useState<string>('');
     const [tagName, setTagName] = useState<string>('');
     const [tags, setTags] = useState<tagsType[]>([]);
-    const [description, setDescription] = useState<string>('');
     const [uploadFile, setUploadFile] = useState<uploadFileType | any>({});
     const [statusUploadedPhoto, setStatusUploadedPhoto] = useState<'' | 'error' | 'success' | 'pending'>('');
     const [imageRefFromStorage, setImageRefFromStorage] = useState<string>('');
-    const [imagesRefsFromStorage, setImagesRefsFromStorage] = useState<[]>([]);
+    const [description, setDescription] = useState<string>('');
 
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+
+        if (loadingForm === 'succeeded') {
+            const popUp = document.querySelector('.success-window');
+            popUp?.classList.add('active');
+        }
+
+    }, [loadingForm])
 
     useEffect(() => {
         if (uploadFile.name) {
@@ -104,20 +104,30 @@ const AddingRecepiesForm = () => {
 
     const handleSubmitForm = (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault();
-        dispatch(postRecepie(
-            {
-                id: nextId(),
-                title: nameValue,
-                time: 0,
-                ingredients: tags.map(tag => tag.tagText),
-                description: description,
-                img: imageRefFromStorage
+
+        if (nameValue && tags.length > 0 && description) {
+            dispatch(postRecepie({
+                    id: '',
+                    title: nameValue,
+                    time: 0,
+                    ingredients: tags.map(tag => tag.tagText),
+                    description: description,
+                    img: imageRefFromStorage
+                }));
+            if (!error) {
+                setNameValue('');
+                setTagName('');
+                setTags([]);
+                setUploadFile({});
+                setImageRefFromStorage('');
+                setStatusUploadedPhoto('');
+                setDescription('');
             }
-        ));
-        setNameValue('');
-        setTagName('');
-        setTags([]);
-        setDescription('');
+            
+        } else {
+            alert('all fields must be fills');
+        }
+        
     }
 
     const tagsRender = (tags: tagsType[]) => {
@@ -141,6 +151,7 @@ const AddingRecepiesForm = () => {
     const renderedTags = tagsRender(tags);
     
     let uploadInfo;
+
     if (statusUploadedPhoto === 'pending') {
         uploadInfo = 'loading...'
     }
@@ -151,7 +162,8 @@ const AddingRecepiesForm = () => {
     }
 
     return(
-        <form className="form add-recepie__form">
+        <>
+            <form className="form add-recepie__form">
             <label className="form__name-label">
                 <span>Название блюда</span>
                 <input  className="form__name-recepie" 
@@ -200,7 +212,10 @@ const AddingRecepiesForm = () => {
                 className="form__submit addRecipe-btn" 
                 type="submit"
                 onClick={handleSubmitForm}/>
-        </form>
+            </form>
+            {PopUp()}
+        </>
+        
     )
 }
 
