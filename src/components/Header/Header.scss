@@ -1,0 +1,8 @@
+.header {
+    padding: 25px 0;
+    border-bottom: 1px solid rgb(71, 71, 71);
+    &__top {
+        display: flex;
+        gap: 20px;
+    }
+}

@@ -1,10 +1,10 @@
-import Filters from "../components/Filters/Filters";
+import Header from "../components/Header/Header";
 import RecipeLIst from "../components/RecipeList/RecipeLIst";
 const Main = () => {
     return (
         <div>
             <div className="container">
-                <Filters/>
+                <Header/>
                 <RecipeLIst/>
             </div>
         </div>

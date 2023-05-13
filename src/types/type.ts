@@ -25,6 +25,8 @@ export interface tagsType {
 
 export interface filterRecepies {
     filteredRecepies: Recepie[];
+	searchInput: string;
+	searchTags: tagsType[];
 }
 
 export interface objectForFiltered {

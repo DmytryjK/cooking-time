@@ -41,25 +41,23 @@ const RecipeLIst = () => {
                 
                 return(
                     <li key={id} className="recipe-list__item">
-                        <div className="recipe-list__top">
+                        <div className="recipe-list__img-wrapper">
+                            <img 
+                                className="recipe-list__image"
+                                src={img} 
+                                alt={title} />
+                        </div>
+                        <div className="recipe-list__content-wrapper">
                             <h2 className="recipe-list__title">{title}</h2>
                             <span className="recipe-list__timer">{time ? time : null}</span>
-                        </div>
-                        <ul className="recipe-list__product-tags product-tags">
-                            <li className="product-tags__item-header">
-                                <h3 className="recipe-list__subtitle">Ингредиенты:</h3>
-                            </li>
-                            {renderedTags ? renderedTags : null}
-                        </ul>
-                        <div className="recipe-list__content-wrapper">
-                            <div className="recipe-list__img-wrapper">
-                                <img 
-                                    className="recipe-list__image"
-                                    src={img} 
-                                    alt={title} />
-                            </div>
+                            <ul className="recipe-list__product-tags product-tags">
+                                <li className="product-tags__item-header">
+                                    <h3 className="recipe-list__subtitle">Ингредиенты:</h3>
+                                </li>
+                                {renderedTags ? renderedTags : null}
+                            </ul>
                             <div className="recipe-list__content-descr">
-                                {substrDescr}
+                                {substrDescr.substring(0, 50) + '...'}
                             </div>
                             <div className="recipe-list__more">
                                 <a 
@@ -87,4 +85,3 @@ const RecipeLIst = () => {
 }
 
 export default RecipeLIst;
-

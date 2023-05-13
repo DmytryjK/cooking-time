@@ -1,4 +1,8 @@
 .tagsForm {
+    margin-top: 100px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
     border: none;
     &__header {
         display: block;
@@ -31,15 +35,16 @@
             color: white;
         }
     }
+    &__delAll-btn {
+        flex-shrink: 0;
+    }
     &__tagList {
+        display: flex;
         padding: 0;
         margin: 0;
-        margin-top: 20px;
-        display: flex;
         flex-wrap: wrap;
         row-gap: 15px;
         column-gap: 25px;
-        max-width: 500px;
         list-style-type: none;
     }
     &__createdTag {
