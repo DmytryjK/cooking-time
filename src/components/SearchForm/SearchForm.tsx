@@ -23,7 +23,7 @@ const SearchForm = () => {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.code === 'Comma' && inputValue !== '') {
+        if ((event.code === 'Comma' || event.code === 'Slash') && inputValue !== '') {
             event.preventDefault();
             dispatch(addSearchTag({
                 id: nextId("createdTag"), 

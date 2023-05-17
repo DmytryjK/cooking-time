@@ -1,7 +1,7 @@
 export interface Recepie {
 	id: number | string | null;
 	title: string;
-	time?: number;
+	time?: string | null;
 	ingredients?: string[];
 	img?: string;
 	description?: string;

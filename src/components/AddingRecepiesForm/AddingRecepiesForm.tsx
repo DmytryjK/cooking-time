@@ -15,6 +15,7 @@ const AddingRecepiesForm = () => {
     const {error, loadingForm} = useAppSelector(state => state.recepies);
     const [nameValue, setNameValue] = useState<string>('');
     const [tagName, setTagName] = useState<string>('');
+    const [timerValue, setTimerValue] = useState<string>('');
     const [tags, setTags] = useState<tagsType[]>([]);
     const [uploadFile, setUploadFile] = useState<uploadFileType | any>({});
     const [statusUploadedPhoto, setStatusUploadedPhoto] = useState<'' | 'error' | 'success' | 'pending'>('');
@@ -65,6 +66,10 @@ const AddingRecepiesForm = () => {
         setNameValue(e.target.value);
     }
 
+    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTimerValue(e.target.value);
+    }
+
     const handleTagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTagName(event.target.value);
     }
@@ -109,7 +114,7 @@ const AddingRecepiesForm = () => {
             dispatch(postRecepie({
                     id: '',
                     title: nameValue,
-                    time: 0,
+                    time: timerValue ? timerValue : null,
                     ingredients: tags.map(tag => tag.tagText),
                     description: description,
                     img: imageRefFromStorage
@@ -190,6 +195,15 @@ const AddingRecepiesForm = () => {
                     {renderedTags}
                 </ul>
             </fieldset>
+            <label className="form__timer-label">
+                <span>Время приготовления</span>
+                <div className="form__timer-wrapper">
+                    <input  className="form__timer-input" 
+                        type="text"
+                        value={timerValue}
+                        onChange={handleTimeChange}/>
+                </div>
+            </label>
             <label className="form__upload-label">
                 <input 
                     className="form__upload-photo" 

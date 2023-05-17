@@ -30,9 +30,14 @@ export const filtersSlice = createSlice({
 		filterRecepiesByTag: (state, action: PayloadAction<objectForFiltered>) => {
 			const {recepies, tags} = action.payload;
 			state.filteredRecepies = [...recepies];
-
+			
 			if (tags.length > 0) {
-            	state.filteredRecepies = state.filteredRecepies.filter(item => item.ingredients?.some(i => tags.includes(i)));
+				state.filteredRecepies = state.filteredRecepies.filter(item => {
+					return item.ingredients?.some(ingredient => {
+						const upperTags = tags.map(tag => tag.toUpperCase());
+						return upperTags.includes(ingredient.toUpperCase());
+					})
+				});
 			} 
 		},
 		filterRecepiesByName: (state, action: PayloadAction<objectForSearch>) => {

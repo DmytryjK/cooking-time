@@ -11,7 +11,6 @@ const Tags = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        console.log(searchTags);
         const tags = searchTags.map(createdTag => createdTag.tagText);
         dispatch(filterRecepiesByTag({...recepies, tags}));
     }, [searchTags]);

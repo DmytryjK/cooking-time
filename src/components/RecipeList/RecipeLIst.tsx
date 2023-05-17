@@ -32,7 +32,7 @@ const RecipeLIst = () => {
                 
                 const {ingredients, id, title, time, img, description} = item;
                 const substrDescr = description ? description?.substring(0, 250) + '...' : '';
-
+                const timerClass = time ? "recipe-list__timer active" : "recipe-list__timer";
                 const renderedTags = ingredients?.map(item => {
                     return (
                         <li key={nextId("tag-id-")} className="product-tags__item">{item}</li>
@@ -48,16 +48,18 @@ const RecipeLIst = () => {
                                 alt={title} />
                         </div>
                         <div className="recipe-list__content-wrapper">
-                            <h2 className="recipe-list__title">{title}</h2>
-                            <span className="recipe-list__timer">{time ? time : null}</span>
-                            <ul className="recipe-list__product-tags product-tags">
-                                <li className="product-tags__item-header">
-                                    <h3 className="recipe-list__subtitle">Ингредиенты:</h3>
-                                </li>
-                                {renderedTags ? renderedTags : null}
-                            </ul>
-                            <div className="recipe-list__content-descr">
-                                {substrDescr.substring(0, 50) + '...'}
+                            <div className="recipe-list__content-text">
+                                <h2 className="recipe-list__title" title={title}>{title.length > 42 ? (title.substring(0, 42) + '...') : title}</h2>
+                                <span className={timerClass}>{time ? time + 'min' : null}</span>
+                                <ul className="recipe-list__product-tags product-tags">
+                                    {/* <li className="product-tags__item-header">
+                                        <h3 className="recipe-list__subtitle">Ингредиенты:</h3>
+                                    </li> */}
+                                    {renderedTags ? renderedTags : null}
+                                </ul>
+                                {/* <div className="recipe-list__content-descr">
+                                    {substrDescr.substring(0, 50) + '...'}
+                                </div> */}
                             </div>
                             <div className="recipe-list__more">
                                 <a 

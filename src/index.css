@@ -9,7 +9,7 @@
 }
 
 body {
-	background-color: grey;
+	background-color: white;
 }
 
 .container {
@@ -24,6 +24,7 @@ input, textarea {
 	border: none;
 	padding: 5px 20px;
 	min-height: 34px;
+	background-color: lightgrey;
 	transition: 0.3s ease outline-color;
 }
 
@@ -33,6 +34,7 @@ textarea {
 input:focus, textarea:focus {
 	outline-color: rgb(146, 146, 146);
 }
+
 
 ul, li {
 	list-style-type: none;
