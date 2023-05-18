@@ -47,3 +47,7 @@ export interface uploadFileType {
     type?: string;
     webkitRelativePath?: string;
 }
+
+export interface User {
+	email: string;
+}

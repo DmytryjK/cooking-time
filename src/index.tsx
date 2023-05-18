@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 
 import { createBrowserRouter, RouterProvider, useParams } from "react-router-dom";
-import { Main, AddRecepies, RecepieMore } from "./pages/";
+import { Main, AddRecepies, RecepieMore, Favorites } from "./pages/";
 
 import {store} from './store/store';
 
@@ -17,6 +17,10 @@ const router = createBrowserRouter([
     {
         path: "/add-recepie",
         element: <AddRecepies/>, 
+    },
+    {
+        path: "/favorites",
+        element: <Favorites/>, 
     },
     {
         path: "/about-recepie/:id",

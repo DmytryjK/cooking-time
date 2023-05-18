@@ -1,14 +1,15 @@
 import Header from "../components/Header/Header";
 import RecipeLIst from "../components/RecipeList/RecipeLIst";
-const Main = () => {
+
+const Favorites = () => {
     return (
         <div>
             <div className="container">
                 <Header/>
-                <RecipeLIst url={'dishes'}/>
+                <RecipeLIst url={'favorites'}/>
             </div>
         </div>
     )
 }
 
-export default Main;
+export default Favorites;

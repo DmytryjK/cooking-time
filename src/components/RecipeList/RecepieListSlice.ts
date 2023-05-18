@@ -14,10 +14,11 @@ const initialState: Recepies & PostState = {
 
 export const fetchRecepies = createAsyncThunk(
 	'recepiesList/fetchRecepies',
-	async function(_, { rejectWithValue }) {
+	async function(url: string, { rejectWithValue }) {
+
 		try {
 			const dbRef = ref(getDatabase());
-			const response = await get(child(dbRef, 'dishes'));
+			const response = await get(child(dbRef, url));
 
 			if (!response.exists()) throw new Error('Something went wrong');
 
@@ -69,6 +70,26 @@ export const postRecepie = createAsyncThunk(
 		} catch (error: unknown) {
 			return rejectWithValue(error);
 		}
+	}
+);
+
+export const addRecepieToFavorites = createAsyncThunk(
+	'recepiesList/postRecepie',
+	async function({recepiId, userIdAuth}:{recepiId: string|number|null, userIdAuth: string}, { rejectWithValue }) {
+		console.log(recepiId, userIdAuth);
+		// try{
+		// 	const db = getDatabase();
+		// 	const newPostKey = push(child(ref(db), 'favorites')).key;
+		// 	const postData = { ...currentRecepie };
+
+		// 	const updates: any = {};
+		// 	updates['/favorites/' + newPostKey] = postData;
+
+		// 	update(ref(db), updates);
+		// 	return postData;
+		// } catch (error: unknown) {
+		// 	return rejectWithValue(error);
+		// }
 	}
 );
 

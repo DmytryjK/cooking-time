@@ -1,3 +1,20 @@
+.authentication-block {
+    margin-left: auto;
+    width: 100%;
+}
+.authentication__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 15px;
+}
+.authentication__title {
+    font-size: 14px;
+}
+.authentication__right-wrapper {
+    text-align: right;
+}
 .authorization {
     position: absolute;
     top: 0;

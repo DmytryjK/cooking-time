@@ -3,6 +3,8 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 import {useState, useEffect} from 'react';
 
+import type { User } from "../../types/type";
+
 import './Authentication.scss';
 
 const Authentication = () => {
@@ -11,21 +13,23 @@ const Authentication = () => {
     const [inputMail, setInputMail] = useState<string>('');
     const [inputPass, setInputPass] = useState<string>('');
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+
+    const [authorizedUserInfo, setAuthorizedUserInfo] = useState<User>({email: ''});
+
     const auth = getAuth();
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
-          if (user) {
-            console.log('login success');
-            setIsAuthorized(true);
-            // Пользователь уже вошел в систему
-            // Можно выполнить необходимые действия
-          } else {
-            console.log('try to login');
-            setIsAuthorized(false);
-            // Пользователь не вошел в систему
-            // Можно выполнить перенаправление на страницу входа или другие действия
-          }
+            if (user) {
+                setIsAuthorized(true);
+                setIsAuthWindowShow(false);
+                user.email && setAuthorizedUserInfo({
+                    email: user.email
+                });
+            } else {
+                console.log('try to login');
+                setIsAuthorized(false);
+            }
         });
     
         return () => unsubscribe(); // Отписываемся от слушателя при размонтировании компонента
@@ -57,7 +61,7 @@ const Authentication = () => {
 
         signInWithEmailAndPassword(auth, inputMail, inputPass)
         .then(({user}) => {
-            console.log(user);
+            
         })
         .then(res => console.log('success'))
         .catch((error) => {
@@ -185,9 +189,18 @@ const Authentication = () => {
     return (
         <div className="authentication-block">
             {isAuthorized ? 
-            <button onClick={handleLogOut}>Log Out</button>
+            <div className="authentication__header">
+                <a className="authentication__favorites" href="/favorites">Избранное</a>
+                <div className="authentication__right-wrapper">
+                    <h3 className="authentication__title">Welcome, <em>{authorizedUserInfo.email}</em></h3>
+                    <button onClick={handleLogOut}>Log Out</button>
+                </div>
+            </div>
+            
             :
+
             <button onClick={() => setIsAuthWindowShow(!isAuthWindowShow)}>Log In</button>}
+
             { Login() }
             { SignUp() }
         </div>

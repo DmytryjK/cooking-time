@@ -9,6 +9,7 @@ const Header = () => {
     return (
         <header className="header">
             <div className="header__top">
+                <a className="header__logo" href="/">Главная</a>
                 <SearchForm/>
                 <AddRecipeBtn text={"Добавить рецепт"}/>
                 <Authentication/>
