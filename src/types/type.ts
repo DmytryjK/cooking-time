@@ -5,6 +5,7 @@ export interface Recepie {
 	ingredients?: string[];
 	img?: string;
 	description?: string;
+	favorites: boolean;
 }
 
 export interface Recepies {
@@ -48,6 +49,22 @@ export interface uploadFileType {
     webkitRelativePath?: string;
 }
 
-export interface User {
+export interface userType {
+	user: {
+		uid: string;
+		email: string;
+	}
+}
+
+export interface user {
+	uid: string;
 	email: string;
+}
+
+export interface FavoriteRecipes {
+	favoriteRecipes: Recepie[];
+	favoriteRecipesId: string[];
+	loadingRecipeId: 'idle' | 'pending' | 'succeeded' | 'failed'
+	loadingRecipesById: 'idle' | 'pending' | 'succeeded' | 'failed'
+	error: null | unknown;
 }

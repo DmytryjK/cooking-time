@@ -117,7 +117,8 @@ const AddingRecepiesForm = () => {
                     time: timerValue ? timerValue : null,
                     ingredients: tags.map(tag => tag.tagText),
                     description: description,
-                    img: imageRefFromStorage
+                    img: imageRefFromStorage,
+                    favorites: false
                 }));
             if (!error) {
                 setNameValue('');

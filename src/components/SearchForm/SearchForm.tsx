@@ -2,24 +2,23 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { filterRecepiesByName, addSearchTag } from '../Filters/FiltersSlice';
 
-import type { Recepies } from '../../types/type';
+import type { Recepie } from '../../types/type';
 
 import './SearchForm.scss';
 
 import nextId from "react-id-generator";
 
-const SearchForm = () => {
-    const recepies = useAppSelector(state => state.recepies);
+const SearchForm = ({recepies}:{recepies:Recepie[]}) => {
     const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState<string>('');
     
-    const handleSearchClick = (value: string, recepies: Recepies) => {
-        dispatch(filterRecepiesByName({...recepies, value}));
+    const handleSearchClick = (value: string, recepies: Recepie[]) => {
+        dispatch(filterRecepiesByName({recepies, value}));
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
-        !event.target.value && dispatch(filterRecepiesByName({...recepies, value: ""}))
+        !event.target.value && dispatch(filterRecepiesByName({recepies, value: ""}))
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -33,7 +32,7 @@ const SearchForm = () => {
         } 
         if (event.code === 'Enter' && inputValue !== '') {
             const value = inputValue;
-            dispatch(filterRecepiesByName({...recepies, value}));
+            dispatch(filterRecepiesByName({recepies, value}));
         } 
     }
 

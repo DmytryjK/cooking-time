@@ -35,7 +35,7 @@ export const filtersSlice = createSlice({
 				state.filteredRecepies = state.filteredRecepies.filter(item => {
 					return item.ingredients?.some(ingredient => {
 						const upperTags = tags.map(tag => tag.toUpperCase());
-						return upperTags.includes(ingredient.toUpperCase());
+						return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
 					})
 				});
 			} 

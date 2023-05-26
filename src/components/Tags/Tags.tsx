@@ -2,17 +2,17 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { filterRecepiesByTag, deleteSearchTag, deleteAllTags } from '../Filters/FiltersSlice';
 
-import { tagsType } from '../../types/type';
+import { tagsType, Recepie } from '../../types/type';
 import './Tags.scss';
 
-const Tags = () => {
-    const recepies = useAppSelector(state => state.recepies);
+const Tags = ({recepies}:{recepies:Recepie[]}) => {
+    // const recepies = useAppSelector(state => state.recepies);
     const searchTags = useAppSelector(state => state.filters.searchTags);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         const tags = searchTags.map(createdTag => createdTag.tagText);
-        dispatch(filterRecepiesByTag({...recepies, tags}));
+        dispatch(filterRecepiesByTag({recepies, tags}));
     }, [searchTags]);
 
     const createNewTag = (tags: tagsType[]) => {

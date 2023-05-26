@@ -2,19 +2,23 @@ import { clickOptions } from "@testing-library/user-event/dist/click";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 
 import {useState, useEffect} from 'react';
-
-import type { User } from "../../types/type";
+import { createUser } from "./AuthenticationSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import './Authentication.scss';
+
 
 const Authentication = () => {
     const [isAuthWindowShow, setIsAuthWindowShow] = useState<boolean>(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false);
     const [inputMail, setInputMail] = useState<string>('');
     const [inputPass, setInputPass] = useState<string>('');
-    const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
-    const [authorizedUserInfo, setAuthorizedUserInfo] = useState<User>({email: ''});
+    const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+    // const [authorizedUserInfo, setAuthorizedUserInfo] = useState<User>({email: ''});
+
+    const currentUser = useAppSelector(state => state.authentication.user);
+    const dispatch = useAppDispatch();
 
     const auth = getAuth();
 
@@ -23,9 +27,10 @@ const Authentication = () => {
             if (user) {
                 setIsAuthorized(true);
                 setIsAuthWindowShow(false);
-                user.email && setAuthorizedUserInfo({
-                    email: user.email
-                });
+                if (user.uid && user.email) {
+                    dispatch(createUser({uid: user.uid, email: user.email}));
+                }   
+                
             } else {
                 console.log('try to login');
                 setIsAuthorized(false);
@@ -189,27 +194,26 @@ const Authentication = () => {
     return (
         <div className="authentication-block">
             {isAuthorized ? 
-            <div className="authentication__header">
-                <a className="authentication__favorites" href="/favorites">Избранное</a>
-                <div className="authentication__right-wrapper">
-                    <h3 className="authentication__title">Welcome, <em>{authorizedUserInfo.email}</em></h3>
-                    <button onClick={handleLogOut}>Log Out</button>
+                <div className="authentication__header">
+                    <a className="authentication__favorites" href="/favorites">Избранное</a>
+                    <div className="authentication__right-wrapper">
+                        <h3 className="authentication__title">Welcome, <em>{currentUser.email}</em></h3>
+                        <button 
+                            className="authentication__logout-btn" 
+                            onClick={handleLogOut}>Log Out
+                        </button>
+                    </div>
                 </div>
-            </div>
-            
+
             :
 
-            <button onClick={() => setIsAuthWindowShow(!isAuthWindowShow)}>Log In</button>}
-
+                <button 
+                    className="authentication__login-btn" 
+                    onClick={() => setIsAuthWindowShow(!isAuthWindowShow)}>Log In
+                </button>}
             { Login() }
             { SignUp() }
         </div>
-    )
-}
-
-const LogOutBlock = () => {
-    return (
-        <a href="">Log Out</a>
     )
 }
 

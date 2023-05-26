@@ -5,6 +5,8 @@ import nextId from "react-id-generator";
 import { fetchRecepie } from '../components/RecipeList/RecepieListSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 
+import Header from '../components/Header/Header';
+
 import './RecepieMore.scss';
 
 const RecepieMore = () => {
@@ -46,13 +48,15 @@ const RecepieMore = () => {
         return result;
     }
     
-
     return(
-        <main className="recepie-page">
-            <div className="container">
-            {renderedInfo()} 
-            </div>
-        </main>
+        <div className="container">
+            <Header isSearch={false} recepies={[]}/>
+            <main className="recepie-page">
+                <div className="container">
+                    {renderedInfo()} 
+                </div>
+            </main>
+        </div>
     )
 }
 

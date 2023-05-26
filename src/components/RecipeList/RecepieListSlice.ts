@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, child, get, push, update } from "firebase/database";
+import { getDatabase, ref, child, get, push, update, set, remove } from "firebase/database";
 
 import type { Recepies, Recepie, PostState } from '../../types/type';
 
@@ -12,13 +12,18 @@ const initialState: Recepies & PostState = {
 	error: null,
 }
 
+type isFavoritePayload = {
+	recipeId: string|number|null;
+	isFavorite: boolean;
+};
+
 export const fetchRecepies = createAsyncThunk(
 	'recepiesList/fetchRecepies',
-	async function(url: string, { rejectWithValue }) {
+	async function(_, { rejectWithValue }) {
 
 		try {
 			const dbRef = ref(getDatabase());
-			const response = await get(child(dbRef, url));
+			const response = await get(child(dbRef, 'dishes'));
 
 			if (!response.exists()) throw new Error('Something went wrong');
 
@@ -33,7 +38,6 @@ export const fetchRecepies = createAsyncThunk(
 		} catch (error: unknown) {
 			return rejectWithValue(error);
 		}
-		
 	}
 )
 
@@ -73,23 +77,24 @@ export const postRecepie = createAsyncThunk(
 	}
 );
 
-export const addRecepieToFavorites = createAsyncThunk(
-	'recepiesList/postRecepie',
-	async function({recepiId, userIdAuth}:{recepiId: string|number|null, userIdAuth: string}, { rejectWithValue }) {
-		console.log(recepiId, userIdAuth);
-		// try{
-		// 	const db = getDatabase();
-		// 	const newPostKey = push(child(ref(db), 'favorites')).key;
-		// 	const postData = { ...currentRecepie };
+export const updateRecipeInfo = createAsyncThunk(
+	'recepiesList/updateRecipeInfo',
+	async function(recipeInfo: Recepie, { rejectWithValue }) {
+		try{
+			const db = getDatabase();
+			const recipeId = recipeInfo.id;
 
-		// 	const updates: any = {};
-		// 	updates['/favorites/' + newPostKey] = postData;
+			const updates: any = {};
+			updates[`dishes/${recipeId}`] = {...recipeInfo};
 
-		// 	update(ref(db), updates);
-		// 	return postData;
-		// } catch (error: unknown) {
-		// 	return rejectWithValue(error);
-		// }
+			update(ref(db), updates)
+				.then(() => {
+					console.log('Поле рецепта успешно обновлено');
+				});
+
+		} catch (error: unknown) {
+			return rejectWithValue(error);
+		}
 	}
 );
 
@@ -99,6 +104,13 @@ export const recepieListSlice = createSlice({
 	reducers: {
 		addNewRecepie: (state, action: PayloadAction<Recepie>) => {
 			state.recepies.push(action.payload);
+		},
+		setFavoriteRecipes: (state, action: PayloadAction<isFavoritePayload>) => {
+			const { recipeId, isFavorite } = action.payload;
+			state.recepies = [...state.recepies.map(recepie => {
+				recepie.id === recipeId ? recepie.favorites = isFavorite : recepie.favorites = recepie.favorites;
+				return recepie;
+			})];
 		}
 	},
 	extraReducers: (builder) => {
@@ -141,6 +153,6 @@ export const recepieListSlice = createSlice({
 	},
 })
 
-export const { addNewRecepie } = recepieListSlice.actions;
+export const { addNewRecepie, setFavoriteRecipes } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;
