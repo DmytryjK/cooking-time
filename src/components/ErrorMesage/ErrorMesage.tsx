@@ -1,9 +1,9 @@
 import './ErrorMesage.scss';
 
-const ErrorMesage = ({text} : {text: string}) => {
+const ErrorMesage = ({text} : {text: unknown}) => {
     return (
         <div className="errorMessage">
-            {text}
+            {`${text}`}
         </div>
     )
 }

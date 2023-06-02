@@ -15,25 +15,27 @@ const FavoritesRecipes = () => {
         uid && dispatch(fetchFavoritesId(uid));
     }, [uid]);
 
-
     useEffect(() => {
-        if ( loadingRecipesById === 'succeeded' ) {
+        if ( loadingRecipeId === 'succeeded' ) {
             dispatch(fetchFavoritesRecipesById(favoriteRecipesId));
         }
     }, [favoriteRecipesId]);
- 
-    const loading = loadingRecipesById !== 'succeeded' ? 'loading' : undefined;
-    const content = favoriteRecipesId.length === 0 && loadingRecipesById === 'idle' ? 'Список избранного пуст, добавьте рецепты на главной странице' : <RecipeLIst fetchedRecipes={favoriteRecipes} loadStatus={loadingRecipesById}/>; 
+
+
+    const content = () => {
+        if (loadingRecipeId === 'failed' || loadingRecipesById === 'failed' ) {
+            return <ErrorMesage text={error}/>
+        } else if (loadingRecipeId === 'succeeded' && loadingRecipesById === 'succeeded' && favoriteRecipesId.length === 0) {
+            return <ErrorMesage text={'Ваш список избранного пуст'}/>
+        } else {
+            return <RecipeLIst fetchedRecipes={favoriteRecipes} loadStatus={loadingRecipesById}/>; 
+        }
+    }
 
     return (
         <>
-            <ErrorMesage text={error instanceof Error ? error["message"] : ''}/>
-            {/* {loading} */}
-            {/* {content} */}
+            {content()}
         </>
-        
-        // <RecipeLIst fetchedRecipes={favoriteRecipes} loadStatus={loadingRecipesById}/>
-        // favoriteRecipesId.length > 0 ? <RecipeLIst fetchedRecipes={favoriteRecipes} loadStatus={loadingRecipesById}/> : <p>Список избранного пуст, вы можете добавить рецепты на Главной странице</p>
     )
 }
 

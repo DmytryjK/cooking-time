@@ -29,6 +29,7 @@ const Authentication = () => {
                 setIsAuthWindowShow(false);
                 if (user.uid && user.email) {
                     dispatch(createUser({uid: user.uid, email: user.email}));
+                    
                 }   
                 
             } else {
@@ -53,7 +54,7 @@ const Authentication = () => {
 
         createUserWithEmailAndPassword(auth, inputMail, inputPass)
         .then(({user}) => {
-            console.log(user);
+            console.log(user.uid);
         })
         .catch((error) => {
             const errorCode = error.code;
