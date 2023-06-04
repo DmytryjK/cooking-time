@@ -23,23 +23,35 @@ const Authentication = () => {
     const auth = getAuth();
 
     useEffect(() => {
+        const savedUser = localStorage.getItem('user');
+
+        if (savedUser !== null) {
+            const parsedUser = JSON.parse(savedUser);
+            dispatch(createUser(parsedUser));
+            setIsAuthorized(true);
+            setIsAuthWindowShow(false);
+        }
+
         const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                setIsAuthorized(true);
-                setIsAuthWindowShow(false);
-                if (user.uid && user.email) {
-                    dispatch(createUser({uid: user.uid, email: user.email}));
-                    
-                }   
-                
-            } else {
-                console.log('try to login');
-                setIsAuthorized(false);
+          if (user) {
+            setIsAuthorized(true);
+            setIsAuthWindowShow(false);
+            if (user.uid && user.email) {
+              const userToSave = { uid: user.uid, email: user.email };
+              localStorage.setItem('user', JSON.stringify(userToSave));
+              dispatch(createUser(userToSave));
             }
+          } else {
+            localStorage.clear();
+            console.log('try to login');
+            setIsAuthorized(false);
+          }
         });
-    
-        return () => unsubscribe(); // Отписываемся от слушателя при размонтировании компонента
-    }, []);
+      
+        return () => {
+          unsubscribe(); // Отписываемся от слушателя при размонтировании компонента
+        };
+      }, []);
 
     useEffect(() => {
         isAuthWindowShow && setIsRegisterOpen(false);

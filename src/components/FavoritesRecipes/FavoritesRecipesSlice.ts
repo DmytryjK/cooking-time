@@ -37,7 +37,7 @@ export const fetchFavoritesId = createAsyncThunk(
 				} else {
 					originalData = [];
 				}
-			} else {
+			} else { 
 				originalData = [];
 			}
 
