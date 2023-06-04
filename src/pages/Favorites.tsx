@@ -7,7 +7,6 @@ import FavoritesRecipes from "../components/FavoritesRecipes/FavoritesRecipes";
 
 const Favorites = () => {
     const recepies = useAppSelector(state=> state.favoriteRecipes.favoriteRecipes);
-    const {uid} = useAppSelector(state => state.authentication.user);
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -15,7 +15,6 @@ const Authentication = () => {
     const [inputPass, setInputPass] = useState<string>('');
 
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-    // const [authorizedUserInfo, setAuthorizedUserInfo] = useState<User>({email: ''});
 
     const currentUser = useAppSelector(state => state.authentication.user);
     const dispatch = useAppDispatch();
@@ -33,19 +32,20 @@ const Authentication = () => {
         }
 
         const unsubscribe = auth.onAuthStateChanged((user) => {
-          if (user) {
-            setIsAuthorized(true);
-            setIsAuthWindowShow(false);
-            if (user.uid && user.email) {
-              const userToSave = { uid: user.uid, email: user.email };
-              localStorage.setItem('user', JSON.stringify(userToSave));
-              dispatch(createUser(userToSave));
+            if (user) {
+                setIsAuthorized(true);
+                if (user.uid && user.email) {
+                    const userToSave = { uid: user.uid, email: user.email };
+                    localStorage.setItem('user', JSON.stringify(userToSave));
+                    dispatch(createUser(userToSave));
+                }
+            } else {
+                localStorage.clear();
+                console.log('try to login');
+                setIsAuthorized(false);
             }
-          } else {
-            localStorage.clear();
-            console.log('try to login');
-            setIsAuthorized(false);
-          }
+            setInputMail('');
+            setInputPass('');
         });
       
         return () => {
@@ -66,7 +66,7 @@ const Authentication = () => {
 
         createUserWithEmailAndPassword(auth, inputMail, inputPass)
         .then(({user}) => {
-            console.log(user.uid);
+            setIsRegisterOpen(false);
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -79,7 +79,7 @@ const Authentication = () => {
 
         signInWithEmailAndPassword(auth, inputMail, inputPass)
         .then(({user}) => {
-            
+            setIsAuthWindowShow(false);
         })
         .then(res => console.log('success'))
         .catch((error) => {
@@ -104,11 +104,18 @@ const Authentication = () => {
         setInputPass(e.currentTarget.value);
     }
 
+    const closePopup = (e: React.MouseEvent<HTMLDivElement>) => {
+        setIsAuthWindowShow(false);
+        setIsRegisterOpen(false);
+        setInputMail(''); 
+        setInputPass(''); 
+    }
+
     const SignUp = () => {
         return (
             <div 
                 className={isRegisterOpen ? "authorization active" : "authorization"} 
-                onMouseDown={() => setIsRegisterOpen(false)}>
+                onMouseDown={closePopup}>
                 <div 
                     className={isRegisterOpen ? "authorization__inner active" : "authorization__inner"} 
                     onMouseDown={e => e.stopPropagation()}>
@@ -121,6 +128,8 @@ const Authentication = () => {
                                     <input 
                                         className="form-login__input-username" 
                                         type="email"
+                                        name="email"
+                                        autoComplete="email"
                                         onChange={handleMailChange}
                                         value={inputMail}/>
                                 </div>
@@ -131,6 +140,8 @@ const Authentication = () => {
                                     <input      
                                         className="form-login__input-password" 
                                         type="text"
+                                        name="password"
+                                        autoComplete="password"
                                         onChange={handlePassChange}
                                         value={inputPass}/>
                                 </div>
@@ -165,8 +176,8 @@ const Authentication = () => {
     const Login = () => {
         return (
             <div 
-                className={isAuthWindowShow ? "authorization active" : "authorization"} 
-                onMouseDown ={() => setIsAuthWindowShow(false)}>
+                className={isAuthWindowShow ? "authorization active" : "authorization"}
+                onMouseDown={closePopup}>
                 <div 
                     className={isAuthWindowShow ? "authorization__inner active" : "authorization__inner"} 
                     onMouseDown ={e => e.stopPropagation()}>
@@ -178,6 +189,8 @@ const Authentication = () => {
                                 <input 
                                     className="form__input-username" 
                                     type="email"
+                                    name="email"
+                                    autoComplete="email"
                                     onChange={handleMailChange}
                                     value={inputMail}/>
                             </div>
@@ -188,6 +201,8 @@ const Authentication = () => {
                                 <input      
                                     className="form-login__input-password" 
                                     type="text"
+                                    name="password"
+                                    autoComplete="current-password"
                                     onChange={handlePassChange}
                                     value={inputPass}/>
                             </div>
