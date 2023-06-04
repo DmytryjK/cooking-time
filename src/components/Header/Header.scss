@@ -6,4 +6,8 @@
         gap: 20px;
         align-items: center;
     }
+    &__logo.active {
+        color: rgb(80, 92, 255);
+        font-weight: 600;
+    }
 }

@@ -1,3 +1,4 @@
+import {FC} from 'react';
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { fetchFavoritesId, fetchFavoritesRecipesById } from "./FavoritesRecipesSlice";
@@ -6,7 +7,7 @@ import RecipeLIst from "../RecipeList/RecipeLIst";
 
 import ErrorMesage from "../ErrorMesage/ErrorMesage";
 
-const FavoritesRecipes = () => {
+const FavoritesRecipes: FC = () => {
     const {favoriteRecipesId, favoriteRecipes, loadingRecipesById, loadingRecipeId, error} = useAppSelector(state => state.favoriteRecipes);
     const {uid} = useAppSelector(state => state.authentication.user);
     const dispatch = useAppDispatch();

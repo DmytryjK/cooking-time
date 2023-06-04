@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, FC } from 'react';
 import './RecipeLIst.scss';
 import { useAppSelector, useAppDispatch
  } from '../../hooks/hooks';
@@ -11,11 +11,10 @@ import { setFavoriteRecipes } from './RecepieListSlice';
 
 import type { Recepie } from '../../types/type';
 import nextId from "react-id-generator";
-import { auth } from '../../firebase/firebase';
 
-const RecipeLIst = ({fetchedRecipes, loadStatus}:{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 'succeeded' | 'failed'}) => {
+const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 'succeeded' | 'failed'}> = ({fetchedRecipes, loadStatus}) => {
 
-    const { recepies, error } = useAppSelector(state => state.recepies);
+    const { error } = useAppSelector(state => state.recepies);
     const { filteredRecepies } = useAppSelector(state => state.filters);
     const { uid } = useAppSelector(state => state.authentication.user);
     const dispatch = useAppDispatch();

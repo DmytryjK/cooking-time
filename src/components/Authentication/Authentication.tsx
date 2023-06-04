@@ -1,3 +1,4 @@
+import {FC} from 'react';
 import { clickOptions } from "@testing-library/user-event/dist/click";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 
@@ -6,9 +7,10 @@ import { createUser } from "./AuthenticationSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import './Authentication.scss';
+import { NavLink } from 'react-router-dom';
 
 
-const Authentication = () => {
+const Authentication: FC = () => {
     const [isAuthWindowShow, setIsAuthWindowShow] = useState<boolean>(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false);
     const [inputMail, setInputMail] = useState<string>('');
@@ -223,7 +225,7 @@ const Authentication = () => {
         <div className="authentication-block">
             {isAuthorized ? 
                 <div className="authentication__header">
-                    <a className="authentication__favorites" href="/favorites">Избранное</a>
+                    <NavLink to="/favorites" className={({ isActive }) => isActive ? "authentication__favorites active" : "authentication__favorites"}>Избранное</NavLink>
                     <div className="authentication__right-wrapper">
                         <h3 className="authentication__title">Welcome, <em>{currentUser.email}</em></h3>
                         <button 

@@ -22,6 +22,10 @@
     margin-left: auto;
     display: block;
 }
+.authentication__favorites.active {
+    color: rgb(80, 92, 255);
+    font-weight: 600;
+}
 .authorization {
     position: absolute;
     top: 0;

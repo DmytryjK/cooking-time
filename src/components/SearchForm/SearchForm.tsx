@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { filterRecepiesByName, addSearchTag } from '../Filters/FiltersSlice';
 
@@ -8,7 +8,7 @@ import './SearchForm.scss';
 
 import nextId from "react-id-generator";
 
-const SearchForm = ({recepies}:{recepies:Recepie[]}) => {
+const SearchForm: FC<{recepies:Recepie[]}> = ({recepies}) => {
     const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState<string>('');
     

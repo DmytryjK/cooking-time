@@ -1,6 +1,7 @@
+import {FC} from 'react';
 import './ErrorMesage.scss';
 
-const ErrorMesage = ({text} : {text: unknown}) => {
+const ErrorMesage: FC<{text: unknown}> = ({text}) => {
     return (
         <div className="errorMessage">
             {`${text}`}

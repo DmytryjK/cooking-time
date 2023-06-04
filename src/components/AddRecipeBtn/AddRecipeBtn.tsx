@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from 'react';
 import './AddRecipeBtn.scss';
+import { NavLink } from 'react-router-dom';
 
 const AddRecipeBtn = ({text = ''}) => {
     return (
-        <a className="addRecipe-btn" href="/add-recepie">{text}</a>
+        <NavLink to="/add-recepie" className={({ isActive }) => isActive ? "addRecipe-btn active" : "addRecipe-btn"}>{text}</NavLink>
     )
 }
 

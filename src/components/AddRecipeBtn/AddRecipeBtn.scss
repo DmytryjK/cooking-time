@@ -15,4 +15,7 @@
         background-color: black;
         color: white;
     }
+    &.active {
+        color: rgb(80, 92, 255);
+    }
 }
