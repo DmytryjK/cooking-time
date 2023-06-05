@@ -1,19 +1,19 @@
-import AddingRecepiesForm from '../components/AddingRecepiesForm/AddingRecepiesForm';
+import AddingRecipesForm from '../components/AddingRecipesForm/AddingRecipesForm';
 import Header from '../components/Header/Header';
-import './AddRecepies.scss'
+import './AddRecipes.scss'
 
-const AddRecepies = () => {
+const AddRecipes = () => {
     return (
         <div className="container">
             <Header isSearch={false} recepies={[]}/>
             <main className="add-recepie">
                 <div className="container">
                     <h2 className="add-recepie__title">Добавьте новый рецепт</h2>
-                    <AddingRecepiesForm/>
+                    <AddingRecipesForm/>
                 </div>
             </main>
         </div>  
     )
 }
 
-export default AddRecepies;
+export default AddRecipes;

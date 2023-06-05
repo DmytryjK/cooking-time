@@ -8,9 +8,9 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import type { tagsType, uploadFileType } from '../../types/type';
 
 import PopUp from '../PopUp/PopUp';
-import './AddingRecepiesForm.scss';
+import './AddingRecipesForm.scss';
 
-const AddingRecepiesForm = () => {
+const AddingRecipesForm = () => {
 
     const {error, loadingForm} = useAppSelector(state => state.recepies);
     const [nameValue, setNameValue] = useState<string>('');
@@ -234,4 +234,4 @@ const AddingRecepiesForm = () => {
     )
 }
 
-export default AddingRecepiesForm;
+export default AddingRecipesForm;

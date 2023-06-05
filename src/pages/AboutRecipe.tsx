@@ -7,9 +7,9 @@ import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 
 import Header from '../components/Header/Header';
 
-import './RecepieMore.scss';
+import './AboutRecipe.scss';
 
-const RecepieMore = () => {
+const AboutRecipe = () => {
     const recepieId = useParams();
     const {fetchedRecepieInfo} = useAppSelector(state => state.recepies);
     const dispatch = useAppDispatch();
@@ -60,4 +60,4 @@ const RecepieMore = () => {
     )
 }
 
-export default RecepieMore;
+export default AboutRecipe;

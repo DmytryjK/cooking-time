@@ -1,6 +1,6 @@
-import AddRecepies from "./AddRecepies";
+import AddRecipes from "./AddRecipes";
 import Main from "./Main";
-import RecepieMore from "./RecepieMore";
+import AboutRecipe from "./AboutRecipe";
 import Favorites from "./Favorites";
 
-export {AddRecepies, Main, RecepieMore, Favorites};
+export {AddRecipes, Main, AboutRecipe, Favorites};
