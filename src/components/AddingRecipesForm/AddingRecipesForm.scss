@@ -58,10 +58,15 @@
         border-radius: 10px;
         transition: 0.2s ease-in-out color, 0.2s ease-in-out border;
     }
-    &__descr {
-        padding: 20px;
+
+    &__descr-editor {
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 1px solid grey;
+        font-size: inherit;
     }
-    &__name-label, &__upload-label, &__descr-label, .tagsForm__header, &__timer-label {
+    
+    &__name-label, &__upload-label, &__descr-title, .tagsForm__header, &__timer-label {
         font-size: 22px;
     }
     .tagsForm {

@@ -13,7 +13,7 @@ const Header: FC<{isSearch:boolean, recepies:Recepie[]}> = ({isSearch, recepies}
     return (
         <header className="header">
             <div className="header__top">
-                <NavLink to="/" className={({ isActive }) => isActive ? "header__logo active" : "header__logo"}>Главная</NavLink>
+                <NavLink to="/" reloadDocument className={({ isActive }) => isActive ? "header__logo active" : "header__logo"}>Главная</NavLink>
                 {isSearch ? <SearchForm recepies={recepies}/> : undefined}
                 <AddRecipeBtn text={"Добавить рецепт"}/>
                 <Authentication/>

@@ -77,6 +77,7 @@
         display: flex;
         gap: 5px;
         overflow: hidden;
+        list-style-type: none;
         &:after {
             content: '';
             position: absolute;

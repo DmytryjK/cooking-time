@@ -5,7 +5,6 @@
 	margin: 0;
 	padding: 0;
 	font-family: 'SofiaSans';
-	font-weight: 400;
 }
 
 body {
@@ -17,6 +16,20 @@ body {
 	padding: 30px;
 	margin: 0 auto;
 }
+
+/* edit description form for recipe */
+.ql-container { 
+	font-size: inherit;
+	border: none;
+}
+.ql-toolbar.ql-snow {
+	border: none;
+	border-bottom: 1px solid grey;
+}
+.ql-editor {
+	min-height: 300px;
+}
+/* ---------------- */
 
 input, textarea {
 	outline-color: transparent;
@@ -35,7 +48,3 @@ input:focus, textarea:focus {
 	outline-color: rgb(146, 146, 146);
 }
 
-
-ul, li {
-	list-style-type: none;
-}

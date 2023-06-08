@@ -5,6 +5,9 @@ import { postRecepie } from '../RecipeList/RecepieListSlice';
 import { storage } from '../../firebase/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import type { tagsType, uploadFileType } from '../../types/type';
 
 import PopUp from '../PopUp/PopUp';
@@ -89,9 +92,9 @@ const AddingRecipesForm = () => {
         setTags(tags.filter(tag => tag.id !== id));
     }
 
-    const handleDescrChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setDescription(e.target.value);
-    }   
+    // const handleDescrChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    //     setDescription(e.target.value);
+    // }   
 
     const changeTagsStatesOnEvent = () => {
         if (tagName.length > 0) {
@@ -133,7 +136,6 @@ const AddingRecipesForm = () => {
         } else {
             alert('all fields must be fills');
         }
-        
     }
 
     const tagsRender = (tags: tagsType[]) => {
@@ -170,63 +172,61 @@ const AddingRecipesForm = () => {
     return(
         <>
             <form className="form add-recepie__form">
-            <label className="form__name-label">
-                <span>Название блюда</span>
-                <input  className="form__name-recepie" 
-                        type="text" 
-                        required
-                        value={nameValue}
-                        onChange={handleNameChange}/>
-            </label>
-            <fieldset className="tagsForm">          
-                <legend className="tagsForm__header">Ингредиенты</legend>
-                <div className="tagsForm__top-wrapper">
-                    <input 
-                    className="tagsForm__tagName"
-                    type="text"
-                    value={tagName}
-                    onChange={handleTagChange}
-                    onKeyDown={handleKeyDown}/>
-                    <button 
-                        className="tagsForm__search-btn"
-                        onClick={handlePlusBtn}
-                        >+</button>
-                </div>
-                <ul className="tagsForm__tagList">
-                    {renderedTags}
-                </ul>
-            </fieldset>
-            <label className="form__timer-label">
-                <span>Время приготовления</span>
-                <div className="form__timer-wrapper">
-                    <input  className="form__timer-input" 
+                <label className="form__name-label">
+                    <span>Название блюда</span>
+                    <input  className="form__name-recepie" 
+                            type="text" 
+                            required
+                            value={nameValue}
+                            onChange={handleNameChange}/>
+                </label>
+                <fieldset className="tagsForm">          
+                    <legend className="tagsForm__header">Ингредиенты</legend>
+                    <div className="tagsForm__top-wrapper">
+                        <input 
+                        className="tagsForm__tagName"
                         type="text"
-                        value={timerValue}
-                        onChange={handleTimeChange}/>
+                        value={tagName}
+                        onChange={handleTagChange}
+                        onKeyDown={handleKeyDown}/>
+                        <button 
+                            className="tagsForm__search-btn"
+                            onClick={handlePlusBtn}
+                            >+</button>
+                    </div>
+                    <ul className="tagsForm__tagList">
+                        {renderedTags}
+                    </ul>
+                </fieldset>
+                <label className="form__timer-label">
+                    <span>Время приготовления</span>
+                    <div className="form__timer-wrapper">
+                        <input  className="form__timer-input" 
+                            type="text"
+                            value={timerValue}
+                            onChange={handleTimeChange}/>
+                    </div>
+                </label>
+                <label className="form__upload-label">
+                    <input 
+                        className="form__upload-photo" 
+                        type="file"
+                        onChange={handleUploadPhoto}
+                        disabled = {statusUploadedPhoto === 'success' ? true : false}/>
+                    <span className="form__upload-label-name">{uploadInfo ? uploadInfo : 'Загрузить фото блюда'}</span>
+                </label>
+                <div className="form__descr">
+                    <span className="form__descr-title">Описание</span>
+                    <ReactQuill 
+                        className="form__descr-editor"
+                        theme="snow" 
+                        value={description} 
+                        onChange={setDescription} />
                 </div>
-            </label>
-            <label className="form__upload-label">
                 <input 
-                    className="form__upload-photo" 
-                    type="file"
-                    onChange={handleUploadPhoto}
-                    disabled = {statusUploadedPhoto === 'success' ? true : false}/>
-                <span className="form__upload-label-name">{uploadInfo ? uploadInfo : 'Загрузить фото блюда'}</span>
-            </label>
-            <label className="form__descr-label">
-                <span>Описание</span>
-                <textarea 
-                    className="form__descr" 
-                    name="description-dishes" 
-                    rows={20} 
-                    required
-                    value={description}
-                    onChange={handleDescrChange}></textarea>
-            </label>
-            <input 
-                className="form__submit addRecipe-btn" 
-                type="submit"
-                onClick={handleSubmitForm}/>
+                    className="form__submit addRecipe-btn" 
+                    type="submit"
+                    onClick={handleSubmitForm}/>
             </form>
             {PopUp()}
         </>

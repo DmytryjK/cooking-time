@@ -225,7 +225,7 @@ const Authentication: FC = () => {
         <div className="authentication-block">
             {isAuthorized ? 
                 <div className="authentication__header">
-                    <NavLink to="/favorites" className={({ isActive }) => isActive ? "authentication__favorites active" : "authentication__favorites"}>Избранное</NavLink>
+                    <NavLink to="/favorites" reloadDocument className={({ isActive }) => isActive ? "authentication__favorites active" : "authentication__favorites"}>Избранное</NavLink>
                     <div className="authentication__right-wrapper">
                         <h3 className="authentication__title">Welcome, <em>{currentUser.email}</em></h3>
                         <button 

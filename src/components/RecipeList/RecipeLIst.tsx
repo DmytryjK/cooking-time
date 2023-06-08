@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch
 
 import { updateRecipeInfo } from './RecepieListSlice';
 import { cloneRecepies } from '../Filters/FiltersSlice';
-import { manageFavoritesRecipes, fetchFavoritesId } from '../FavoritesRecipes/FavoritesRecipesSlice';
+import { manageFavoritesRecipes } from '../FavoritesRecipes/FavoritesRecipesSlice';
 
 import { setFavoriteRecipes } from './RecepieListSlice';
 
@@ -17,6 +17,7 @@ const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 
     const { error } = useAppSelector(state => state.recepies);
     const { filteredRecepies } = useAppSelector(state => state.filters);
     const { uid } = useAppSelector(state => state.authentication.user);
+    const { loadingRecipeId } = useAppSelector(state => state.favoriteRecipes);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -32,7 +33,6 @@ const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 
             favorites: !item.favorites
         }));
         dispatch(manageFavoritesRecipes({recepieId, uid}));
-        dispatch(fetchFavoritesId(uid));
     };
 
     const renderItems = (items: Recepie[]) => {

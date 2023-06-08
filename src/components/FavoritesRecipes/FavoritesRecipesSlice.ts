@@ -15,7 +15,6 @@ export const fetchFavoritesId = createAsyncThunk(
 	'favoriteRecipes/fetchFavoritesId',
 	async function(uid: string, { rejectWithValue }) {
 		try {
-			console.log('fetchFavoritesId')
 			const db = getDatabase();
 			const dbRef = ref(db);
 			const favoritesRecipeRef = ref(db, 'favorites');
@@ -56,7 +55,6 @@ export const fetchFavoritesRecipesById = createAsyncThunk(
 	'favoriteRecipes/fetchFavoritesRecipesById',
 	async function(favoriteRecipesId: string[], { rejectWithValue }) {
 		try {
-			console.log('fetchFavoritesRecipesById')
 			const dbRef = getDatabase();
 			const queries = favoriteRecipesId.map((recipeId) => get(ref(dbRef, `dishes/${recipeId}`)));
 
@@ -119,12 +117,10 @@ export const favoriteRecipesSlice = createSlice({
 			state.error = null;
 		})
 		builder.addCase(fetchFavoritesId.fulfilled, (state, action: PayloadAction<string[]>) => {
-			console.log(action.payload, 'succeeded')
 			state.favoriteRecipesId = action.payload;
 			state.loadingRecipeId = 'succeeded';
 		})
 		builder.addCase(fetchFavoritesId.rejected, (state, action: PayloadAction<unknown>) => {
-			console.log(action.payload, 'failed')
 			state.loadingRecipeId = 'failed';
 			state.error = action.payload;
 		})
