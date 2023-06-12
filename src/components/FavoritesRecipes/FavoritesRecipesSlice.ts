@@ -5,13 +5,12 @@ import type { FavoriteRecipes, Recepie } from '../../types/type';
 
 const initialState: FavoriteRecipes = {
 	favoriteRecipes: [],
-    favoriteRecipesId: [],
-	loadingRecipeId: 'idle',
 	loadingRecipesById: 'idle',
+	loadingRecipeIdToFirebase: 'idle',
 	error: null,
 }
 
-export const fetchFavoritesId = createAsyncThunk(
+export const fetchFavoritesRecipe = createAsyncThunk(
 	'favoriteRecipes/fetchFavoritesId',
 	async function(uid: string, { rejectWithValue }) {
 		try {
@@ -22,7 +21,7 @@ export const fetchFavoritesId = createAsyncThunk(
 			const favoritesTomSnapshot = await get(favoritesRecipeRef);
 			const userFavoritesRecipesSnapshot = await get(child(favoritesRecipeRef, uid));
 
-			let originalData: string[] = [];
+			let recipesData: Recepie[] = [];
 			
 			if (favoritesTomSnapshot.exists()) {
 				let response;
@@ -31,39 +30,30 @@ export const fetchFavoritesId = createAsyncThunk(
 					if (!response.exists()) {
 						throw new Error('Упс... что-то пошло не так, попробуйте ещё раз!');
 					} else {
-						originalData = [...response.val()];
+						// originalData = [...response.val()];
+						const favoriteRecipesId = [...response.val()];
+						console.log(favoriteRecipesId);
+						const queries = favoriteRecipesId.map((recipeId) => get(ref(db, `dishes/${recipeId}`)));
+						const snapshots = await Promise.all(queries);
+						const responseRecipes: Recepie[] = snapshots.map((snapshot) => snapshot.val());
+
+						recipesData = [...responseRecipes];
+						// return recipesData;
 					};
 				} else {
-					originalData = [];
+					recipesData = [];
 				}
 			} else { 
-				originalData = [];
+				recipesData = [];
 			}
 
-			return originalData;
+			return recipesData;
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				return rejectWithValue(error.message);
 			} else {
 				return rejectWithValue('Произошла неизвестная ошибка');
 			}
-		}
-	}
-)
-
-export const fetchFavoritesRecipesById = createAsyncThunk(
-	'favoriteRecipes/fetchFavoritesRecipesById',
-	async function(favoriteRecipesId: string[], { rejectWithValue }) {
-		try {
-			const dbRef = getDatabase();
-			const queries = favoriteRecipesId.map((recipeId) => get(ref(dbRef, `dishes/${recipeId}`)));
-
-			const snapshots = await Promise.all(queries);
-			const recipesData = snapshots.map((snapshot) => snapshot.val());
-
-			return recipesData;
-		} catch (error) {
-			return rejectWithValue(error);
 		}
 	}
 )
@@ -98,7 +88,8 @@ export const manageFavoritesRecipes = createAsyncThunk(
 			}
 
 			await set(userRef, { [uid]: currentRecipe });
-    		return recepieId;
+			console.log(recepieId);
+			return recepieId;
 			
 		} catch (error: unknown) {
 			return rejectWithValue(error);
@@ -112,39 +103,29 @@ export const favoriteRecipesSlice = createSlice({
 	reducers: {
 	},
 	extraReducers: (builder) => {
-		builder.addCase(fetchFavoritesId.pending, (state) => {
-			state.loadingRecipeId = 'pending';
-			state.error = null;
-		})
-		builder.addCase(fetchFavoritesId.fulfilled, (state, action: PayloadAction<string[]>) => {
-			state.favoriteRecipesId = action.payload;
-			state.loadingRecipeId = 'succeeded';
-		})
-		builder.addCase(fetchFavoritesId.rejected, (state, action: PayloadAction<unknown>) => {
-			state.loadingRecipeId = 'failed';
-			state.error = action.payload;
-		})
-		builder.addCase(fetchFavoritesRecipesById.pending, (state) => {
+		builder.addCase(fetchFavoritesRecipe.pending, (state) => {
 			state.loadingRecipesById = 'pending';
 			state.error = null;
 		})
-		builder.addCase(fetchFavoritesRecipesById.fulfilled, (state, action: PayloadAction<Recepie[]>) => {
+		builder.addCase(fetchFavoritesRecipe.fulfilled, (state, action: PayloadAction<Recepie[]>) => {
 			state.favoriteRecipes = action.payload;
 			state.loadingRecipesById = 'succeeded';
 		})
-		builder.addCase(fetchFavoritesRecipesById.rejected, (state, action: PayloadAction<unknown>) => {
+		builder.addCase(fetchFavoritesRecipe.rejected, (state, action: PayloadAction<unknown>) => {
 			state.loadingRecipesById = 'failed';
 			state.error = action.payload;
 		})
 		builder.addCase(manageFavoritesRecipes.pending, (state) => {
-			state.loadingRecipeId = 'pending';
+			state.loadingRecipeIdToFirebase = 'pending';
 			state.error = null;
 		})
-		builder.addCase(manageFavoritesRecipes.fulfilled, (state) => {
-			state.loadingRecipeId = 'succeeded';
+		builder.addCase(manageFavoritesRecipes.fulfilled, (state, action: PayloadAction<string | number | undefined>) => {
+			state.loadingRecipeIdToFirebase = 'succeeded';
+			// state.favoriteRecipes = state.favoriteRecipes.filter(item => item.id === action.payload);
+			// console.log(state.favoriteRecipes);
 		})
 		builder.addCase(manageFavoritesRecipes.rejected, (state, action: PayloadAction<unknown>) => {
-			state.loadingRecipeId = 'failed';
+			state.loadingRecipeIdToFirebase = 'failed';
 		})
 	},
 })

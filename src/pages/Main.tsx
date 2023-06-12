@@ -1,23 +1,16 @@
 import Header from "../components/Header/Header";
-import RecipeLIst from "../components/RecipeList/RecipeLIst";
+import AllRecipes from "../components/AllRecipes/AllRecipes";
 
-import {useEffect} from 'react';
-import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { fetchRecepies } from "../components/RecipeList/RecepieListSlice";
+import { useAppSelector } from "../hooks/hooks";
 
 const Main = () => {
-    const { recepies, error, loading } = useAppSelector(state => state.recepies);
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(fetchRecepies());
-    }, [dispatch]);
+    const { recepies } = useAppSelector(state => state.recepies);
 
     return (
         <div>
             <div className="container">
                 <Header isSearch={true} recepies={recepies}/> 
-                <RecipeLIst fetchedRecipes={recepies} loadStatus={loading}/>
+                <AllRecipes/>
             </div>
         </div>
     )

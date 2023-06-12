@@ -15,7 +15,7 @@ export interface Recepies {
 
 export interface PostState {
 	loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-	loadingForm: 'idle' | 'pending' | 'succeeded' | 'failed';
+	loadingForm?: 'idle' | 'pending' | 'succeeded' | 'failed';
 	error: null | unknown;
 }
 
@@ -63,8 +63,7 @@ export interface user {
 
 export interface FavoriteRecipes {
 	favoriteRecipes: Recepie[];
-	favoriteRecipesId: string[];
-	loadingRecipeId: 'idle' | 'pending' | 'succeeded' | 'failed'
 	loadingRecipesById: 'idle' | 'pending' | 'succeeded' | 'failed'
+	loadingRecipeIdToFirebase: 'idle' | 'pending' | 'succeeded' | 'failed'
 	error: null | unknown;
 }

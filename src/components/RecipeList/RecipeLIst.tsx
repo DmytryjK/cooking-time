@@ -1,30 +1,33 @@
-import { useEffect, FC } from 'react';
+import { useEffect, FC, useState } from 'react';
 import './RecipeLIst.scss';
 import { useAppSelector, useAppDispatch
  } from '../../hooks/hooks';
 
-import { updateRecipeInfo } from './RecepieListSlice';
+import { updateRecipeInfo, setFavoriteRecipes, setCurrentRecipes } from './RecepieListSlice';
 import { cloneRecepies } from '../Filters/FiltersSlice';
 import { manageFavoritesRecipes } from '../FavoritesRecipes/FavoritesRecipesSlice';
-
-import { setFavoriteRecipes } from './RecepieListSlice';
 
 import type { Recepie } from '../../types/type';
 import nextId from "react-id-generator";
 
 const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 'succeeded' | 'failed'}> = ({fetchedRecipes, loadStatus}) => {
 
-    const { error } = useAppSelector(state => state.recepies);
+    const { error, recepies } = useAppSelector(state => state.recepies);
     const { filteredRecepies } = useAppSelector(state => state.filters);
     const { uid } = useAppSelector(state => state.authentication.user);
-    const { loadingRecipeId } = useAppSelector(state => state.favoriteRecipes);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (loadStatus === 'succeeded') {
-            dispatch(cloneRecepies(fetchedRecipes));
+            dispatch(setCurrentRecipes(fetchedRecipes));
         }
-    }, [loadStatus, fetchedRecipes]);
+    }, [loadStatus]);
+
+    useEffect(() => {
+        if (loadStatus === 'succeeded') {
+            dispatch(cloneRecepies(recepies));
+        }
+    }, [recepies]);
 
     const handleAddFavorite = ( recepieId: string|number|null, item: Recepie) => {
         dispatch(setFavoriteRecipes({recipeId: recepieId, isFavorite: !item.favorites}));

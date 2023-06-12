@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, child, get, push, update, set, remove } from "firebase/database";
+import { getDatabase, ref, child, get, push, update } from "firebase/database";
 
 import type { Recepies, Recepie, PostState } from '../../types/type';
-
 
 const initialState: Recepies & PostState = {
 	recepies: [],
@@ -17,30 +16,6 @@ type isFavoritePayload = {
 	isFavorite: boolean;
 };
 
-export const fetchRecepies = createAsyncThunk(
-	'recepiesList/fetchRecepies',
-	async function(_, { rejectWithValue }) {
-
-		try {
-			const dbRef = ref(getDatabase());
-			const response = await get(child(dbRef, 'dishes'));
-
-			if (!response.exists()) throw new Error('Something went wrong');
-
-			const originalData: Recepie[] = await response.val();
-			const transformRecepiesToArr: Recepie[]= [];
-
-			for (const key in originalData) transformRecepiesToArr.push(originalData[key]);
-			return { 
-				recepies: transformRecepiesToArr,
-				originalFetchedRecepies: originalData
-			};
-		} catch (error: unknown) {
-			return rejectWithValue(error);
-		}
-	}
-)
-
 export const fetchRecepie = createAsyncThunk(
 	'recepiesList/fetchRecepie',
 	async function(id: number | string | undefined, { rejectWithValue }) {
@@ -54,7 +29,6 @@ export const fetchRecepie = createAsyncThunk(
 		} catch (error: unknown) {
 			return rejectWithValue(error);
 		}
-		
 	}
 )
 
@@ -102,11 +76,15 @@ export const recepieListSlice = createSlice({
 	name: 'recepiesList',
 	initialState,
 	reducers: {
+		setCurrentRecipes: (state, action: PayloadAction<Recepie[]>) => {
+			state.recepies = action.payload;
+		},
 		addNewRecepie: (state, action: PayloadAction<Recepie>) => {
 			state.recepies.push(action.payload);
 		},
 		setFavoriteRecipes: (state, action: PayloadAction<isFavoritePayload>) => {
 			const { recipeId, isFavorite } = action.payload;
+
 			state.recepies = [...state.recepies.map(recepie => {
 				recepie.id === recipeId ? recepie.favorites = isFavorite : recepie.favorites = recepie.favorites;
 				return recepie;
@@ -114,18 +92,6 @@ export const recepieListSlice = createSlice({
 		}
 	},
 	extraReducers: (builder) => {
-		builder.addCase(fetchRecepies.pending, (state) => {
-			state.loading = 'pending';
-			state.error = null;
-		})
-		builder.addCase(fetchRecepies.fulfilled, (state, action: PayloadAction<Recepies>) => {
-			state.loading = 'succeeded';
-			state.recepies = action.payload.recepies;
-		})
-		builder.addCase(fetchRecepies.rejected, (state, action: PayloadAction<unknown>) => {
-			state.loading = 'failed';
-			state.error = action.payload;
-		})
 		builder.addCase(fetchRecepie.pending, (state) => {
 			state.loading = 'pending';
 			state.error = null;
@@ -153,6 +119,6 @@ export const recepieListSlice = createSlice({
 	},
 })
 
-export const { addNewRecepie, setFavoriteRecipes } = recepieListSlice.actions;
+export const { addNewRecepie, setFavoriteRecipes, setCurrentRecipes } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;
