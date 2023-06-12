@@ -224,22 +224,14 @@ const Authentication: FC = () => {
     return (
         <div className="authentication-block">
             {isAuthorized ? 
-                <div className="authentication__header">
-                    <NavLink to="/favorites" reloadDocument className={({ isActive }) => isActive ? "authentication__favorites active" : "authentication__favorites"}>Избранное</NavLink>
-                    <div className="authentication__right-wrapper">
-                        <h3 className="authentication__title">Welcome, <em>{currentUser.email}</em></h3>
-                        <button 
-                            className="authentication__logout-btn" 
-                            onClick={handleLogOut}>Log Out
-                        </button>
-                    </div>
-                </div>
-
-            :
-
+                <button 
+                    className="authentication__logout-btn" 
+                    onClick={handleLogOut}>Вийти
+                </button>
+            :   
                 <button 
                     className="authentication__login-btn" 
-                    onClick={() => setIsAuthWindowShow(!isAuthWindowShow)}>Log In
+                    onClick={() => setIsAuthWindowShow(!isAuthWindowShow)}>Увійти | Зареєструватись
                 </button>}
             { Login() }
             { SignUp() }

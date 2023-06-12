@@ -1,7 +1,12 @@
 .header {
     padding: 25px 0;
     border-bottom: 1px solid rgb(71, 71, 71);
-    &__top {
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__nav {
         display: flex;
         gap: 20px;
         align-items: center;
@@ -9,5 +14,10 @@
     &__logo.active {
         color: rgb(80, 92, 255);
         font-weight: 600;
+    }
+    &__right {
+        display: flex;
+        gap: 20px;
+        align-items: center;
     }
 }

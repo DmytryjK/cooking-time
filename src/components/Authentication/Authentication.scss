@@ -1,19 +1,6 @@
 .authentication-block {
     margin-left: auto;
     width: 100%;
-}
-.authentication__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 15px;
-}
-.authentication__title {
-    font-size: 14px;
-}
-.authentication__right-wrapper {
-    text-align: right;
     button {
         cursor: pointer;
     }
@@ -26,6 +13,7 @@
     color: rgb(80, 92, 255);
     font-weight: 600;
 }
+
 .authorization {
     position: absolute;
     top: 0;
