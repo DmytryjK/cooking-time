@@ -8,7 +8,8 @@ import RecipeList from "../RecipeList/RecipeLIst";
 import ErrorMesage from "../ErrorMesage/ErrorMesage";
 
 const FavoritesRecipes: FC = () => {
-    const { favoriteRecipes, loadingRecipesById, loadingRecipeIdToFirebase, error} = useAppSelector(state => state.favoriteRecipes);
+    const { favoriteRecipes, loadingRecipesById, error} = useAppSelector(state => state.favoriteRecipes);
+    const { recepies } = useAppSelector(state => state.recepies);
     const {uid} = useAppSelector(state => state.authentication.user);
     const dispatch = useAppDispatch();
 
@@ -16,7 +17,7 @@ const FavoritesRecipes: FC = () => {
         if (uid) {
             dispatch(fetchFavoritesRecipe(uid));
         }
-    }, [uid, loadingRecipeIdToFirebase]);
+    }, [uid]);
 
     const content = () => {
         if (loadingRecipesById === 'failed' ) {

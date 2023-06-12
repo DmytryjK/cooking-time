@@ -30,15 +30,14 @@ export const fetchFavoritesRecipe = createAsyncThunk(
 					if (!response.exists()) {
 						throw new Error('Упс... что-то пошло не так, попробуйте ещё раз!');
 					} else {
-						// originalData = [...response.val()];
 						const favoriteRecipesId = [...response.val()];
-						console.log(favoriteRecipesId);
+
 						const queries = favoriteRecipesId.map((recipeId) => get(ref(db, `dishes/${recipeId}`)));
+
 						const snapshots = await Promise.all(queries);
 						const responseRecipes: Recepie[] = snapshots.map((snapshot) => snapshot.val());
 
 						recipesData = [...responseRecipes];
-						// return recipesData;
 					};
 				} else {
 					recipesData = [];
@@ -62,7 +61,6 @@ export const manageFavoritesRecipes = createAsyncThunk(
 	'favoriteRecipes/manageFavoritesRecipes',
 	async function({recepieId, uid}:{recepieId: string|number|null, uid: string}, { rejectWithValue }) {
 		try{
-			console.log('manageFavoritesRecipes')
 			const db = getDatabase();
 			const userRef = ref(db, `favorites/`);
 
@@ -88,7 +86,6 @@ export const manageFavoritesRecipes = createAsyncThunk(
 			}
 
 			await set(userRef, { [uid]: currentRecipe });
-			console.log(recepieId);
 			return recepieId;
 			
 		} catch (error: unknown) {
@@ -119,10 +116,9 @@ export const favoriteRecipesSlice = createSlice({
 			state.loadingRecipeIdToFirebase = 'pending';
 			state.error = null;
 		})
-		builder.addCase(manageFavoritesRecipes.fulfilled, (state, action: PayloadAction<string | number | undefined>) => {
+		builder.addCase(manageFavoritesRecipes.fulfilled, (state, action:PayloadAction<string|number|undefined>) => {
 			state.loadingRecipeIdToFirebase = 'succeeded';
-			// state.favoriteRecipes = state.favoriteRecipes.filter(item => item.id === action.payload);
-			// console.log(state.favoriteRecipes);
+			state.favoriteRecipes = state.favoriteRecipes.filter(item => item.id !== action.payload);
 		})
 		builder.addCase(manageFavoritesRecipes.rejected, (state, action: PayloadAction<unknown>) => {
 			state.loadingRecipeIdToFirebase = 'failed';

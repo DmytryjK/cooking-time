@@ -9,13 +9,20 @@ import { manageFavoritesRecipes } from '../FavoritesRecipes/FavoritesRecipesSlic
 
 import type { Recepie } from '../../types/type';
 import nextId from "react-id-generator";
+import { useLocation } from 'react-router-dom';
 
 const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 'succeeded' | 'failed'}> = ({fetchedRecipes, loadStatus}) => {
 
     const { error, recepies } = useAppSelector(state => state.recepies);
+    const { loadingRecipeIdToFirebase } = useAppSelector(state => state.favoriteRecipes);
     const { filteredRecepies } = useAppSelector(state => state.filters);
     const { uid } = useAppSelector(state => state.authentication.user);
+
+    const [currentFavoriteId, setCurrentFavoriteId] = useState<string|number|null>(null);
+
     const dispatch = useAppDispatch();
+
+    const currentLink = useLocation().pathname;
 
     useEffect(() => {
         if (loadStatus === 'succeeded') {
@@ -24,10 +31,15 @@ const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 
     }, [loadStatus]);
 
     useEffect(() => {
-        if (loadStatus === 'succeeded') {
-            dispatch(cloneRecepies(recepies));
+        dispatch(cloneRecepies(recepies));
+    }, [recepies]); 
+
+    useEffect(() => {
+        if (currentLink === '/favorites' && loadingRecipeIdToFirebase === 'succeeded') {
+            const removedItem = filteredRecepies.filter(item => item.id !== currentFavoriteId);
+            dispatch(setCurrentRecipes(removedItem));
         }
-    }, [recepies]);
+    }, [loadingRecipeIdToFirebase]);
 
     const handleAddFavorite = ( recepieId: string|number|null, item: Recepie) => {
         dispatch(setFavoriteRecipes({recipeId: recepieId, isFavorite: !item.favorites}));
@@ -36,6 +48,7 @@ const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 
             favorites: !item.favorites
         }));
         dispatch(manageFavoritesRecipes({recepieId, uid}));
+        setCurrentFavoriteId(recepieId);
     };
 
     const renderItems = (items: Recepie[]) => {
