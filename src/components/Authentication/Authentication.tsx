@@ -7,8 +7,6 @@ import { createUser } from "./AuthenticationSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 import './Authentication.scss';
-import { NavLink } from 'react-router-dom';
-
 
 const Authentication: FC = () => {
     const [isAuthWindowShow, setIsAuthWindowShow] = useState<boolean>(false);
@@ -222,19 +220,75 @@ const Authentication: FC = () => {
     }
 
     return (
-        <div className="authentication-block">
-            {isAuthorized ? 
-                <button 
-                    className="authentication__logout-btn" 
-                    onClick={handleLogOut}>Вийти
-                </button>
-            :   
-                <button 
-                    className="authentication__login-btn" 
-                    onClick={() => setIsAuthWindowShow(!isAuthWindowShow)}>Увійти | Зареєструватись
-                </button>}
-            { Login() }
-            { SignUp() }
+        <div className="authentication__wrapper">
+            <div className="authentication__block login active">
+                <h1 className="authentication__block-title">Увійти</h1>
+                <ul className="authentication__block-list">
+                    <li className="authentication__block-item">
+                        <button className="authentication__block-btn">
+                            <span className="authentication__block-text">
+                                Увійти через Email
+                                <span className="authentication__block-decorative block-email"></span>
+                            </span>
+                        </button>
+                        
+                    </li>
+                    <li className="authentication__block-item">
+                        <button className="authentication__block-btn">
+                            <span className="authentication__block-text">
+                                Увійти через Google
+                                <span className="authentication__block-decorative block-google"></span>
+                            </span>
+                        </button>
+                    </li>
+                    <li className="authentication__block-item">
+                        <button className="authentication__block-btn">
+                            <span className="authentication__block-text">
+                                Увійти через Facebook
+                                <span className="authentication__block-decorative block-facebook"></span>
+                            </span>
+                        </button>
+                    </li>
+                </ul>
+                <div className="authentication__change-form">
+                    <span>Не маєте аккаунта?</span>
+                    <button>Зареєструйтесь</button>
+                </div>
+            </div>
+            <div className="authentication__block register">
+                <h1 className="authentication__block-title">Зареєструватись</h1>
+                <ul className="authentication__block-list">
+                    <li className="authentication__block-item">
+                        <button className="authentication__block-btn">
+                            <span className="authentication__block-text">
+                                Зареєструватись через Email
+                                <span className="authentication__block-decorative block-email"></span>
+                            </span>
+                        </button>
+                        
+                    </li>
+                    <li className="authentication__block-item">
+                        <button className="authentication__block-btn">
+                            <span className="authentication__block-text">
+                                Зареєструватись через Google
+                                <span className="authentication__block-decorative block-google"></span>
+                            </span>
+                        </button>
+                    </li>
+                    <li className="authentication__block-item">
+                        <button className="authentication__block-btn">
+                            <span className="authentication__block-text">
+                                Зареєструватись через Facebook
+                                <span className="authentication__block-decorative block-facebook"></span>
+                            </span>
+                        </button>
+                    </li>
+                </ul>
+                <div className="authentication__change-form">
+                    <span>Маєте аккаунт?</span>
+                    <button>Увійти</button>
+                </div>
+            </div>
         </div>
     )
 }

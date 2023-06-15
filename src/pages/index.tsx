@@ -2,6 +2,6 @@ import AddRecipes from "./AddRecipes";
 import Main from "./Main";
 import AboutRecipe from "./AboutRecipe";
 import Favorites from "./Favorites";
-import Authorization from "./Authorization";
+import AuthorizationPage from "./AuthorizationPage";
 
-export {AddRecipes, Main, AboutRecipe, Favorites, Authorization};
+export {AddRecipes, Main, AboutRecipe, Favorites, AuthorizationPage};

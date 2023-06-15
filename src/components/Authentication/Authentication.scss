@@ -1,162 +1,80 @@
-.authentication-block {
-    margin-left: auto;
-    width: 100%;
-    button {
-        cursor: pointer;
+.authentication{
+    &__wrapper {
+        width: 400px;
+        margin: auto 0;
+        background-color:red;
+        overflow: hidden;
     }
-}
-.authentication__login-btn {
-    margin-left: auto;
-    display: block;
-}
-.authentication__favorites.active {
-    color: rgb(80, 92, 255);
-    font-weight: 600;
-}
-
-.authorization {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.2s ease opacity, 0.2s ease visibility;
-    z-index: 999;
-    &.active {
-        opacity: 1;
-        visibility: visible;
-        transition: 0.2s ease opacity, 0.2s ease visibility;
-    }
-    &__inner {
-        background-color: rgb(255, 255, 255);
-        padding: 20px;
-        border-radius: 20px;
-        min-width: 500px;
-        transform: scale(0.5);
-        transition: 0.3s ease transform;
+    &__block {
+        visibility: hidden;
+        display: none;
         &.active {
-            transform: scale(1);
-            transition: 0.3s ease transform;
-        }
-    }
-    &__signup-link {
-        display: block;
-        margin: 0 auto;
-        margin-top: 30px;
-        background: none;
-        border: none;
-        font-size: 16px;
-        color: rgb(164, 125, 255);
-        font-weight: 600;
-        text-transform: uppercase;
-        cursor: pointer;
-        &:hover {
-            color: rgb(94, 42, 214);
-        }
-    }
-    &__forms-wrapper {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        gap: 80px;
-    }
-    .form__divider {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 50%;
-        transform: translateX(50%);
-        width: 0.5px;
-        z-index: 1;
-        &:after {
-            content: '';
-            position: absolute;
+            visibility: visible;
             display: block;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgb(196, 196, 196);
-            z-index: 1;
         }
-        span {
-            display: block;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            color: grey;
-            height: 40px;
-            background-color: white;
-            font-size: 20px;
-            font-weight: 800;
-            z-index: 1000;
+        &-title {
+            font-weight: 700;
+            font-size: 25px;
+            line-height: 34px;
         }
-    }
-    .form-login {
-        margin-top: 20px;
-        span {
-            display: inline-block;
-            margin-top: 10px;
-        }
-        &__input-wrapper {
-            margin-top: 10px;
-        }
-        &__input-username, &__input-password {
-            width: 100%;
-        }
-        &__submit {
-            margin-top: 20px;
-            padding: 10px 50px;
-            background-color: rgb(0, 221, 48);
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-        }
-    }
-
-    .login{
-        &__social-networks {
-            width: 230px;
-        }
-        &__social-list {
-            margin-top: 40px;
-        }
-        &__social-item:not(:first-child) {
-            margin-top: 20px;
-        }
-        &__social-btn {
-            position: relative;
-            padding: 10px 25px 10px 60px;
-            border: 2px solid rgb(231, 231, 231);
-            border-radius: 10px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.2s ease background-color;
-            &:hover {
-                background-color: rgb(230, 230, 230);
+        &-item {
+            list-style-type: none;
+            &:first-child {
+                margin-top: 30px;
             }
-            &.google:before, &.facebook:before {
-                content: '';
+            &:not(:first-child) {
+                margin-top: 10px;
+            }
+        }
+        &-btn {
+            display: block;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 22px;
+            width: 400px;
+            height: 55px;
+            background-color: transparent;
+            border: 1px solid #303030;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        &-text {
+            position: relative;
+            .authentication__block-decorative {
                 position: absolute;
-                display: block;
-                width: 25px;
-                height: 25px;
-                left: 25px;
+                display: inline-block;
+                left: -35px;
                 top: 50%;
                 transform: translateY(-50%);
-                background-color: red;
+                width: 25px;
+                height: 25px;
+            }
+            .block-email {
+                background: url('../../resources/icons/login/mail.svg') center center no-repeat;
+            }
+            .block-google {
+                background: url('../../resources/icons/login/google.svg') center center no-repeat;
+            }
+            .block-facebook {
+                background: url('../../resources/icons/login/facebook.svg') center center no-repeat;
             }
         }
-        
+    }
+    &__change-form {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: 500;
+        button {
+            margin-left: 5px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 0.5px solid black;
+            height: 17px;
+            cursor: pointer;
+        }
     }
 }

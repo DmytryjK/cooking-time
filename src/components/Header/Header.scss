@@ -1,19 +1,35 @@
 .header {
-    padding: 25px 0;
-    border-bottom: 1px solid rgb(71, 71, 71);
+    padding: 20px 0;
     &__wrapper {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
-    &__nav {
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+    }
+    &__nav-list {
         display: flex;
         gap: 20px;
         align-items: center;
+        li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
     }
-    &__logo.active {
-        color: rgb(80, 92, 255);
-        font-weight: 600;
+    &__nav-link {
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 20px;
+        color: #303030;
+        text-decoration: none;
+        &.active {
+            color: #D24A34;
+            text-decoration: underline;
+        }
     }
     &__right {
         display: flex;
