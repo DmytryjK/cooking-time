@@ -12,18 +12,34 @@ const initialState: Recepies & PostState = {
 
 export const fetchRecepies = createAsyncThunk(
 	'allRecipes/fetchRecepies',
-	async function(_, { rejectWithValue }) {
-
+	async function(uid:string, { rejectWithValue }) {
 		try {
 			const dbRef = ref(getDatabase());
-			const response = await get(child(dbRef, 'dishes'));
+			const responseRecipe = await get(child(dbRef, 'dishes'));
 
-			if (!response.exists()) throw new Error('Something went wrong');
+			if (!responseRecipe.exists()) throw new Error('Something went wrong');
 
-			const originalData: Recepie[] = await response.val();
+			const originalData: Recepie[] = await responseRecipe.val();
 			const transformRecepiesToArr: Recepie[]= [];
 
-			for (const key in originalData) transformRecepiesToArr.push(originalData[key]);
+			const responseFavoritesId = await get(child(dbRef, `favorites/${uid}`));
+			const favoriteId:string[] = await responseFavoritesId.val();
+
+			if (favoriteId) {
+				for (const key in originalData) {
+					originalData[key].favorites = false;
+					favoriteId.forEach(favoriteId => {
+						if (originalData[key].id === favoriteId) {
+							originalData[key].favorites = true;
+						} 
+					})
+				}
+			}
+
+			for (const key in originalData) {
+				transformRecepiesToArr.push(originalData[key]);
+			}
+
 			return { 
 				recepies: transformRecepiesToArr,
 				originalFetchedRecepies: originalData

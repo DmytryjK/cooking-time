@@ -1,7 +1,7 @@
 import {FC} from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, reload } from "firebase/auth";
 
 import { useState, useEffect, useRef } from 'react';
 import { createUser } from "./AuthenticationSlice";
@@ -11,6 +11,8 @@ import './Authentication.scss';
 
 const Authentication: FC = () => {
     const navigate = useNavigate();
+    const route = useSearchParams();
+    const location = useLocation();
 
     const [isLoginWindowShow, setIsLoginWindowShow] = useState<boolean>(false);
     const [isRegisterWindowShow, setIsRegisterWindowShow] = useState<boolean>(false);
@@ -35,9 +37,12 @@ const Authentication: FC = () => {
     const auth = getAuth();
 
     useEffect(() => {
+        if (localStorage.getItem('user')) navigate("/");
+    }, []);
+
+    useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                navigate('/');
                 setIsAuthorized(true);
                 if (user.uid && user.email) {
                     const userToSave = { uid: user.uid, email: user.email };
@@ -63,8 +68,8 @@ const Authentication: FC = () => {
 
         createUserWithEmailAndPassword(auth, inputMail, inputPass)
         .then(({user}) => {
+            navigate('/');
             setIsRegisterOpen(false);
-            
         })
         .catch((error) => {
             const errorCode = error.code;

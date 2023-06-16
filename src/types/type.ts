@@ -1,5 +1,5 @@
 export interface Recepie {
-	id: number | string | null;
+	id: string|number|null;
 	title: string;
 	time?: string | null;
 	ingredients?: string[];

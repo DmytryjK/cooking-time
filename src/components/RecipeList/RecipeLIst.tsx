@@ -3,7 +3,7 @@ import './RecipeLIst.scss';
 import { useAppSelector, useAppDispatch
  } from '../../hooks/hooks';
 
-import { updateRecipeInfo, setFavoriteRecipes, setCurrentRecipes } from './RecepieListSlice';
+import { setFavoriteRecipes, setCurrentRecipes } from './RecepieListSlice';
 import { cloneRecepies } from '../Filters/FiltersSlice';
 import { manageFavoritesRecipes } from '../FavoritesRecipes/FavoritesRecipesSlice';
 
@@ -43,10 +43,10 @@ const RecipeLIst: FC<{fetchedRecipes:Recepie[], loadStatus:'idle' | 'pending' | 
 
     const handleAddFavorite = ( recepieId: string|number|null, item: Recepie) => {
         dispatch(setFavoriteRecipes({recipeId: recepieId, isFavorite: !item.favorites}));
-        dispatch(updateRecipeInfo({
-            ...item,
-            favorites: !item.favorites
-        }));
+        // dispatch(updateRecipeInfo({
+        //     ...item,
+        //     favorites: !item.favorites
+        // }));
         dispatch(manageFavoritesRecipes({recepieId, uid}));
         setCurrentFavoriteId(recepieId);
     };

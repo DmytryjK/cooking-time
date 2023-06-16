@@ -51,26 +51,26 @@ export const postRecepie = createAsyncThunk(
 	}
 );
 
-export const updateRecipeInfo = createAsyncThunk(
-	'recepiesList/updateRecipeInfo',
-	async function(recipeInfo: Recepie, { rejectWithValue }) {
-		try{
-			const db = getDatabase();
-			const recipeId = recipeInfo.id;
+// export const updateRecipeInfo = createAsyncThunk(
+// 	'recepiesList/updateRecipeInfo',
+// 	async function(recipeInfo: Recepie, { rejectWithValue }) {
+// 		try{
+// 			const db = getDatabase();
+// 			const recipeId = recipeInfo.id;
 
-			const updates: any = {};
-			updates[`dishes/${recipeId}`] = {...recipeInfo};
+// 			const updates: any = {};
+// 			updates[`dishes/${recipeId}`] = {...recipeInfo};
 
-			update(ref(db), updates)
-				.then(() => {
-					console.log('Поле рецепта успешно обновлено');
-				});
+// 			update(ref(db), updates)
+// 				.then(() => {
+// 					console.log('Поле рецепта успешно обновлено');
+// 				});
 
-		} catch (error: unknown) {
-			return rejectWithValue(error);
-		}
-	}
-);
+// 		} catch (error: unknown) {
+// 			return rejectWithValue(error);
+// 		}
+// 	}
+// );
 
 export const recepieListSlice = createSlice({
 	name: 'recepiesList',

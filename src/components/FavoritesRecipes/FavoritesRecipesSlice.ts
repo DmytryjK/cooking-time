@@ -35,8 +35,10 @@ export const fetchFavoritesRecipe = createAsyncThunk(
 						const queries = favoriteRecipesId.map((recipeId) => get(ref(db, `dishes/${recipeId}`)));
 
 						const snapshots = await Promise.all(queries);
-						const responseRecipes: Recepie[] = snapshots.map((snapshot) => snapshot.val());
-
+						const responseRecipes: Recepie[] = snapshots.map((snapshot) => {
+							const result = {...snapshot.val(), favorites: true}
+							return result;
+						});
 						recipesData = [...responseRecipes];
 					};
 				} else {
@@ -45,7 +47,7 @@ export const fetchFavoritesRecipe = createAsyncThunk(
 			} else { 
 				recipesData = [];
 			}
-
+			console.log(recipesData);
 			return recipesData;
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -98,6 +100,9 @@ export const favoriteRecipesSlice = createSlice({
 	name: 'favoriteRecipes',
 	initialState,
 	reducers: {
+		createFavoritesRecipes: (state, action) => {
+
+		}
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchFavoritesRecipe.pending, (state) => {

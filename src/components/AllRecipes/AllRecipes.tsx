@@ -7,8 +7,11 @@ const AllRecipes = () => {
     const { recepies, error, loading } = useAppSelector(state => state.allRecipes);
     const dispatch = useAppDispatch();
 
+    const localUser = localStorage.getItem('user');
+    const localUserParsedId = localUser && JSON.parse(localUser)["uid"];
+
     useEffect(() => {
-        dispatch(fetchRecepies());
+        dispatch(fetchRecepies(localUserParsedId));
     }, [dispatch]);
 
     return (
