@@ -85,7 +85,7 @@ export const manageFavoritesRecipes = createAsyncThunk(
 				return;
 			}
 
-			await set(userRef, { [uid]: currentRecipe });
+			await update(userRef, { [uid]: currentRecipe });
 			return recepieId;
 			
 		} catch (error: unknown) {

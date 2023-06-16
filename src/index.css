@@ -31,16 +31,6 @@ body {
 }
 /* ---------------- */
 
-input, textarea {
-	outline-color: transparent;
-	border-radius: 10px;
-	border: none;
-	padding: 5px 20px;
-	min-height: 34px;
-	background-color: lightgrey;
-	transition: 0.3s ease outline-color;
-}
-
 textarea {
 	resize: none;
 }

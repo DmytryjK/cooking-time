@@ -19,8 +19,14 @@ const FavoritesRecipes: FC = () => {
         }
     }, [uid]);
 
+    const registerAttention = () => {
+        return <div>Зареєструйтесь, щоб побачити список рецептів</div>
+    }
+
     const content = () => {
-        if (loadingRecipesById === 'failed' ) {
+        if (!uid) {
+            return registerAttention();
+        } else if (loadingRecipesById === 'failed' ) {
             return <ErrorMesage text={error}/>
         } else if (loadingRecipesById === 'succeeded' && favoriteRecipes.length === 0) {
             return <ErrorMesage text={'Ваш список избранного пуст'}/>

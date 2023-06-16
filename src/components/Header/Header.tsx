@@ -1,19 +1,48 @@
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import AddRecipeBtn from '../AddRecipeBtn/AddRecipeBtn';
 import Tags from '../Tags/Tags';
 import SearchForm from "../SearchForm/SearchForm";
 import Authentication from '../Authentication/Authentication';
 
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { createUser } from '../Authentication/AuthenticationSlice';
+
 import './Header.scss';
 import { Recepie } from '../../types/type';
 import { NavLink } from "react-router-dom";
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 import logo from '../../resources/icons/logo.svg';
 
 const Header: FC<{isSearch:boolean, recepies:Recepie[]}> = ({isSearch, recepies}) => {
-
     const {uid} = useAppSelector(state => state.authentication.user);
+    const [userAuthToLocalStorage, setUserAuthToLocalStorage] = useState<string | null>(null);
+
+    const dispatch = useAppDispatch();
+    const auth = getAuth();
+    const savedUser = localStorage.getItem('user');
+
+    useEffect(() => {
+        setUserAuthToLocalStorage(savedUser);
+    }, [savedUser]);
+
+    useEffect(() => {
+        if (!uid && savedUser) {
+            dispatch(createUser(JSON.parse(savedUser)));
+        }
+    }, [uid, savedUser, dispatch]);
+
+    const handleLogout = () => {
+        signOut(auth)
+            .then(() => {
+                console.log('logout success');
+                localStorage.clear();
+                setUserAuthToLocalStorage(null);
+                dispatch(createUser({uid: '', email: ''}));
+            }).catch((error) => {
+                console.log('error when u try sign out')
+            });
+    }
 
     return (
         <header className="header">
@@ -46,21 +75,17 @@ const Header: FC<{isSearch:boolean, recepies:Recepie[]}> = ({isSearch, recepies}
                 </div>
                 <div className="header__right">
                     <SearchForm recepies={recepies}/>
-                    {/* <Authentication/> */}
-                    <NavLink 
-                        className="auth-page" 
-                        to="/auth" 
-                        reloadDocument > Увійти | Зареєструватись 
-                    </NavLink>
-                    {/* {   uid ? 
-                            <NavLink 
-                                className="auth-page" 
-                                to="/auth" 
-                                reloadDocument > Увійти | Зареєструватись 
-                            </NavLink>
-                        :
-                            <button className="logout__btn">Вихід</button>
-                    } */}
+                    {userAuthToLocalStorage ? 
+                        <button 
+                            onClick={handleLogout} 
+                            className="logout__btn">Вихід</button>
+                            :
+                        <NavLink 
+                            className="auth-page" 
+                            to="/auth" 
+                            reloadDocument > Увійти | Зареєструватись 
+                        </NavLink>
+                    }
                 </div>
             </div>
             <Tags recepies={recepies}/>

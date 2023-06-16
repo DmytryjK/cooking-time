@@ -7,14 +7,6 @@ import FavoritesRecipes from "../components/FavoritesRecipes/FavoritesRecipes";
 
 const Favorites = () => {
     const recepies = useAppSelector(state=> state.favoriteRecipes.favoriteRecipes);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const authUser = localStorage.getItem('user');
-        if (!authUser) {
-            navigate('/');
-        }
-    }, []);
 
     return (
         <div>
