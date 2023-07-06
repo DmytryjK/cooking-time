@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d4eb5740.css",
+    "main.js": "/static/js/main.9df878b7.js",
+    "static/media/background-auth.jpg": "/static/media/background-auth.5c8f91c2ae03e5618207.jpg",
+    "static/media/Manrope-SemiBold.ttf": "/static/media/Manrope-SemiBold.310f108cc524df0e5ffc.ttf",
+    "static/media/Manrope-Medium.ttf": "/static/media/Manrope-Medium.08894ccb04665d1a9d53.ttf",
+    "static/media/Manrope-Regular.ttf": "/static/media/Manrope-Regular.a9b9e09fe6b69741f316.ttf",
+    "static/media/Manrope-Bold.ttf": "/static/media/Manrope-Bold.47f6d7143da9d8c0e480.ttf",
+    "static/media/google.svg": "/static/media/google.65d311b48c92645aa56a.svg",
+    "static/media/logo.svg": "/static/media/logo.4a3273d909c5a637112c9732bb322211.svg",
+    "static/media/mail.svg": "/static/media/mail.4184fd6d97772970cc8a.svg",
+    "static/media/timer-line2.svg": "/static/media/timer-line2.3b24ee10b982c9a26453.svg",
+    "static/media/hide_show-pass.svg": "/static/media/hide_show-pass.6a72097a6eb7f9cbe4d7.svg",
+    "static/media/edit.svg": "/static/media/edit.2a1f26bf9ef45022692c.svg",
+    "static/media/edit_active.svg": "/static/media/edit_active.77d8063d28c027eae674.svg",
+    "static/media/cancel-edit.svg": "/static/media/cancel-edit.1e99d5336217fd4d93f1.svg",
+    "static/media/cancel-edit_active.svg": "/static/media/cancel-edit_active.95e480137cd3bb7b67b8.svg",
+    "static/media/facebook.svg": "/static/media/facebook.58a4990010fa3d9062ff.svg",
+    "index.html": "/index.html",
+    "static/media/index.cjs": "/static/media/index.cd351d7c31d0d3fccf96.cjs",
+    "static/media/checked.svg": "/static/media/checked.0229aeb1ddd240cb8877.svg",
+    "main.d4eb5740.css.map": "/static/css/main.d4eb5740.css.map",
+    "main.9df878b7.js.map": "/static/js/main.9df878b7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d4eb5740.css",
+    "static/js/main.9df878b7.js"
+  ]
+}
