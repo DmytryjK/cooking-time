@@ -1,29 +1,26 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import ReactDOM from 'react-dom/client';
 import { createBrowserRouter } from "react-router-dom";
-import { Main, AddRecipes, AboutRecipe, Favorites, AuthorizationPage } from "./pages";
+import { MainPage, AddRecipePage, AboutRecipePage, FavoritesPage, AuthorizationPage } from "./pages";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Main />,
+        element: <MainPage />,
     },
     {
         path: "/auth",
         element: <AuthorizationPage/>
     },
     {
-        path: "/add-recepie",
-        element: <AddRecipes />, 
+        path: "/add-recipe",
+        element: <AddRecipePage />, 
     },
     {
         path: "/favorites",
-        element: <Favorites />, 
+        element: <FavoritesPage />, 
     },
     {
         path: "/about-recepie/:id",
-        element: <AboutRecipe />, 
+        element: <AboutRecipePage />, 
     }
 ]);
 
