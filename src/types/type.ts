@@ -66,4 +66,5 @@ export interface FavoriteRecipes {
 	loadingRecipesById: 'idle' | 'pending' | 'succeeded' | 'failed'
 	loadingRecipeIdToFirebase: 'idle' | 'pending' | 'succeeded' | 'failed'
 	error: null | unknown;
+	currentFavoriteId: string |  number | null; 
 }

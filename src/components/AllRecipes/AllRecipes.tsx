@@ -1,4 +1,4 @@
-import RecipeLIst from "../RecipeList/RecipeLIst";
+import RecipeList from "../RecipeList/RecipeLIst";
 import {useEffect} from 'react';
 import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 import { fetchRecepies } from "./AllRecipesSlice";
@@ -14,8 +14,9 @@ const AllRecipes = () => {
         dispatch(fetchRecepies(localUserParsedId));
     }, [dispatch]);
 
+
     return (
-        <RecipeLIst fetchedRecipes={recepies} loadStatus={loading}/>
+        <RecipeList fetchedRecipes={recepies} loadStatus={loading}/>
     )
 }
 

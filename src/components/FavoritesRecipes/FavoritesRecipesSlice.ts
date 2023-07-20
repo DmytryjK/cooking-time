@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, child, get, push, update, set, remove } from "firebase/database";
+import { getDatabase, ref, child, get, update } from "firebase/database";
 
 import type { FavoriteRecipes, Recepie } from '../../types/type';
 
@@ -8,6 +8,7 @@ const initialState: FavoriteRecipes = {
 	loadingRecipesById: 'idle',
 	loadingRecipeIdToFirebase: 'idle',
 	error: null,
+	currentFavoriteId: null,
 }
 
 export const fetchFavoritesRecipe = createAsyncThunk(
@@ -47,7 +48,6 @@ export const fetchFavoritesRecipe = createAsyncThunk(
 			} else { 
 				recipesData = [];
 			}
-			console.log(recipesData);
 			return recipesData;
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -100,8 +100,8 @@ export const favoriteRecipesSlice = createSlice({
 	name: 'favoriteRecipes',
 	initialState,
 	reducers: {
-		createFavoritesRecipes: (state, action) => {
-
+		setCurrentFavoriteId: (state, action: PayloadAction<string | number | null>) => {
+			state.currentFavoriteId = action.payload;
 		}
 	},
 	extraReducers: (builder) => {
@@ -130,5 +130,5 @@ export const favoriteRecipesSlice = createSlice({
 		})
 	},
 })
-
+export const { setCurrentFavoriteId } = favoriteRecipesSlice.actions; 
 export default favoriteRecipesSlice.reducer;

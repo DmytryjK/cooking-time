@@ -76,9 +76,9 @@ export const recepieListSlice = createSlice({
 	name: 'recepiesList',
 	initialState,
 	reducers: {
-		setCurrentRecipes: (state, action: PayloadAction<Recepie[]>) => {
-			state.recepies = action.payload;
-		},
+		// setCurrentRecipes: (state, action: PayloadAction<Recepie[]>) => {
+		// 	state.recepies = action.payload;
+		// },
 		addNewRecepie: (state, action: PayloadAction<Recepie>) => {
 			state.recepies.push(action.payload);
 		},
@@ -119,6 +119,6 @@ export const recepieListSlice = createSlice({
 	},
 })
 
-export const { addNewRecepie, setFavoriteRecipes, setCurrentRecipes } = recepieListSlice.actions;
+export const { addNewRecepie, setFavoriteRecipes } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;

@@ -14,10 +14,7 @@ export const authenticationSlice = createSlice({
 	reducers: {
 		createUser: (state, action: PayloadAction<user>) => {
 			state.user = {...action.payload};
-		},
-		// deleteUser: (state, action: PayloadAction<userType>) => {
-		// 	state = {...action.payload};
-		// }
+		}
 	}
 })
 
