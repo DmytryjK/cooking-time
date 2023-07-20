@@ -1,7 +1,7 @@
-import AddRecipes from "./AddRecipes";
-import Main from "./Main";
-import AboutRecipe from "./AboutRecipe";
-import Favorites from "./Favorites";
-import AuthorizationPage from "./AuthorizationPage";
+import AddRecipePage from "./AddRecipePage/AddRecipePage";
+import MainPage from "./MainPage/MainPage";
+import AboutRecipePage from "./AboutRecipePage/AboutRecipePage";
+import FavoritesPage from "./FavoritesPage/FavoritesPage";
+import AuthorizationPage from "./AuthorizationPage/AuthorizationPage";
 
-export {AddRecipes, Main, AboutRecipe, Favorites, AuthorizationPage};
+export {AddRecipePage, MainPage, AboutRecipePage, FavoritesPage, AuthorizationPage};

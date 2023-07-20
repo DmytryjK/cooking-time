@@ -1,0 +1,15 @@
+.edit-recipe {
+    &__back-btn {
+        position: absolute;
+        right: 0px;
+        background: url('../../../../assets/icons/cancel-edit.svg') center center/cover no-repeat;
+        width: 30px;
+        height: 30px;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s ease-out background;
+        &:hover {
+            background: url('../../../../assets/icons/cancel-edit_active.svg') center center/cover no-repeat;
+        }
+    }
+}
