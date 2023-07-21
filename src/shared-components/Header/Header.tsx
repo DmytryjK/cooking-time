@@ -5,11 +5,12 @@ import { getAuth, signOut } from "firebase/auth";
 import { createUser } from '../../store/reducers/AuthenticationSlice';
 import { Recepie } from '../../types/type';
 import { NavLink } from "react-router-dom";
+import { cloneRecepies } from '../../store/reducers/FiltersSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import logo from '../../assets/icons/logo.svg';
 import './Header.scss';
 
-const Header: FC<{isSearch:boolean, recepies:Recepie[]}> = ({isSearch, recepies}) => {
+const Header: FC<{isSearch:boolean, recipes:Recepie[]}> = ({isSearch, recipes}) => {
     const {uid} = useAppSelector(state => state.authentication.user);
     const [userAuthToLocalStorage, setUserAuthToLocalStorage] = useState<string | null>(null);
 
@@ -69,7 +70,7 @@ const Header: FC<{isSearch:boolean, recepies:Recepie[]}> = ({isSearch, recepies}
                     </nav>
                 </div>
                 <div className="header__right">
-                    <SearchForm recepies={recepies}/>
+                    {isSearch ? <SearchForm recipes={recipes}/> : null}
                     {userAuthToLocalStorage ? 
                         <button 
                             onClick={handleLogout} 
@@ -83,7 +84,7 @@ const Header: FC<{isSearch:boolean, recepies:Recepie[]}> = ({isSearch, recepies}
                     }
                 </div>
             </div>
-            <Tags recepies={recepies}/>
+            <Tags recipes={recipes}/>
         </header>
     )
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import nextId from 'react-id-generator';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
-import { postRecepie } from '../../../../store/reducers/RecepieListSlice';
+import { postRecipe } from '../../../../store/reducers/RecipesListSlice';
 import { storage } from '../../../../firebase/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
@@ -15,7 +15,7 @@ import './AddingRecipesForm.scss';
 
 const AddingRecipesForm = () => {
 
-    const {error, loadingForm} = useAppSelector(state => state.recepies);
+    const {error, loadingForm} = useAppSelector(state => state.recipes);
     const [nameValue, setNameValue] = useState<string>('');
     const [tagName, setTagName] = useState<string>('');
     const [timerValue, setTimerValue] = useState<string>('');
@@ -114,7 +114,7 @@ const AddingRecipesForm = () => {
         e.preventDefault();
 
         if (nameValue && tags.length > 0 && description) {
-            dispatch(postRecepie({
+            dispatch(postRecipe({
                     id: '',
                     title: nameValue,
                     time: timerValue ? timerValue : null,

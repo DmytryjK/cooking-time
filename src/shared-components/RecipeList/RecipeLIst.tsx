@@ -1,18 +1,12 @@
-import { useEffect, FC, useState, memo } from 'react';
-import './RecipeLIst.scss';
+import { useEffect, FC } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
-
-// import { setFavoriteRecipes, setCurrentRecipes } from './RecepieListSlice';
-import { setFavoriteRecipes } from '../../store/reducers/RecepieListSlice';
-import { cloneRecepies } from '../../store/reducers/FiltersSlice';
-import { manageFavoritesRecipes, setCurrentFavoriteId } from '../../store/reducers/FavoritesRecipesSlice';
-
 import RecipeListItem from '../RecipeListItem/RecipeListItem';
-
-import type { Recepie } from '../../types/type';
+import { setFavoriteRecipes, setCurrentRecipes } from '../../store/reducers/RecipesListSlice';
+import { manageFavoritesRecipes } from '../../store/reducers/FavoritesRecipesSlice';
 import nextId from "react-id-generator";
 import { useLocation } from 'react-router-dom';
-
+import type { Recepie } from '../../types/type';
+import './RecipeLIst.scss';
 interface RecipeListProps {
     fetchedRecipes: Recepie[];
     loadStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -20,7 +14,7 @@ interface RecipeListProps {
 
 const RecipeList: FC<RecipeListProps> = ({fetchedRecipes, loadStatus}) => {
 
-    const { error } = useAppSelector(state => state.recepies);
+    const { error } = useAppSelector(state => state.recipes);
     const { loadingRecipeIdToFirebase, currentFavoriteId } = useAppSelector(state => state.favoriteRecipes);
     const { filteredRecepies } = useAppSelector(state => state.filters);
     const { uid } = useAppSelector(state => state.authentication.user);
@@ -28,32 +22,16 @@ const RecipeList: FC<RecipeListProps> = ({fetchedRecipes, loadStatus}) => {
     const dispatch = useAppDispatch();
     const currentLink = useLocation().pathname;
 
-    console.log('rerender-list');
+    useEffect(() => {
+        if (currentLink === '/favorites' && loadingRecipeIdToFirebase === 'succeeded') {
+            const removedItem = filteredRecepies.filter(item => item.id !== currentFavoriteId);
+            dispatch(setCurrentRecipes(removedItem));
+        }
+    }, [loadingRecipeIdToFirebase]);
 
-    // useEffect(() => {
-    //     if (loadStatus === 'succeeded') {
-    //         dispatch(setCurrentRecipes(fetchedRecipes));
-    //     }
-    // }, [loadStatus]);
-
-    // useEffect(() => {
-    //     dispatch(cloneRecepies(recepies));
-    // }, [recepies]); 
-
-    // useEffect(() => {
-    //     if (currentLink === '/favorites' && loadingRecipeIdToFirebase === 'succeeded') {
-    //         const removedItem = filteredRecepies.filter(item => item.id !== currentFavoriteId);
-    //         // dispatch(setCurrentRecipes(removedItem));
-    //     }
-    // }, [loadingRecipeIdToFirebase]);
-
-    const handleAddFavorite = (recepieId: string | number | null, item: Recepie, e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        e.preventDefault();
-        console.log('test')
+    const handleAddFavorite = (recepieId: string | number | null, item: Recepie) => {
         dispatch(manageFavoritesRecipes({recepieId, uid}));
-        // dispatch(setFavoriteRecipes({recipeId: recepieId, isFavorite: !item.favorites}));
-        // dispatch(setCurrentFavoriteId(recepieId));
+        dispatch(setFavoriteRecipes({recipeId: recepieId, isFavorite: !item.favorites}));
     };
 
     const renderItems = (items: Recepie[]) => {
@@ -68,31 +46,10 @@ const RecipeList: FC<RecipeListProps> = ({fetchedRecipes, loadStatus}) => {
             return renderedList;
         }
     }
-
-    // const renderedContent = () => {
-    //     let renderedComponents = null;
-    //     if (loadStatus !== 'succeeded') {
-    //         renderedComponents = 'loading...';
-    //     } else if (error) {
-    //         renderedComponents = "Something wen't wrong, try again";
-    //     } else if (loadStatus === 'succeeded') {
-    //         renderedComponents = renderItems(fetchedRecipes);
-    //     } else if (filteredRecepies.length === 0 && loadStatus === 'succeeded') {
-    //         renderedComponents = 'Поиск не дал результатов, попробуйте ещё раз';
-    //     }
-
-    //     // else if (loadStatus === 'succeeded' && filteredRecepies.length > 0) {
-    //     //     renderedComponents = renderItems(filteredRecepies);
-    //     // } else if (filteredRecepies.length === 0 && loadStatus === 'succeeded') {
-    //     //     renderedComponents = 'Поиск не дал результатов, попробуйте ещё раз';
-    //     // }
-    //     return renderedComponents;
-    // }
     
     return (
         <ul className='recipe-list'>
-            {/* {renderedContent()} */}
-            {renderItems(fetchedRecipes)}
+            {renderItems(filteredRecepies)}
         </ul>
     )
 }

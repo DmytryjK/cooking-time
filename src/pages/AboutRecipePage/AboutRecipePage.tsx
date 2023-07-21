@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import nextId from "react-id-generator";
 import sanitizeHtml from 'sanitize-html';
 
-import { fetchRecepie } from '../../store/reducers/RecepieListSlice';
+import { fetchRecipe } from '../../store/reducers/RecipesListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 import Header from '../../shared-components/Header/Header';
@@ -15,7 +15,7 @@ import { Recepie } from '../../types/type';
 
 const AboutRecipePage = () => {
     const recepieId = useParams();
-    const {fetchedRecepieInfo} = useAppSelector(state => state.recepies);
+    const { recipe } = useAppSelector(state => state.recipes);
     const dispatch = useAppDispatch();
     const [isEditActive, setIsEditActive] = useState<boolean>(false);
     const [currentRecipeToEdit, setCurrentRecipeToEdit] = useState<Recepie | null>(null);
@@ -28,7 +28,7 @@ const AboutRecipePage = () => {
     }
 
     useEffect(() => {
-        dispatch(fetchRecepie(recepieId.id));
+        dispatch(fetchRecipe(recepieId.id));
     }, []);
 
     const handleEditRecipe = (fetchedRecepieInfo: Recepie) => {
@@ -38,15 +38,15 @@ const AboutRecipePage = () => {
 
     const renderedInfo = () => {
         let result;
-        if (fetchedRecepieInfo) {
-            const {title, ingredients, img, description} = fetchedRecepieInfo;
+        if (recipe) {
+            const {title, ingredients, img, description} = recipe;
             const sanitizedHtml = description && sanitizeHtml(description);
 
             result = <>
                         <button 
                             className="recepie-page__edit"
                             title="редактировать"
-                            onClick={() => handleEditRecipe(fetchedRecepieInfo)}>
+                            onClick={() => handleEditRecipe(recipe)}>
                         </button>
                         <h2 className="recepie-page__title">{title}</h2>
                         <img className="recepie-page__photo" src={img} alt="фото" />
@@ -78,7 +78,7 @@ const AboutRecipePage = () => {
     return(
         <div className="about-recipe">
             <div className="container">
-                <Header isSearch={false} recepies={[]}/>
+                <Header isSearch={false} recipes={[]}/>
 
                 <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
                     <div className="success-window__block">
