@@ -4,7 +4,7 @@ import './AddRecipePage.scss'
 
 const AddRecipePage = () => {
     return (
-        <div className="container">
+        <>
             <Header isSearch={false} recipes={[]}/>
             <main className="add-recepie">
                 <div className="container">
@@ -12,7 +12,7 @@ const AddRecipePage = () => {
                     <AddingRecipesForm/>
                 </div>
             </main>
-        </div>  
+        </>
     )
 }
 

@@ -30,7 +30,7 @@ const FavoritesRecipes: FC = () => {
         } else if (loadingRecipesById === 'succeeded' && favoriteRecipes.length === 0) {
             return <ErrorMesage text={'Ваш список избранного пуст'}/>
         } else {
-            return <RecipeList fetchedRecipes={favoriteRecipes} loadStatus={loadingRecipesById}/>; 
+            return <RecipeList />; 
         }
     }
 
