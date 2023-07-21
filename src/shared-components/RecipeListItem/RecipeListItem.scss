@@ -1,25 +1,28 @@
 @use '../../styles/variables' as *;
 .recipe-card {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    max-width: 325px;
-    min-width: 300px;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 3px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);
-    border-radius: 20px;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    &:hover {
-        .recipe-card__img-wrapper:after {
-            opacity: 0.15;
-        } 
-        .recipe-card__image {
-            transform: scale(1.03);
+    &__link {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        max-width: 325px;
+        min-width: 300px;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 3px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);
+        border-radius: 20px;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        &:hover {
+            .recipe-card__img-wrapper:after {
+                opacity: 0.15;
+            } 
+            .recipe-card__image {
+                transform: scale(1.03);
+            }
         }
     }
+    
     &.favorite  {
         .recipe-card__favorite-btn svg path {
             fill: yellow;
@@ -104,41 +107,7 @@
             }
         }
     }
-    .product-tags {
-        position: relative;
-        margin-top: 20px;
-        display: flex;
-        gap: 5px;
-        overflow: hidden;
-        list-style-type: none;
-        &:after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 10px;
-            height: 100%;
-            background: linear-gradient(270deg, #FFFFFF 0%, #FFFFFF 22.4%, rgba(255, 255, 255, 0) 95.59%);
-        }
-        &__item-header {
-            display: flex;
-            align-items: center;
-        }
-        &__item {
-            flex-shrink: 0;
-            position: relative;
-            min-width: 50px;
-            font-size: 13px;
-            font-weight: 500;
-            text-align: center;
-            color: $accent-color;
-            padding: 5px 10px;
-            border: 1px solid $accent-color;
-            border-radius: 50px;
-            cursor: default;
-        }
-    }
+
     &__more {
         margin-top: 10px;
         display: flex;
@@ -181,6 +150,7 @@
         border-radius: 50%;
         border: none;
         background-color: $accent-color;
+        z-index: 999;
         cursor: pointer;
         &:after {
             content: '';
@@ -200,6 +170,42 @@
             &:after {
                 background: url('../../assets/icons/favorites/Heart_hover.svg') center center/cover no-repeat;
             }
+        }
+    }
+
+    .product-tags {
+        position: relative;
+        margin-top: 20px;
+        display: flex;
+        gap: 5px;
+        overflow: hidden;
+        list-style-type: none;
+        &:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(270deg, #FFFFFF 0%, #FFFFFF 22.4%, rgba(255, 255, 255, 0) 95.59%);
+        }
+        &__item-header {
+            display: flex;
+            align-items: center;
+        }
+        &__item {
+            flex-shrink: 0;
+            position: relative;
+            min-width: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            color: $accent-color;
+            padding: 5px 10px;
+            border: 1px solid $accent-color;
+            border-radius: 50px;
+            cursor: default;
         }
     }
 }

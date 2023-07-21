@@ -28,8 +28,8 @@ export const filtersSlice = createSlice({
 			state.searchTags = [];
 		},
 		filterRecepiesByTag: (state, action: PayloadAction<objectForFiltered>) => {
-			const {recepies, tags} = action.payload;
-			state.filteredRecepies = [...recepies];
+			const {recipes, tags} = action.payload;
+			state.filteredRecepies = [...recipes];
 			
 			if (tags.length > 0) {
 				state.filteredRecepies = state.filteredRecepies.filter(item => {
@@ -41,12 +41,14 @@ export const filtersSlice = createSlice({
 			} 
 		},
 		filterRecepiesByName: (state, action: PayloadAction<objectForSearch>) => {
-			const {recepies, value} = action.payload;
-			state.filteredRecepies = [...recepies];
-			
+			const {recipes, value} = action.payload;
+			state.filteredRecepies = [...recipes];
+	
 			if (value) {
-				state.filteredRecepies = state.filteredRecepies.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) > -1)
+				state.filteredRecepies = recipes.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) > -1)
 			} 
+			console.log(state.filteredRecepies);
+			
 		}
 
 	}

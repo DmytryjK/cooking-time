@@ -9,7 +9,7 @@ export interface Recepie {
 }
 
 export interface Recepies {
-	recepies: Recepie[];
+	recipes: Recepie[];
 	fetchedRecepieInfo?: Recepie | null;
 }
 
@@ -31,12 +31,12 @@ export interface filterRecepies {
 }
 
 export interface objectForFiltered {
-	recepies: Recepie[];
+	recipes: Recepie[];
 	tags: string[];
 }
 
 export interface objectForSearch {
-	recepies: Recepie[];
+	recipes: Recepie[];
 	value: string;
 }
 

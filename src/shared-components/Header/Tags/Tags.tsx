@@ -1,18 +1,24 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { filterRecepiesByTag, deleteSearchTag, deleteAllTags } from '../../../store/reducers/FiltersSlice';
+import { filterRecepiesByTag, deleteSearchTag, deleteAllTags, cloneRecepies } from '../../../store/reducers/FiltersSlice';
 
 import { tagsType, Recepie } from '../../../types/type';
 import './Tags.scss';
 
-const Tags = ({recepies}:{recepies:Recepie[]}) => {
-    // const recepies = useAppSelector(state => state.recepies);
+const Tags = ({recipes}:{recipes:Recepie[]}) => {
+    const { filteredRecepies } = useAppSelector(state => state.filters); 
     const searchTags = useAppSelector(state => state.filters.searchTags);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        dispatch(cloneRecepies(recipes));
+    }, [recipes]); 
+
+    useEffect(() => {
         const tags = searchTags.map(createdTag => createdTag.tagText);
-        dispatch(filterRecepiesByTag({recepies, tags}));
+        dispatch(filterRecepiesByTag({recipes: filteredRecepies, tags}));
+
+        if (tags.length === 0) dispatch(filterRecepiesByTag({recipes: recipes, tags}));
     }, [searchTags]);
 
     const createNewTag = (tags: tagsType[]) => {

@@ -5,7 +5,7 @@ import './AddRecipePage.scss'
 const AddRecipePage = () => {
     return (
         <div className="container">
-            <Header isSearch={false} recepies={[]}/>
+            <Header isSearch={false} recipes={[]}/>
             <main className="add-recepie">
                 <div className="container">
                     <h2 className="add-recepie__title">Добавьте новый рецепт</h2>
