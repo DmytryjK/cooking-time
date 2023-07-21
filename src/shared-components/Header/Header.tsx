@@ -42,49 +42,51 @@ const Header: FC<{isSearch:boolean, recipes:Recepie[]}> = ({isSearch, recipes}) 
 
     return (
         <header className="header">
-            <div className="header__wrapper">
-                <div className="header__left">
-                    <NavLink to="/" 
-                        reloadDocument
-                        className={({ isActive }) => isActive ? "header__logo active" : "header__nav-link"}>
-                            <img width={100} height={54} src={logo} alt="" />
-                    </NavLink>
-                    <nav className="header__nav">
-                        <ul className="header__nav-list">
-                            <li className="header__nav-item">
-                                <NavLink to="/" 
-                                    className={({ isActive }) => isActive ? "header__nav-link active" : "header__nav-link"}>Головна 
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/favorites"
-                                    className={({isActive}) => isActive ? "header__nav-link active" : "header__nav-link"}>Обране
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/add-recipe" 
-                                    className={({ isActive }) => isActive ? "header__nav-link active" : "header__nav-link"}>Додати рецепт
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div className="header__right">
-                    {isSearch ? <SearchForm recipes={recipes}/> : null}
-                    {userAuthToLocalStorage ? 
-                        <button 
-                            onClick={handleLogout} 
-                            className="logout__btn">Вихід</button>
-                            :
-                        <NavLink 
-                            className="auth-page" 
-                            to="/auth" 
-                            reloadDocument > Увійти | Зареєструватись 
+            <div className="container">
+                <div className="header__wrapper">
+                    <div className="header__left">
+                        <NavLink to="/" 
+                            reloadDocument
+                            className={({ isActive }) => isActive ? "header__logo active" : "header__nav-link"}>
+                                <img width={100} height={54} src={logo} alt="" />
                         </NavLink>
-                    }
+                        <nav className="header__nav">
+                            <ul className="header__nav-list">
+                                <li className="header__nav-item">
+                                    <NavLink to="/" 
+                                        className={({ isActive }) => isActive ? "header__nav-link active" : "header__nav-link"}>Головна 
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/favorites"
+                                        className={({isActive}) => isActive ? "header__nav-link active" : "header__nav-link"}>Обране
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/add-recipe" 
+                                        className={({ isActive }) => isActive ? "header__nav-link active" : "header__nav-link"}>Додати рецепт
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div className="header__right">
+                        {isSearch ? <SearchForm recipes={recipes}/> : null}
+                        {userAuthToLocalStorage ? 
+                            <button 
+                                onClick={handleLogout} 
+                                className="logout__btn">Вихід</button>
+                                :
+                            <NavLink 
+                                className="auth-page" 
+                                to="/auth" 
+                                reloadDocument > Увійти | Зареєструватись 
+                            </NavLink>
+                        }
+                    </div>
                 </div>
+                <Tags recipes={recipes}/>
             </div>
-            <Tags recipes={recipes}/>
         </header>
     )
 }

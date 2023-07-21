@@ -3,19 +3,17 @@ import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import RecipeListItem from '../RecipeListItem/RecipeListItem';
 import { setFavoriteRecipes, setCurrentRecipes } from '../../store/reducers/RecipesListSlice';
 import { manageFavoritesRecipes } from '../../store/reducers/FavoritesRecipesSlice';
+import Loader from '../Loader/Loader';
 import nextId from "react-id-generator";
 import { useLocation } from 'react-router-dom';
 import type { Recepie } from '../../types/type';
 import './RecipeLIst.scss';
-interface RecipeListProps {
-    fetchedRecipes: Recepie[];
-    loadStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
-}
+import ErrorMesage from '../ErrorMesage/ErrorMesage';
 
-const RecipeList: FC<RecipeListProps> = ({fetchedRecipes, loadStatus}) => {
+const RecipeList: FC = () => {
 
-    const { error } = useAppSelector(state => state.recipes);
-    const { loadingRecipeIdToFirebase, currentFavoriteId } = useAppSelector(state => state.favoriteRecipes);
+    const { error, loadingRecipes } = useAppSelector(state => state.recipes);
+    const { loadingRecipeIdToFirebase, currentFavoriteId, loadingRecipesById } = useAppSelector(state => state.favoriteRecipes);
     const { filteredRecepies } = useAppSelector(state => state.filters);
     const { uid } = useAppSelector(state => state.authentication.user);
 
@@ -35,21 +33,37 @@ const RecipeList: FC<RecipeListProps> = ({fetchedRecipes, loadStatus}) => {
     };
 
     const renderItems = (items: Recepie[]) => {
-        if (items) {
-            const renderedList = items.map((item) => {
-                return(
-                    <li key={nextId("recipe-card-")} className="recipe-list__item">
-                        <RecipeListItem recipe={item} addToFavorite={handleAddFavorite}/>
-                    </li>
-                )
-            })
-            return renderedList;
+        return items.map((item) => {
+            return(
+                <li key={nextId("recipe-card-")} className="recipe-list__item">
+                    <RecipeListItem recipe={item} addToFavorite={handleAddFavorite}/>
+                </li>
+            )
+        })
+    }
+    
+    const renderCards = () => {
+        let render = null;
+        if (error) {
+            render = <ErrorMesage text={'Щось пішло не так, спробуйте ще раз'} />;
+        } else if ( 
+            (
+                loadingRecipes === 'succeeded' && 
+                loadingRecipesById === 'succeeded' ) && 
+                filteredRecepies.length === 0
+            ) {
+            render = <ErrorMesage text={'За вашим запитом нічого не знайдено'} />
+        } else if (filteredRecepies.length !== 0) {
+            render = renderItems(filteredRecepies);
+        } else {
+            render = <Loader />;
         }
+        return render;
     }
     
     return (
         <ul className='recipe-list'>
-            {renderItems(filteredRecepies)}
+            {renderCards()}
         </ul>
     )
 }

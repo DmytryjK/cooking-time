@@ -6,12 +6,14 @@ const FavoritesPage = () => {
     const {favoriteRecipes} = useAppSelector(state=> state.favoriteRecipes);
 
     return (
-        <div>
-            <div className="container">
-                <Header isSearch={true} recipes={favoriteRecipes}/>
-                <FavoritesRecipes />
-            </div>
-        </div>
+        <>
+            <Header isSearch={true} recipes={favoriteRecipes}/>
+            <section className="favorites">
+                <div className="container">
+                    <FavoritesRecipes />
+                </div>
+            </section>
+        </>
     )
 }
 
