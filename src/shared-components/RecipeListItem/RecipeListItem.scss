@@ -1,13 +1,13 @@
 @use '../../styles/variables' as *;
 .recipe-card {
     width: 100%;
+    max-width: 320px;
+    min-width: 250px;
     position: relative;
     &__link {
         display: flex;
         flex-direction: column;
         padding: 15px;
-        max-width: 320px;
-        min-width: 250px;
         height: 100%;
         background: #FFFFFF;
         box-shadow: 0px 0px 3px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);

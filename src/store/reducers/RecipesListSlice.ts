@@ -3,7 +3,7 @@ import { getDatabase, ref, child, get, push, update } from "firebase/database";
 
 import type { Recipes, Recipe, tagsType } from '../../types/type';
 
-type PayloadNewActionFilter = {
+type PayloadActionFilter = {
 	searchInput: string;
 	searchTags: tagsType[];
 	searchCategories: string[];
@@ -151,7 +151,7 @@ export const recepieListSlice = createSlice({
 			})];
 			state.filteredRecipes = [...state.recipes];
 		},
-		filterRecipes: (state, action: PayloadAction<PayloadNewActionFilter>) => {
+		filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
 			const {searchInput, searchTags, searchCategories} = action.payload;
 			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
 

@@ -1,3 +1,4 @@
+@use '../../../styles/variables' as *;
 .searchForm {
     &__input-wrapper {
         position: relative;
@@ -9,10 +10,28 @@
         border-radius: 6px;
         background-color: #EDEDED;
         width: 235px;
-        border: none;
+        border: 1px solid transparent;
+        outline: none;
         font-weight: 400;
         font-size: 14px;
         color: #303030;
+        &:hover {
+            border-color: $border-input;
+        }
+        &:focus {
+            border-color: $accent-color;
+            background-color: $light-accent-bg;
+            caret-color: $accent-color;
+            color: $accent-color;
+            &::placeholder {
+                color: transparent;
+            }
+        }
+        &:focus ~ .searchForm__searchBtn {
+            .searchForm__searchBtn-icon {
+                fill: $accent-color;
+            }
+        }
     }
     &__searchBtn {
         position: absolute;
@@ -27,11 +46,8 @@
         background-color: transparent;
         cursor: pointer;
         transition: background-color 0.3s ease, border-color 0.3s ease;
-        &:hover {
-            .searchForm__searchBtn-icon {
-                fill: white;
-                transition: fill 0.3s ease;
-            }
+        &-icon {
+            fill: $text-color;
         }
     }
 }
