@@ -1,3 +1,4 @@
+@use '../../../../styles/variables' as *;
 .authentication{
     &__wrapper {
         width: 400px;
@@ -33,6 +34,7 @@
             }
         }
         &-btn {
+            margin-top: 25px;
             display: block;
             font-weight: 500;
             font-size: 16px;
@@ -40,12 +42,14 @@
             width: 400px;
             height: 55px;
             background-color: transparent;
-            border: 1px solid #303030;
+            border: 1px solid $text-color;
             border-radius: 6px;
             cursor: pointer;
-            transition: 0.2s ease-out background-color;
+            transition: 0.2s ease-out background-color, 0.2s ease-out color;
             &:hover {
-                background-color:rgb(241, 241, 241);
+                // background-color:rgb(241, 241, 241);
+                background-color: $text-color;
+                color: $light-color;
             }
         }
         &-text {
@@ -84,7 +88,39 @@
             border: none;
             border-bottom: 0.5px solid black;
             height: 17px;
+            font-family: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: 0.2s ease-out color, 0.2s ease-out border-color;
+            &:hover {
+                color: $second-accent-color;
+                border-color: $second-accent-color;
+            }
+        }
+    }
+    &__decorative-block {
+        margin-top: 25px;
+        position: relative;
+        text-align: center;
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color: $text-color;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        &:after {
+            right: 0;
+        }
+        .text {
+            position: relative;
+            display: inline-block;
+            background-color: white;
+            padding: 5px 10px;
+            z-index: 2;
         }
     }
 }
@@ -196,6 +232,10 @@
             line-height: 22px;
             color: #FDFDFD;
             cursor: pointer;
+            transition: 0.2s ease-out background-color;
+            &:hover {
+                background-color: $second-accent-color;
+            }
         }
     }
 }
