@@ -3,7 +3,8 @@ export interface Recipe {
 	title: string;
 	time?: string | null;
 	ingredients?: string[];
-	img?: string;
+	img: string;
+	previewImg: string;
 	description?: string;
 	favorites: boolean;
 	category: string;

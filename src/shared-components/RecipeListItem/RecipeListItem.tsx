@@ -7,7 +7,7 @@ import './RecipeListItem.scss';
 type HandleAddToFavorite = (recepieId: string|number|null, item: Recipe) => void;
 
 const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite: HandleAddToFavorite}) => {
-    const {ingredients, id, title, time, img, favorites, category} = recipe;
+    const {ingredients, id, title, time, img, previewImg, favorites, category} = recipe;
     const timerClass = time ? "recipe-card__timer active" : "recipe-card__timer";
     const { uid } = useAppSelector(state => state.authentication.user);
 
@@ -25,13 +25,13 @@ const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite:
                         className="recipe-card__image"
                         width={290}
                         height={290}
-                        src={img} 
+                        src={previewImg} 
                         alt={title} />
                 </div>
                 <div className="recipe-card__content-text">
                     <h2 className="recipe-card__title" title={title}>{title.length > 42 ? (title.substring(0, 42) + '...') : title}</h2>
                     <div className="recipe-card__inner-wrapper">
-                        <span className={timerClass}>{time ? time + 'min' : null}</span>
+                        <span className={timerClass}>{time ? time + 'хв' : null}</span>
                         <ul className="recipe-card__product-tags product-tags">
                             {renderedTags ? renderedTags : null}
                         </ul>
