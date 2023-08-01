@@ -17,12 +17,15 @@ const AddingRecipesForm = () => {
 
     const {error, loadingForm} = useAppSelector(state => state.recipes);
     const [nameValue, setNameValue] = useState<string>('');
+    const [categoryValue, setCategoryValue] = useState<string>('');
     const [tagName, setTagName] = useState<string>('');
     const [timerValue, setTimerValue] = useState<string>('');
     const [tags, setTags] = useState<tagsType[]>([]);
     const [uploadFile, setUploadFile] = useState<uploadFileType | any>({});
     const [statusUploadedPhoto, setStatusUploadedPhoto] = useState<'' | 'error' | 'success' | 'pending'>('');
     const [imageRefFromStorage, setImageRefFromStorage] = useState<string>('');
+    const [previewImgRefFromStorage, setPreviewImgRefFromStorage] = useState<string>('');
+    const [currentTypePhoto, setCurrentTypePhoto] = useState<'main' | 'preview' | null>();
     const [description, setDescription] = useState<string>('');
 
     const dispatch = useAppDispatch();
@@ -37,6 +40,7 @@ const AddingRecipesForm = () => {
     }, [loadingForm])
 
     useEffect(() => {
+        if (!currentTypePhoto) return;
         if (uploadFile.name) {
             const imageRef = ref(storage, `${uploadFile.name}${nextId('photo-id')}`);
 
@@ -44,25 +48,41 @@ const AddingRecipesForm = () => {
                 .then((snapshot) => {
                     setStatusUploadedPhoto('success');
                     getDownloadURL(snapshot.ref)
-                        .then(ref => setImageRefFromStorage(ref));
+                        .then(ref => {
+                            if (currentTypePhoto === 'main') {
+                                setImageRefFromStorage(ref);
+                            } else {
+                                setPreviewImgRefFromStorage(ref);
+                            }
+                        })
             });
         }
-    }, [uploadFile]);
+    }, [uploadFile, currentTypePhoto]);
 
-    const handleUploadPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadPhoto = (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'preview') => {
         e.preventDefault();
         const files = e.target.files;
+        console.log(files);
         setStatusUploadedPhoto('pending');
-
-        if (files && files.length > 0) {
-            if (files[0].type.indexOf("image") >= 0) {
-                setUploadFile(files[0]);
-            } else {
-                setStatusUploadedPhoto('error');
-                alert('виберіть інший тип файлу для зображення')
+        if (type === 'main') {
+            if (files && files.length > 0) {
+                if (files[0].type.indexOf("image") >= 0) {
+                    setUploadFile(files[0]);
+                } else {
+                    setStatusUploadedPhoto('error');
+                    alert('виберіть інший тип файлу для зображення')
+                }
+            }
+        } else {
+            if (files && files.length > 0) {
+                if (files[0].type.indexOf("image") >= 0) {
+                    setUploadFile(files[0]);
+                } else {
+                    setStatusUploadedPhoto('error');
+                    alert('виберіть інший тип файлу для зображення')
+                }
             }
         }
-        
     }
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,15 +141,19 @@ const AddingRecipesForm = () => {
                     ingredients: tags.map(tag => tag.tagText),
                     description: description,
                     img: imageRefFromStorage,
+                    previewImg: previewImgRefFromStorage,
                     favorites: false,
-                    category: 'Перші страви',
+                    category: categoryValue,
                 }));
             if (!error) {
                 setNameValue('');
+                setCategoryValue('');
                 setTagName('');
                 setTags([]);
                 setUploadFile({});
                 setImageRefFromStorage('');
+                setPreviewImgRefFromStorage('');
+                setCurrentTypePhoto(null);
                 setStatusUploadedPhoto('');
                 setDescription('');
             }
@@ -179,7 +203,15 @@ const AddingRecipesForm = () => {
                             type="text" 
                             required
                             value={nameValue}
-                            onChange={handleNameChange}/>
+                            onChange={(e) => setNameValue(e.target.value)}/>
+                </label>
+                <label className="form__name-label">
+                    <span>Категорія</span>
+                    <input  className="form__name-recepie" 
+                            type="text" 
+                            required
+                            value={categoryValue}
+                            onChange={(e) => setCategoryValue(e.target.value)}/>
                 </label>
                 <fieldset className="tagsForm">          
                     <legend className="tagsForm__header">Ингредиенты</legend>
@@ -212,9 +244,25 @@ const AddingRecipesForm = () => {
                     <input 
                         className="form__upload-photo" 
                         type="file"
-                        onChange={handleUploadPhoto}
-                        disabled = {statusUploadedPhoto === 'success' ? true : false}/>
+                        onChange={(e) => {
+                            handleUploadPhoto(e, 'main'); 
+                            setCurrentTypePhoto('main')
+                        }}
+                        // disabled = {statusUploadedPhoto === 'success' ? true : false}
+                        />
                     <span className="form__upload-label-name">{uploadInfo ? uploadInfo : 'Загрузить фото блюда'}</span>
+                </label>
+                <label className="form__upload-label">
+                    <input 
+                        className="form__upload-photo" 
+                        type="file"
+                        onChange={(e) => {
+                            handleUploadPhoto(e, 'preview'); 
+                            setCurrentTypePhoto('preview')
+                        }}
+                        // disabled = {statusUploadedPhoto === 'success' ? true : false}
+                        />
+                    <span className="form__upload-label-name">{uploadInfo ? uploadInfo : 'Загрузить превью блюда'}</span>
                 </label>
                 <div className="form__descr">
                     <span className="form__descr-title">Описание</span>
