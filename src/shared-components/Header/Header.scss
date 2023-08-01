@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 .header {
     padding: 20px 0;
     &__wrapper {
@@ -26,9 +27,14 @@
         line-height: 20px;
         color: #303030;
         text-decoration: none;
+        transition: 0.2s ease-out color;
+        &:hover {
+            color: $accent-color;
+        }
         &.active {
             color: #D24A34;
             text-decoration: underline;
+            text-decoration-skip-ink: none;
         }
     }
     &__right {

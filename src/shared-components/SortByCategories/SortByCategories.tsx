@@ -72,13 +72,13 @@ const SortByCategories = () => {
                             value="Перші страви"
                             onChange={toggleCategories}
                         />
-                        <span className="sort__input-custom" />
                         <label
                             className="sort__label"
                             htmlFor="sort-1"
                         >
                             Перші страви
                         </label>
+                        <span className="sort__input-custom" />
                     </div>
                     <div className="sort__field">
                         <input
@@ -88,13 +88,13 @@ const SortByCategories = () => {
                             value="Десерти"
                             onChange={toggleCategories}
                         />
-                        <span className="sort__input-custom" />
                         <label
                             className="sort__label"
                             htmlFor="sort-2"
                         >
                             Десерти
                         </label>
+                        <span className="sort__input-custom" />
                     </div>
                     <div className="sort__field">
                         <input
@@ -104,10 +104,10 @@ const SortByCategories = () => {
                             value="Випічка"
                             onChange={toggleCategories}
                         />
-                        <span className="sort__input-custom" />
                         <label className="sort__label" htmlFor="sort-3">
                             Випічка
                         </label>
+                        <span className="sort__input-custom" />
                     </div>
                     <div className="sort__field">
                         <input
@@ -117,10 +117,10 @@ const SortByCategories = () => {
                             value="Гарнір"
                             onChange={toggleCategories}
                         />
-                        <span className="sort__input-custom" />
                         <label className="sort__label" htmlFor="sort-4">
                             Гарнір
                         </label>
+                        <span className="sort__input-custom" />
                     </div>
                     <button className="sort__accept-btn" onClick={() => setIsFilterActive(true)} >Показати</button>
                 </fieldset>

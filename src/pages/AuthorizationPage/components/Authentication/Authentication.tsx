@@ -173,66 +173,66 @@ const Authentication: FC = () => {
         )
     }
 
-    const LoginByEmail = () => {
-        return (
-            <div className="authorization__window">
-                <h1 className="authorization__window-title">Увійти через електронну пошту</h1>
-                <form 
-                    className="authorization__window-form form-email"
-                    onSubmit={handleLogin}>
-                    <div className="form-email__label-wrapper">
-                        <label className="form-email__label">
-                            <span>Ваша електронна пошта</span>
-                            <div className="form-email__input-wrapper">
-                                <input 
-                                    className="form-email__input" 
-                                    type="email"
-                                    name="email"
-                                    autoComplete="current-email"
-                                    required
-                                    placeholder="youremail@example.com"
-                                    onChange={handleMailChange}
-                                    value={inputMail}/>
-                            </div>
-                        </label>
-                    </div>
-                    <div className="form-email__label-wrapper">
-                        <label className="form-email__label">
-                            <span>Ваш пароль</span>
-                            <div className="form-email__input-wrapper input-password__wrapper">
-                                <input      
-                                    className="form-email__input input-password" 
-                                    type="password"
-                                    name="password"
-                                    autoComplete="current-password"
-                                    required
-                                    placeholder="&#10625; &#10625; &#10625; &#10625; &#10625; &#10625; &#10625;"
-                                    onChange={handlePassChange}
-                                    value={inputPass}
-                                    ref={loginByEmailPassInput}/>
-                                <button 
-                                className="input-password__hide-btn" 
-                                title="hide-show password"
-                                onClick={(e) => handleHidePass(e)}></button>
-                            </div>
-                        </label>
-                    </div>
-                    <div className="form-email__label-wrapper remeber-me__wrapper"> 
-                        <label className="form-email__label remeber-me__label">
-                            <input      
-                                className="form-email__checkbox" 
-                                type="checkbox"
-                                name="stay loged in"/>
-                            <span className="remeber-me__checkbox-default"></span>
-                            <span className="remeber-me__checkbox-checked"></span>
-                            <span>Запам'ятати мене</span>
-                        </label>
-                    </div>
-                    <button className="form-email__submit" type="submit">Увійти</button>
-                </form>
-            </div>
-        )
-    }
+    // const LoginByEmail = () => {
+    //     return (
+    //         <div className="authorization__window">
+    //             <h1 className="authorization__window-title">Увійти через електронну пошту</h1>
+    //             <form 
+    //                 className="authorization__window-form form-email"
+    //                 onSubmit={handleLogin}>
+    //                 <div className="form-email__label-wrapper">
+    //                     <label className="form-email__label">
+    //                         <span>Ваша електронна пошта</span>
+    //                         <div className="form-email__input-wrapper">
+    //                             <input 
+    //                                 className="form-email__input" 
+    //                                 type="email"
+    //                                 name="email"
+    //                                 autoComplete="current-email"
+    //                                 required
+    //                                 placeholder="youremail@example.com"
+    //                                 onChange={handleMailChange}
+    //                                 value={inputMail}/>
+    //                         </div>
+    //                     </label>
+    //                 </div>
+    //                 <div className="form-email__label-wrapper">
+    //                     <label className="form-email__label">
+    //                         <span>Ваш пароль</span>
+    //                         <div className="form-email__input-wrapper input-password__wrapper">
+    //                             <input      
+    //                                 className="form-email__input input-password" 
+    //                                 type="password"
+    //                                 name="password"
+    //                                 autoComplete="current-password"
+    //                                 required
+    //                                 placeholder="&#10625; &#10625; &#10625; &#10625; &#10625; &#10625; &#10625;"
+    //                                 onChange={handlePassChange}
+    //                                 value={inputPass}
+    //                                 ref={loginByEmailPassInput}/>
+    //                             <button 
+    //                             className="input-password__hide-btn" 
+    //                             title="hide-show password"
+    //                             onClick={(e) => handleHidePass(e)}></button>
+    //                         </div>
+    //                     </label>
+    //                 </div>
+    //                 <div className="form-email__label-wrapper remeber-me__wrapper"> 
+    //                     <label className="form-email__label remeber-me__label">
+    //                         <input      
+    //                             className="form-email__checkbox" 
+    //                             type="checkbox"
+    //                             name="stay loged in"/>
+    //                         <span className="remeber-me__checkbox-default"></span>
+    //                         <span className="remeber-me__checkbox-checked"></span>
+    //                         <span>Запам'ятати мене</span>
+    //                     </label>
+    //                 </div>
+    //                 <button className="form-email__submit" type="submit">Увійти</button>
+    //             </form>
+    //         </div>
+    //     )
+    // }
 
     const LoginByGoogle = () => {
         return (
@@ -289,15 +289,67 @@ const Authentication: FC = () => {
                     <h1 className="authentication__block-title">Увійти</h1>
                     <ul className="authentication__block-list">
                         <li className="authentication__block-item">
-                            <button 
+                            {/* <button 
                                 className="authentication__block-btn"
                                 onClick={() => {setIsRegisterWindowShow(false); setIsLoginWindowShow(true); setIsLoginByEmail(true)}}>
                                 <span className="authentication__block-text">
                                     Увійти через Email
                                     <span className="authentication__block-decorative block-email"></span>
                                 </span>
-                            </button>
-                            
+                            </button> */}
+                            <form 
+                                className="authorization__window-form form-email"
+                                onSubmit={handleLogin}>
+                                <div className="form-email__label-wrapper">
+                                    <label className="form-email__label">
+                                        <span>Ваша електронна пошта</span>
+                                        <div className="form-email__input-wrapper">
+                                            <input 
+                                                className="form-email__input" 
+                                                type="email"
+                                                name="email"
+                                                autoComplete="current-email"
+                                                required
+                                                placeholder="youremail@example.com"
+                                                onChange={handleMailChange}
+                                                value={inputMail}/>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div className="form-email__label-wrapper">
+                                    <label className="form-email__label">
+                                        <span>Ваш пароль</span>
+                                        <div className="form-email__input-wrapper input-password__wrapper">
+                                            <input      
+                                                className="form-email__input input-password" 
+                                                type="password"
+                                                name="password"
+                                                autoComplete="current-password"
+                                                required
+                                                placeholder="&#10625; &#10625; &#10625; &#10625; &#10625; &#10625; &#10625;"
+                                                onChange={handlePassChange}
+                                                value={inputPass}
+                                                ref={loginByEmailPassInput}/>
+                                            <button 
+                                            className="input-password__hide-btn" 
+                                            title="hide-show password"
+                                            onClick={(e) => handleHidePass(e)}></button>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div className="form-email__label-wrapper remeber-me__wrapper"> 
+                                    <label className="form-email__label remeber-me__label">
+                                        <input      
+                                            className="form-email__checkbox" 
+                                            type="checkbox"
+                                            name="stay loged in"/>
+                                        <span className="remeber-me__checkbox-default"></span>
+                                        <span className="remeber-me__checkbox-checked"></span>
+                                        <span>Запам'ятати мене</span>
+                                    </label>
+                                </div>
+                                <button className="form-email__submit" type="submit">Увійти</button>
+                            </form>
                         </li>
                         <li className="authentication__block-item">
                             <button 
@@ -306,16 +358,6 @@ const Authentication: FC = () => {
                                 <span className="authentication__block-text">
                                     Увійти через Google
                                     <span className="authentication__block-decorative block-google"></span>
-                                </span>
-                            </button>
-                        </li>
-                        <li className="authentication__block-item">
-                            <button 
-                                className="authentication__block-btn"
-                                onClick={() => {setIsRegisterWindowShow(false); setIsLoginWindowShow(true); setIsLoginByFb(true)}}>
-                                <span className="authentication__block-text">
-                                    Увійти через Facebook
-                                    <span className="authentication__block-decorative block-facebook"></span>
                                 </span>
                             </button>
                         </li>
@@ -349,16 +391,6 @@ const Authentication: FC = () => {
                                 </span>
                             </button>
                         </li>
-                        <li className="authentication__block-item">
-                            <button 
-                                className="authentication__block-btn"
-                                onClick={() => {setIsLoginWindowShow(false); setIsRegisterWindowShow(true); setIsRegisterByFb(true)}}>
-                                <span className="authentication__block-text">
-                                    Зареєструватись через Facebook
-                                    <span className="authentication__block-decorative block-facebook"></span>
-                                </span>
-                            </button>
-                        </li>
                     </ul>
                     <div className="authentication__change-form">
                         <span>Маєте аккаунт?</span>
@@ -369,7 +401,7 @@ const Authentication: FC = () => {
         )
     }
 
-    const windowForAuth = (isLoginByEmail && LoginByEmail()) || (isLoginByGoogle && LoginByGoogle()) || (isRegisterByEmail && SignUpByEmail());
+    const windowForAuth = (isLoginByEmail) || (isLoginByGoogle && LoginByGoogle()) || (isRegisterByEmail && SignUpByEmail());
     // const windowsRegister = isRegisterByEmail && SignUpByEmail();
 
     return (

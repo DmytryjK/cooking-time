@@ -121,6 +121,10 @@
         border-radius: 4px;
         cursor: pointer;
         user-select: none;
+        transition: 0.2s ease-out background-color;
+        &:hover ~ .sort__input-custom {
+            border-color: $text-color;
+        }
     }
     &__input {
         appearance: none;
@@ -146,6 +150,7 @@
         border-radius: 4px;
         border: 1px solid #B9B9B9;
         cursor: pointer;
+        transition: 0.2s ease-out border-color, 0.2s ease-out background-color;
     }
     &__accept-btn {
         padding: 5px 20px;
@@ -157,5 +162,9 @@
         color: $light-color;
         user-select: none;
         cursor: pointer;
+        transition: 0.2s ease-out background-color;
+        &:hover {
+            background-color: $second-accent-color;
+        }
     }
 }
