@@ -288,16 +288,7 @@ const Authentication: FC = () => {
                 <div className={isRegisterOpen ? "authentication__block login" : "authentication__block login active"}>
                     <h1 className="authentication__block-title">Увійти</h1>
                     <ul className="authentication__block-list">
-                        <li className="authentication__block-item">
-                            {/* <button 
-                                className="authentication__block-btn"
-                                onClick={() => {setIsRegisterWindowShow(false); setIsLoginWindowShow(true); setIsLoginByEmail(true)}}>
-                                <span className="authentication__block-text">
-                                    Увійти через Email
-                                    <span className="authentication__block-decorative block-email"></span>
-                                </span>
-                            </button> */}
-                            <form 
+                    <form 
                                 className="authorization__window-form form-email"
                                 onSubmit={handleLogin}>
                                 <div className="form-email__label-wrapper">
@@ -350,23 +341,28 @@ const Authentication: FC = () => {
                                 </div>
                                 <button className="form-email__submit" type="submit">Увійти</button>
                             </form>
-                        </li>
-                        <li className="authentication__block-item">
-                            <button 
-                                className="authentication__block-btn"
-                                onClick={() => {setIsRegisterWindowShow(false); setIsLoginWindowShow(true); setIsLoginByGoogle(true)}}>
-                                <span className="authentication__block-text">
-                                    Увійти через Google
-                                    <span className="authentication__block-decorative block-google"></span>
-                                </span>
-                            </button>
-                        </li>
                     </ul>
                     <div className="authentication__change-form">
                         <span>Не маєте аккаунта?</span>
                         <button onClick={() => setIsRegisterOpen(true)}>Зареєструйтесь</button>
                     </div>
+                    <div className="authentication__decorative-block"><span className="text">або</span></div>
+                    <button 
+                        className="authentication__block-btn"
+                        onClick={() => {
+                            setIsRegisterWindowShow(false); 
+                            setIsLoginWindowShow(true); 
+                            setIsLoginByGoogle(true);
+                        }}>
+                        <span className="authentication__block-text">
+                            Продовжити через Google
+                            <span className="authentication__block-decorative block-google"></span>
+                        </span>
+                    </button>
                 </div>
+                
+                {/* Register Page */}
+
                 <div className={isRegisterOpen ? "authentication__block register active" : "authentication__block register"}>
                     <h1 className="authentication__block-title">Зареєструватись</h1>
                     <ul className="authentication__block-list">

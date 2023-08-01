@@ -75,7 +75,7 @@ const Header = ({isSearch}:{isSearch: boolean}) => {
                                 className="logout__btn">Вийти</button>
                                 :
                             <NavLink 
-                                className="login__link" 
+                                className="login__link"
                                 to="/auth" 
                                 reloadDocument > Увійти | Зареєструватись 
                             </NavLink>
