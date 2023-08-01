@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 .authorization {
     display: flex;
     height: 100vh;
@@ -18,9 +19,27 @@
         height: 100%;
         padding: 0 15px;
     }
+    &__nav {
+        position: relative;
+        margin-top: 20px;
+        max-width: 720px;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    &__nav-link {
+        position: absolute;
+        right: 50px;
+        text-decoration: underline;
+        font-size: 16px;
+        font-weight: 600;
+        color: $accent-color;
+        text-decoration-color: $accent-color;
+        text-decoration-skip-ink: none;
+    }
     &__logo {
-        // margin-bottom: auto;
+        margin: 0 auto;
     }
 }
-    
     

@@ -9,10 +9,17 @@ const AuthorizationPage = () => {
         <section className="authorization">
             <div className="authorization__image"></div>
             <div className="authorization__content">
-                <NavLink className="authorization__logo" 
-                    to="/">
-                    <img src={Logo} alt="" />
-                </NavLink>
+                <nav className="authorization__nav">
+                    <NavLink className="authorization__logo" 
+                        to="/">
+                        <img src={Logo} alt="" />
+                    </NavLink>
+                    <NavLink className="authorization__nav-link" 
+                        to="/">
+                        Назад
+                    </NavLink>
+                </nav>
+                
                 <Authentication />
             </div>
         </section>
