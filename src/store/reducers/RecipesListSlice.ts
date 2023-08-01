@@ -3,11 +3,6 @@ import { getDatabase, ref, child, get, push, update } from "firebase/database";
 
 import type { Recipes, Recipe, tagsType } from '../../types/type';
 
-type PayloadActionFilter = {
-	recipes: Recipe[];
-	value: string | string[];
-}
-
 type PayloadNewActionFilter = {
 	searchInput: string;
 	searchTags: tagsType[];
@@ -160,10 +155,8 @@ export const recepieListSlice = createSlice({
 			const {searchInput, searchTags, searchCategories} = action.payload;
 			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
 
-			if (!searchInput && searchTags.length === 0 && searchCategories.length === 0) {
-				state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
-				return;
-			};
+			if (!searchInput && searchTags.length === 0 && searchCategories.length === 0) return;
+			
 			if (searchInput && searchTags.length > 0 && searchCategories.length > 0) {
 				state.filteredRecipes = state.filteredRecipes
 					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
