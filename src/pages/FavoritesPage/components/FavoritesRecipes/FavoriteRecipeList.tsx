@@ -38,7 +38,6 @@ const FavoritesRecipes: FC = () => {
 
     const renderItems = () => {
         if (loading === 'succeeded' && favoriteRecipes.length === 0) {
-            console.log(uid);
             return <ErrorMesage text={'Список обраного пустий'}/>;
         } else {
             return filteredRecipes.map((item) => {

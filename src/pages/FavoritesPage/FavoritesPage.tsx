@@ -6,12 +6,13 @@ import { useAppSelector } from "../../hooks/hooks";
 
 const FavoritesPage = () => {
     const uid = useAppSelector(store => store.authentication.user.uid);
+    const favoriteRecipes = useAppSelector(store => store.favoriteRecipes.favoriteRecipes);
     return (
         <>
             <Header isSearch={true} />
             <section className="favorites">
                 <div className="container">
-                    {uid && <Filters />}
+                    {uid && favoriteRecipes.length > 0 && <Filters />}
                     <FavoriteRecipeList />
                 </div>
             </section>
