@@ -1,21 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { filterRecepies, objectForFiltered, objectForSearch, Recepie, tagsType } from '../../types/type';
+import type { tagsType } from '../../types/type';
 
-const initialState: filterRecepies = {
-	filteredRecepies: [],
+type TypeFilterRecipes = {
+	searchInput: string;
+	searchTags: tagsType[];
+	searchCategories: string[];
+}
+
+const initialState: TypeFilterRecipes = {
 	searchInput: '',
-	searchTags: []
+	searchTags: [],
+	searchCategories: [],
 }
 
 export const filtersSlice = createSlice({
 	name: 'filters',
 	initialState,
 	reducers: {
-		cloneRecepies: (state, action: PayloadAction<Recepie[]>) => {
-			state.filteredRecepies = [...action.payload];
-		},
 		searchInputValue: (state, action: PayloadAction<string>) => {
 			state.searchInput = action.payload;
+		},
+		activeCategories: (state, action: PayloadAction<string[]>) => {
+			state.searchCategories = action.payload;
 		},
 		addSearchTag: (state, action: PayloadAction<tagsType>) => {
 			state.searchTags = [...state.searchTags, action.payload];
@@ -27,33 +33,9 @@ export const filtersSlice = createSlice({
 		deleteAllTags: (state) => {
 			state.searchTags = [];
 		},
-		filterRecepiesByTag: (state, action: PayloadAction<objectForFiltered>) => {
-			const {recipes, tags} = action.payload;
-			state.filteredRecepies = [...recipes];
-			
-			if (tags.length > 0) {
-				state.filteredRecepies = state.filteredRecepies.filter(item => {
-					return item.ingredients?.some(ingredient => {
-						const upperTags = tags.map(tag => tag.toUpperCase());
-						return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
-					})
-				});
-			} 
-		},
-		filterRecepiesByName: (state, action: PayloadAction<objectForSearch>) => {
-			const {recipes, value} = action.payload;
-			state.filteredRecepies = [...recipes];
-	
-			if (value) {
-				state.filteredRecepies = recipes.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) > -1)
-			} 
-			console.log(state.filteredRecepies);
-			
-		}
-
 	}
 })
 
-export const { filterRecepiesByTag, filterRecepiesByName, cloneRecepies, addSearchTag, deleteSearchTag, deleteAllTags } = filtersSlice.actions;
+export const { addSearchTag, deleteSearchTag, deleteAllTags, activeCategories, searchInputValue } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

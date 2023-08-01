@@ -11,14 +11,14 @@ import Header from '../../shared-components/Header/Header';
 import EditRecipeForm from './components/EditRecipeForm/EditRecipeForm';
 
 import './AboutRecipePage.scss';
-import { Recepie } from '../../types/type';
+import { Recipe } from '../../types/type';
 
 const AboutRecipePage = () => {
     const recepieId = useParams();
     const { recipe } = useAppSelector(state => state.recipes);
     const dispatch = useAppDispatch();
     const [isEditActive, setIsEditActive] = useState<boolean>(false);
-    const [currentRecipeToEdit, setCurrentRecipeToEdit] = useState<Recepie | null>(null);
+    const [currentRecipeToEdit, setCurrentRecipeToEdit] = useState<Recipe | null>(null);
 
     const [attentionWindowOpen, setAttentionWindowOpen] = useState<boolean>(false);
 
@@ -31,7 +31,7 @@ const AboutRecipePage = () => {
         dispatch(fetchRecipe(recepieId.id));
     }, []);
 
-    const handleEditRecipe = (fetchedRecepieInfo: Recepie) => {
+    const handleEditRecipe = (fetchedRecepieInfo: Recipe) => {
         setIsEditActive(true);
         setCurrentRecipeToEdit(fetchedRecepieInfo);
     }
@@ -78,7 +78,7 @@ const AboutRecipePage = () => {
     return(
         <div className="about-recipe">
             <div className="container">
-                <Header isSearch={false} recipes={[]}/>
+                <Header isSearch={false} />
 
                 <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
                     <div className="success-window__block">

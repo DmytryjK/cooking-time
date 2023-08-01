@@ -1,4 +1,4 @@
-@import './fonts/fonst.scss';
+@import '../fonts/fonst.scss';
 
 * {
 	box-sizing: border-box;
@@ -15,6 +15,7 @@ body {
 	max-width: 1400px;
 	padding: 0 30px;
 	margin: 0 auto;
+	width: 100%;
 }
 
 /* edit description form for recipe */

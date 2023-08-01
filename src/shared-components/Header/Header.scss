@@ -37,11 +37,35 @@
         align-items: center;
     }
 
-    .auth-page {
+    .logout__btn, .login__link {
+        position: relative;
+        padding-left: 28px;
         font-weight: 500;
         font-size: 15px;
         line-height: 20px;
         text-decoration: none;
         color: #303030;
+        background-color: transparent;
+        border: none;
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+        }
+    }
+    .logout__btn {
+        cursor: pointer;
+        &:before {
+            background: url('../../assets/icons/login/log-out.svg') center center/cover no-repeat;
+        }
+    }
+    .login__link {
+        &:before {
+            background: url('../../assets/icons/login/log-in.svg') center center/cover no-repeat;
+        }
     }
 }

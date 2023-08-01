@@ -1,20 +1,17 @@
-import { useAppSelector } from "../../hooks/hooks";
 import Header from "../../shared-components/Header/Header";
-import FavoritesRecipes from "./components/FavoritesRecipes/FavoritesRecipes";
+import FavoriteRecipeList from "./components/FavoritesRecipes/FavoriteRecipeList";
 
 const FavoritesPage = () => {
-    const {favoriteRecipes} = useAppSelector(state=> state.favoriteRecipes);
-
     return (
         <>
-            <Header isSearch={true} recipes={favoriteRecipes}/>
+            <Header isSearch={true} />
             <section className="favorites">
                 <div className="container">
-                    <FavoritesRecipes />
+                    <FavoriteRecipeList />
                 </div>
             </section>
         </>
     )
-}
+};
 
 export default FavoritesPage;

@@ -1,4 +1,4 @@
-export interface Recepie {
+export interface Recipe {
 	id: string|number|null;
 	title: string;
 	time?: string | null;
@@ -6,11 +6,12 @@ export interface Recepie {
 	img?: string;
 	description?: string;
 	favorites: boolean;
+	category: string;
 }
 
-export interface Recepies {
-	recipes: Recepie[];
-	fetchedRecepieInfo?: Recepie | null;
+export interface Recipes {
+	recipes: Recipe[];
+	fetchedRecepieInfo?: Recipe | null;
 }
 
 export interface PostState {
@@ -24,20 +25,9 @@ export interface tagsType {
     tagText: string;
 }
 
-export interface filterRecepies {
-    filteredRecepies: Recepie[];
-	searchInput: string;
-	searchTags: tagsType[];
-}
-
 export interface objectForFiltered {
-	recipes: Recepie[];
+	recipes: Recipe[];
 	tags: string[];
-}
-
-export interface objectForSearch {
-	recipes: Recepie[];
-	value: string;
 }
 
 export interface uploadFileType {
@@ -61,10 +51,4 @@ export interface user {
 	email: string;
 }
 
-export interface FavoriteRecipes {
-	favoriteRecipes: Recepie[];
-	loadingRecipesById: 'idle' | 'pending' | 'succeeded' | 'failed'
-	loadingRecipeIdToFirebase: 'idle' | 'pending' | 'succeeded' | 'failed'
-	error: null | unknown;
-	currentFavoriteId: string |  number | null; 
-}
+export type Loading = 'idle' | 'pending' | 'succeeded' | 'failed';

@@ -1,0 +1,55 @@
+@use '../../styles/variables' as *;
+.tagsForm {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: none;
+    max-width: 600px;
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+        row-gap: 15px;
+        column-gap: 10px;
+        list-style-type: none;
+    }
+    &__item {
+        position: relative;
+        min-width: 50px;
+        text-align: center;
+        padding: 5px 24px 5px 10px;
+        border: 1px solid $accent-color;
+        border-radius: 50px;
+        background-color: transparent;
+        color: $accent-color;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 16px;
+        cursor: default;
+    }
+    &__item-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 10px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        transition: 0.3s ease background-color;
+    }
+
+    &__clear-btn {
+        text-decoration: underline;
+        background-color: transparent;
+        text-decoration-skip-ink: none;
+        white-space: nowrap;
+        border: none;
+        cursor: pointer;
+    }
+}

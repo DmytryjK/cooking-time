@@ -1,9 +1,17 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDatabase, ref, child, get, update } from "firebase/database";
 
-import type { FavoriteRecipes, Recepie } from '../../types/type';
+import type { Recipe } from '../../types/type';
 
-const initialState: FavoriteRecipes = {
+type TypeFavoriteRecipes = {
+	favoriteRecipes: Recipe[];
+	loadingRecipesById: 'idle' | 'pending' | 'succeeded' | 'failed';
+	loadingRecipeIdToFirebase: 'idle' | 'pending' | 'succeeded' | 'failed';
+	error: null | unknown;
+	currentFavoriteId: string |  number | null; 
+}
+
+const initialState: TypeFavoriteRecipes = {
 	favoriteRecipes: [],
 	loadingRecipesById: 'idle',
 	loadingRecipeIdToFirebase: 'idle',
@@ -22,7 +30,7 @@ export const fetchFavoritesRecipe = createAsyncThunk(
 			const favoritesTomSnapshot = await get(favoritesRecipeRef);
 			const userFavoritesRecipesSnapshot = await get(child(favoritesRecipeRef, uid));
 
-			let recipesData: Recepie[] = [];
+			let recipesData: Recipe[] = [];
 			
 			if (favoritesTomSnapshot.exists()) {
 				let response;
@@ -36,7 +44,7 @@ export const fetchFavoritesRecipe = createAsyncThunk(
 						const queries = favoriteRecipesId.map((recipeId) => get(ref(db, `dishes/${recipeId}`)));
 
 						const snapshots = await Promise.all(queries);
-						const responseRecipes: Recepie[] = snapshots.map((snapshot) => {
+						const responseRecipes: Recipe[] = snapshots.map((snapshot) => {
 							const result = {...snapshot.val(), favorites: true}
 							return result;
 						});
@@ -109,7 +117,7 @@ export const favoriteRecipesSlice = createSlice({
 			state.loadingRecipesById = 'pending';
 			state.error = null;
 		})
-		builder.addCase(fetchFavoritesRecipe.fulfilled, (state, action: PayloadAction<Recepie[]>) => {
+		builder.addCase(fetchFavoritesRecipe.fulfilled, (state, action: PayloadAction<Recipe[]>) => {
 			state.favoriteRecipes = action.payload;
 			state.loadingRecipesById = 'succeeded';
 		})
@@ -127,6 +135,7 @@ export const favoriteRecipesSlice = createSlice({
 		})
 		builder.addCase(manageFavoritesRecipes.rejected, (state, action: PayloadAction<unknown>) => {
 			state.loadingRecipeIdToFirebase = 'failed';
+			state.error = action.payload;
 		})
 	},
 })
