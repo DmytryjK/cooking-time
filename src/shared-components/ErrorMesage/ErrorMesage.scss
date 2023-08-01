@@ -1,8 +1,9 @@
 .errorMessage {
-    margin-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
     height: 100%;
+    grid-column-start: 1;
+    grid-column-end: 4;
 }

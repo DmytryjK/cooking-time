@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
-import { setCurrentFilteredRecipes } from '../../../../store/reducers/RecipesListSlice';
+import { setCurrentFilteredRecipes, setCurrentRecipes } from '../../../../store/reducers/RecipesListSlice';
 import { fetchFavoritesRecipe, manageFavoritesRecipes } from '../../../../store/reducers/FavoritesRecipesSlice';
 import ErrorMesage from "../../../../shared-components/ErrorMesage/ErrorMesage";
 import renderServerData from '../../../../helpers/renderServerData';
@@ -24,11 +24,12 @@ const FavoritesRecipes: FC = () => {
 
     useEffect(() => {
         if (loading !== 'succeeded') return;
+        dispatch(setCurrentRecipes(favoriteRecipes));
         dispatch(setCurrentFilteredRecipes(favoriteRecipes));
     }, [loading, favoriteRecipes]);
 
     const registerAttention = () => {
-        return <div>Зареєструйтесь, щоб побачити список рецептів</div>
+        return <ErrorMesage text={'Зареєструйтесь, щоб побачити список рецептів'}/>
     }
 
     const handleAddFavorite = (recepieId: string | number | null) => {
@@ -36,9 +37,9 @@ const FavoritesRecipes: FC = () => {
     };
 
     const renderItems = () => {
-        if (!uid) return registerAttention();
         if (loading === 'succeeded' && favoriteRecipes.length === 0) {
-            return <ErrorMesage text={'Ваш список избранного пуст'}/>;
+            console.log(uid);
+            return <ErrorMesage text={'Список обраного пустий'}/>;
         } else {
             return filteredRecipes.map((item) => {
                 return(
@@ -52,12 +53,12 @@ const FavoritesRecipes: FC = () => {
     
     return (
         <ul className='recipe-list'>
-            {renderServerData({
+            {uid ? renderServerData({
                 loading,
                 error,
                 errorText: 'Щось пішло не так, спробуйте ще раз',
                 content: renderItems,
-            })}
+            }) : registerAttention()}
         </ul>
     )
 }
