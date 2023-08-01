@@ -1,11 +1,23 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDatabase, ref, child, get, push, update } from "firebase/database";
 
-import type { Recepies, Recepie } from '../../types/type';
+import type { Recipes, Recipe, tagsType } from '../../types/type';
+
+type PayloadActionFilter = {
+	recipes: Recipe[];
+	value: string | string[];
+}
+
+type PayloadNewActionFilter = {
+	searchInput: string;
+	searchTags: tagsType[];
+	searchCategories: string[];
+}
 
 type initialStateRecipes = {
-	recipes: Recepie[];
-	recipe: Recepie | null;
+	recipes: Recipe[];
+	filteredRecipes: Recipe[];
+	recipe: Recipe | null;
 	loadingRecipe: 'idle' | 'pending' | 'succeeded' | 'failed';
 	loadingRecipes: 'idle' | 'pending' | 'succeeded' | 'failed';
 	loadingForm: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -14,6 +26,7 @@ type initialStateRecipes = {
 
 const initialState: initialStateRecipes = {
 	recipes: [],
+	filteredRecipes: [],
 	recipe: null,
 	loadingRecipe: 'idle',
 	loadingRecipes: 'idle',
@@ -35,8 +48,8 @@ export const fetchRecipes = createAsyncThunk(
 
 			if (!responseRecipe.exists()) throw new Error('Something went wrong');
 
-			const originalData: Recepie[] = await responseRecipe.val();
-			const transformRecepiesToArr: Recepie[]= [];
+			const originalData: Recipe[] = await responseRecipe.val();
+			const transformRecepiesToArr: Recipe[]= [];
 
 			const responseFavoritesId = await get(child(dbRef, `favorites/${uid}`));
 			const favoriteId:string[] = await responseFavoritesId.val();
@@ -74,7 +87,7 @@ export const fetchRecipe = createAsyncThunk(
 			const response = await get(child(dbRef, 'dishes/' + id));
 			
 			if (!response.exists()) throw new Error('Something went wrong');
-			const data: Recepie = await response.val();
+			const data: Recipe = await response.val();
 			return data;
 		} catch (error: unknown) {
 			return rejectWithValue(error);
@@ -84,7 +97,7 @@ export const fetchRecipe = createAsyncThunk(
 
 export const postRecipe = createAsyncThunk(
 	'recepiesList/postRecipe',
-	async function(newRecepie: Recepie, { rejectWithValue }) {
+	async function(newRecepie: Recipe, { rejectWithValue }) {
 		try{
 			const db = getDatabase();
 			const newPostKey = push(child(ref(db), 'dishes')).key;
@@ -126,10 +139,13 @@ export const recepieListSlice = createSlice({
 	name: 'recepiesList',
 	initialState,
 	reducers: {
-		setCurrentRecipes: (state, action: PayloadAction<Recepie[]>) => {
+		setCurrentRecipes: (state, action: PayloadAction<Recipe[]>) => {
 			state.recipes = action.payload;
 		},
-		addNewRecipe: (state, action: PayloadAction<Recepie>) => {
+		setCurrentFilteredRecipes: (state, action: PayloadAction<Recipe[]>) => {
+			state.filteredRecipes = action.payload;
+		},
+		addNewRecipe: (state, action: PayloadAction<Recipe>) => {
 			state.recipes.push(action.payload);
 		},
 		setFavoriteRecipes: (state, action: PayloadAction<isFavoritePayload>) => {
@@ -138,14 +154,78 @@ export const recepieListSlice = createSlice({
 				recipe.id === recipeId ? recipe.favorites = isFavorite : recipe.favorites = recipe.favorites;
 				return recipe;
 			})];
-		}
+			state.filteredRecipes = [...state.recipes];
+		},
+		filterRecipes: (state, action: PayloadAction<PayloadNewActionFilter>) => {
+			const {searchInput, searchTags, searchCategories} = action.payload;
+			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
+
+			if (!searchInput && searchTags.length === 0 && searchCategories.length === 0) {
+				state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
+				return;
+			};
+			if (searchInput && searchTags.length > 0 && searchCategories.length > 0) {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
+					.filter(recipe => {
+						return recipe.ingredients?.some(ingredient => {
+							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
+							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+						})
+					})
+					.filter(recipe => searchCategories.includes(recipe.category) === true);
+				return;
+			} else if (searchInput && searchTags.length > 0) {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
+					.filter(recipe => {
+						return recipe.ingredients?.some(ingredient => {
+							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
+							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+						})
+					})
+					return;
+			} else if (searchInput && searchCategories.length > 0) {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
+					.filter(recipe => searchCategories.includes(recipe.category) === true);
+					return;
+			} else if (searchTags.length > 0 && searchCategories.length > 0) {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => {
+						return recipe.ingredients?.some(ingredient => {
+							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
+							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+						})
+					})
+					.filter(recipe => searchCategories.includes(recipe.category) === true);
+					return;
+			} else if (searchInput) {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1);
+					return;
+			} else if (searchTags.length > 0) {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => {
+						return recipe.ingredients?.some(ingredient => {
+							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
+							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+						})
+					});
+					return;
+			} else {
+				state.filteredRecipes = state.filteredRecipes
+					.filter(recipe => searchCategories.includes(recipe.category) === true);
+					return;
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchRecipe.pending, (state) => {
 			state.loadingRecipe = 'pending';
 			state.error = null;
 		})
-		builder.addCase(fetchRecipe.fulfilled, (state, action: PayloadAction<Recepie>) => {
+		builder.addCase(fetchRecipe.fulfilled, (state, action: PayloadAction<Recipe>) => {
 			state.loadingRecipe = 'succeeded';
 			state.recipe = action.payload;
 		})
@@ -157,7 +237,7 @@ export const recepieListSlice = createSlice({
 			state.loadingForm = 'pending';
 			state.error = null;
 		})
-		builder.addCase(postRecipe.fulfilled, (state, action: PayloadAction<Recepie>) => {
+		builder.addCase(postRecipe.fulfilled, (state, action: PayloadAction<Recipe>) => {
 			state.loadingForm = 'succeeded';
 			state.recipes = [...state.recipes, action.payload];
 		})
@@ -169,7 +249,7 @@ export const recepieListSlice = createSlice({
 			state.loadingRecipes = 'pending';
 			state.error = null;
 		})
-		builder.addCase(fetchRecipes.fulfilled, (state, action: PayloadAction<Recepies>) => {
+		builder.addCase(fetchRecipes.fulfilled, (state, action: PayloadAction<Recipes>) => {
 			state.loadingRecipes = 'succeeded';
 			state.recipes = action.payload.recipes;
 		})
@@ -180,6 +260,6 @@ export const recepieListSlice = createSlice({
 	},
 })
 
-export const { addNewRecipe, setFavoriteRecipes, setCurrentRecipes } = recepieListSlice.actions;
+export const { addNewRecipe, setFavoriteRecipes, setCurrentRecipes, filterRecipes, setCurrentFilteredRecipes } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;

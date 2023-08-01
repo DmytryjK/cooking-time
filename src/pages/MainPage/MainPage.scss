@@ -2,5 +2,12 @@
     min-height: calc(100vh - 100px);
     display: flex;
     justify-content: center;
-    align-items: center;
+    .container {
+        margin-top: 50px;
+    }
+    &__top {
+        display: flex;
+        justify-content: space-between;
+        column-gap: 50px;
+    }
 }

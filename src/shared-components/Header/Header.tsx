@@ -1,16 +1,13 @@
 import {FC, useEffect, useState} from 'react';
-import Tags from './Tags/Tags';
 import SearchForm from "./SearchForm/SearchForm";
 import { getAuth, signOut } from "firebase/auth";
 import { createUser } from '../../store/reducers/AuthenticationSlice';
-import { Recepie } from '../../types/type';
 import { NavLink } from "react-router-dom";
-import { cloneRecepies } from '../../store/reducers/FiltersSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import logo from '../../assets/icons/logo.svg';
 import './Header.scss';
 
-const Header: FC<{isSearch:boolean, recipes:Recepie[]}> = ({isSearch, recipes}) => {
+const Header = ({isSearch}:{isSearch: boolean}) => {
     const {uid} = useAppSelector(state => state.authentication.user);
     const [userAuthToLocalStorage, setUserAuthToLocalStorage] = useState<string | null>(null);
 
@@ -71,21 +68,20 @@ const Header: FC<{isSearch:boolean, recipes:Recepie[]}> = ({isSearch, recipes}) 
                         </nav>
                     </div>
                     <div className="header__right">
-                        {isSearch ? <SearchForm recipes={recipes}/> : null}
+                        {isSearch ? <SearchForm /> : null}
                         {userAuthToLocalStorage ? 
                             <button 
                                 onClick={handleLogout} 
-                                className="logout__btn">Вихід</button>
+                                className="logout__btn">Вийти</button>
                                 :
                             <NavLink 
-                                className="auth-page" 
+                                className="login__link" 
                                 to="/auth" 
                                 reloadDocument > Увійти | Зареєструватись 
                             </NavLink>
                         }
                     </div>
                 </div>
-                <Tags recipes={recipes}/>
             </div>
         </header>
     )

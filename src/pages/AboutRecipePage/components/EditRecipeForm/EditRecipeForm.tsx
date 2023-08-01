@@ -2,12 +2,12 @@ import { FC, SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 
-import { Recepie, uploadFileType } from '../../../../types/type';
+import { Recipe, uploadFileType } from '../../../../types/type';
 
 import 'react-quill/dist/quill.snow.css';
 import './EditRecipeForm.scss';
 
-const EditRecipeForm: FC<{recipe: Recepie, setIsAttentionOpen: React.Dispatch<SetStateAction<boolean>>}> = ({recipe, setIsAttentionOpen}) => {
+const EditRecipeForm: FC<{recipe: Recipe, setIsAttentionOpen: React.Dispatch<SetStateAction<boolean>>}> = ({recipe, setIsAttentionOpen}) => {
 
     const {title, ingredients, img, description} = recipe ;
 

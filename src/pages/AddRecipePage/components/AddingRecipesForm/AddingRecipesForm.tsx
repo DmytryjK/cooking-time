@@ -121,7 +121,8 @@ const AddingRecipesForm = () => {
                     ingredients: tags.map(tag => tag.tagText),
                     description: description,
                     img: imageRefFromStorage,
-                    favorites: false
+                    favorites: false,
+                    category: 'Перші страви',
                 }));
             if (!error) {
                 setNameValue('');

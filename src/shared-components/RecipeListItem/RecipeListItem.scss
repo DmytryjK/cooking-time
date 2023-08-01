@@ -1,12 +1,14 @@
 @use '../../styles/variables' as *;
 .recipe-card {
+    width: 100%;
     position: relative;
     &__link {
         display: flex;
         flex-direction: column;
         padding: 15px;
-        max-width: 325px;
-        min-width: 300px;
+        max-width: 320px;
+        min-width: 250px;
+        height: 100%;
         background: #FFFFFF;
         box-shadow: 0px 0px 3px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);
         border-radius: 20px;
@@ -15,7 +17,7 @@
         cursor: pointer;
         &:hover {
             .recipe-card__img-wrapper:after {
-                opacity: 0.15;
+                opacity: 0.1;
             } 
             .recipe-card__image {
                 transform: scale(1.03);
@@ -43,10 +45,10 @@
         color: #FDFDFD;
     }
     &__img-wrapper {
+        flex-basis: 290px;
         position: relative;
         border-radius: 10px;
         overflow: hidden;
-        height: 290px;
         &:after {
             content: '';
             position: absolute;
@@ -72,10 +74,11 @@
         height: 100%;
         object-fit: cover;
         border-radius: 10px;
+        transform: scale(1.01);
         transition: 0.3s ease-out transform;
     }
-    &__content-wrapper {
-        height: calc(100% - 290px);
+    &__content-text {
+        flex-basis: calc(100% - 290px);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -150,7 +153,7 @@
         border-radius: 50%;
         border: none;
         background-color: $accent-color;
-        z-index: 999;
+        z-index: 2;
         cursor: pointer;
         &:after {
             content: '';

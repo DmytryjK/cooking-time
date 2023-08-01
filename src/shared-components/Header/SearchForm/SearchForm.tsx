@@ -1,29 +1,30 @@
 import { useState, useEffect, FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { filterRecepiesByName, addSearchTag, cloneRecepies } from '../../../store/reducers/FiltersSlice';
-
-import type { Recepie } from '../../../types/type';
+import { addSearchTag, searchInputValue } from '../../../store/reducers/FiltersSlice';
+import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
 
 import './SearchForm.scss';
-
 import nextId from "react-id-generator";
 
-const SearchForm: FC<{recipes:Recepie[]}> = ({recipes}) => {
+const SearchForm = () => {
     const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState<string>('');
-    const {filteredRecepies} = useAppSelector(state => state.filters); 
+    const {searchInput, searchTags, searchCategories} = useAppSelector(state => state.filters);
 
     useEffect(() => {
-        dispatch(cloneRecepies(recipes));
-    }, [recipes]); 
+        dispatch(filterRecipes({searchInput, searchTags, searchCategories}));
+    }, [searchInput, searchTags]);
+
+    useEffect(() => {
+        if (inputValue === '') dispatch(searchInputValue(''));
+    }, [inputValue]);
     
     const handleSearchClick = (value: string) => {
-        dispatch(filterRecepiesByName({recipes: filteredRecepies, value}));
+        dispatch(searchInputValue(value));
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
-        !event.target.value && dispatch(filterRecepiesByName({recipes, value: ""}))
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -36,8 +37,7 @@ const SearchForm: FC<{recipes:Recepie[]}> = ({recipes}) => {
             setInputValue('');
         } 
         if (event.code === 'Enter' && inputValue !== '') {
-            const value = inputValue;
-            dispatch(filterRecepiesByName({recipes, value}));
+            dispatch(searchInputValue(inputValue));
         } 
     }
 
