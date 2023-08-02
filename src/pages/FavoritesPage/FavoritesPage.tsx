@@ -12,7 +12,7 @@ const FavoritesPage = () => {
             <Header isSearch={true} />
             <section className="favorites">
                 <div className="container">
-                    {uid && favoriteRecipes.length > 0 && <Filters />}
+                    {uid && favoriteRecipes.length > 0 && <Filters title="Мої обрані" />}
                     <FavoriteRecipeList />
                 </div>
             </section>

@@ -1,5 +1,11 @@
+@use '../../styles/variables' as *;
 .filters {
     display: flex;
     justify-content: space-between;
-    column-gap: 50px;
+    column-gap: 30px;
+    &__title {
+        color: $text-color;
+        font-size: 25px;
+        font-weight: 700;
+    }
 }
