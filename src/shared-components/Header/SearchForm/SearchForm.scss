@@ -20,7 +20,7 @@
         }
         &:focus {
             border-color: $accent-color;
-            background-color: $light-accent-bg;
+            background-color: $light-color;
             caret-color: $accent-color;
             color: $accent-color;
             &::placeholder {

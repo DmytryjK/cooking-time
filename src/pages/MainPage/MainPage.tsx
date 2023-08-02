@@ -20,7 +20,7 @@ const MainPage = () => {
             <Header isSearch={true} /> 
             <section className="main">
                 <div className="container">
-                    <Filters />
+                    <Filters title="Всі рецепти"/>
                     <RecipeList />
                 </div>
             </section>

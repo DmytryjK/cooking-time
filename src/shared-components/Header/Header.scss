@@ -25,16 +25,19 @@
         font-weight: 500;
         font-size: 15px;
         line-height: 20px;
-        color: #303030;
-        text-decoration: none;
-        transition: 0.2s ease-out color;
+        color: $text-color;
+        text-decoration: underline;
+        text-decoration-skip-ink: none;
+        text-decoration-color: transparent;
+        transition: 0.2s ease-out color, 0.2s ease-out text-decoration-color;
         &:hover {
-            color: $accent-color;
+            text-decoration-color: $text-color;
         }
         &.active {
             color: #D24A34;
-            text-decoration: underline;
-            text-decoration-skip-ink: none;
+            &:hover {
+                text-decoration-color: transparent;
+            }
         }
     }
     &__right {
