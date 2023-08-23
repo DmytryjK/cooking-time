@@ -1,4 +1,5 @@
 import Header from "../../shared-components/Header/Header";
+import Footer from '../../shared-components/Footer/Footer';
 import RecipeList from "./RecipeList/RecipeLIst";
 import {useEffect} from 'react';
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -24,6 +25,7 @@ const MainPage = () => {
                     <RecipeList />
                 </div>
             </section>
+            <Footer />
         </>
     )
 }

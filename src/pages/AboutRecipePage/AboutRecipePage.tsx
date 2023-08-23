@@ -8,6 +8,7 @@ import { fetchRecipe } from '../../store/reducers/RecipesListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 import Header from '../../shared-components/Header/Header';
+import Footer from '../../shared-components/Footer/Footer';
 import EditRecipeForm from './components/EditRecipeForm/EditRecipeForm';
 
 import './AboutRecipePage.scss';
@@ -76,32 +77,32 @@ const AboutRecipePage = () => {
     }
     
     return(
-        <div className="about-recipe">
-            <div className="container">
-                <Header isSearch={false} />
-
-                <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
-                    <div className="success-window__block">
-                        <h2 className="success-window__title">Вы уверены, что хотите закрыть редактор? Все изменения будут отменены.</h2>
-                        <div className="success-window__links">
-                            <button 
-                                className="success-window__back-main">Закрыть редактор</button>
-                            <button 
-                                className="success-window__back">Вернуться</button>
+        <>
+            <Header isSearch={false} />
+            <section className="about-recipe">
+                <div className="container">
+                    
+                    <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
+                        <div className="success-window__block">
+                            <h2 className="success-window__title">Вы уверены, что хотите закрыть редактор? Все изменения будут отменены.</h2>
+                            <div className="success-window__links">
+                                <button 
+                                    className="success-window__back-main">Закрыть редактор</button>
+                                <button 
+                                    className="success-window__back">Вернуться</button>
+                            </div>
+                            <button          
+                                className="success-window__close"
+                            ></button>
                         </div>
-                        <button          
-                            className="success-window__close"
-                        ></button>
                     </div>
-                </div>
-                <main className="recepie-page">
-                    <div className="container">
+                    <main className="recepie-page">
                         {isEditActive && currentRecipeToEdit ? <EditRecipeForm recipe={currentRecipeToEdit} setIsAttentionOpen={setAttentionWindowOpen}/> : renderedInfo()}
-                    </div>
-                </main>
-            </div>
-        </div>
-        
+                    </main>
+                </div>
+            </section>
+            <Footer />
+        </>
     )
 }
 

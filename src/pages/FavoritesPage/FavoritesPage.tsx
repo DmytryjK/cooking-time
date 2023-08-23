@@ -1,4 +1,5 @@
 import Header from "../../shared-components/Header/Header";
+import Footer from '../../shared-components/Footer/Footer';
 import FavoriteRecipeList from "./components/FavoritesRecipes/FavoriteRecipeList";
 import Filters from "../../shared-components/Filters/Filters";
 import './FavoritesPage.scss';
@@ -16,6 +17,7 @@ const FavoritesPage = () => {
                     <FavoriteRecipeList />
                 </div>
             </section>
+            <Footer />
         </>
     )
 };
