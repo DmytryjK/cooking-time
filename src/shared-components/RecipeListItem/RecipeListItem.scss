@@ -35,12 +35,13 @@
         left: 30px;
         top: 28.5px;
         display: inline-flex;
-        padding: 5px 10px;
+        padding: 10px 12px;
         align-items: center;
         font-size: 13px;
         font-style: normal;
         font-weight: 500;
-        border-radius: 50px;
+        line-height: 9px;
+        border-radius: 10px;
         background-color:#D24A34;
         color: #FDFDFD;
     }
@@ -151,7 +152,7 @@
         height: 33px;
         right: 25px;
         top: 25px;
-        border-radius: 50%;
+        border-radius: 6px;
         border: none;
         background-color: $accent-color;
         z-index: 2;
@@ -162,6 +163,7 @@
             display: block;
             width: 21px;
             height: 21px;
+            transform: scale(1.01);
             background: url('../../assets/icons/favorites/Heart.svg') center center/cover no-repeat;
             transition: 0.2s ease-out transform;
         }
@@ -190,7 +192,7 @@
             right: 0;
             top: 0;
             bottom: 0;
-            width: 10px;
+            width: 34px;
             height: 100%;
             background: linear-gradient(270deg, #FFFFFF 0%, #FFFFFF 22.4%, rgba(255, 255, 255, 0) 95.59%);
         }
@@ -206,9 +208,10 @@
             font-weight: 500;
             text-align: center;
             color: $accent-color;
-            padding: 5px 10px;
+            line-height: 9px;
+            padding: 10px 12px;
             border: 1px solid $accent-color;
-            border-radius: 50px;
+            border-radius: 10px;
             cursor: default;
         }
     }
