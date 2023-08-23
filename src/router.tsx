@@ -7,8 +7,12 @@ const router = createBrowserRouter([
         element: <MainPage />,
     },
     {
-        path: "/auth",
-        element: <AuthorizationPage/>
+        path: "/auth-register",
+        element: <AuthorizationPage register />
+    },
+    {
+        path: "/auth-login",
+        element: <AuthorizationPage login />
     },
     {
         path: "/add-recipe",
@@ -21,7 +25,8 @@ const router = createBrowserRouter([
     {
         path: "/about-recepie/:id",
         element: <AboutRecipePage />, 
-    }
+    },
+
 ]);
 
 export default router;

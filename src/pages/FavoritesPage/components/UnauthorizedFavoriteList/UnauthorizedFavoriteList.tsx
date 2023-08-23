@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import './UnauthorizedFavoriteList.scss';
 
 const UnauthorizedFavoriteList = () => {
@@ -6,9 +7,9 @@ const UnauthorizedFavoriteList = () => {
         <h2 className="favorite-unauthorized__title">Мої обрані</h2>
         <p className="favorite-unauthorized__text">Щоб мати змогу додати рецепти в обрані або переглянути свій список обраних</p>
         <div className="favorite-unauthorized__link-wrapper">
-            <a className="favorite-unauthorized__link" href="/">Зареєструйтесь</a>
+            <NavLink className="favorite-unauthorized__link" to="/auth-register">Зареєструйтесь</NavLink>
             <span className="favorite-unauthorized__divider-link">або</span>
-            <a className="favorite-unauthorized__link" href="/">Увійдіть</a>
+            <NavLink className="favorite-unauthorized__link" to="/auth-login">Увійдіть</NavLink>
         </div>
     </div>
   )
