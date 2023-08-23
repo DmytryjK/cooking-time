@@ -76,7 +76,7 @@ const Header = ({isSearch}:{isSearch: boolean}) => {
                                 :
                             <NavLink 
                                 className="login__link"
-                                to="/auth" 
+                                to="/auth-login" 
                                 reloadDocument > Увійти | Зареєструватись 
                             </NavLink>
                         }

@@ -1,10 +1,14 @@
 import Authentication from "./components/Authentication/Authentication";
-
 import { NavLink } from "react-router-dom";
 import Logo from '../../assets/icons/logo.svg';
 import './AuthorizationPage.scss';
 
-const AuthorizationPage = () => {
+type AuthorizationPageProps = {
+    register?: boolean;
+    login?: boolean;
+};
+
+const AuthorizationPage: React.FC<AuthorizationPageProps> = ({register, login}) => {
     return (
         <section className="authorization">
             <div className="authorization__image"></div>
@@ -19,8 +23,7 @@ const AuthorizationPage = () => {
                         Назад
                     </NavLink>
                 </nav>
-                
-                <Authentication />
+                <Authentication register={register} login={login} />
             </div>
         </section>
     )

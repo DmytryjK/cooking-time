@@ -82,7 +82,7 @@
         font-size: 14px;
         line-height: 19px;
         font-weight: 500;
-        button {
+        &_link {
             margin-left: 5px;
             background-color: transparent;
             border: none;
@@ -90,6 +90,7 @@
             height: 17px;
             font-family: 16px;
             font-weight: 600;
+            color: $bgcolor;
             cursor: pointer;
             transition: 0.2s ease-out color, 0.2s ease-out border-color;
             &:hover {
