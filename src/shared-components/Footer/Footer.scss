@@ -1,0 +1,33 @@
+@use '../../styles/variables' as *;
+.footer {
+    margin-top: 180px;
+    background-color: $bgcolor;
+    min-height: 130px;
+    padding: 40px 0;
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__additional-info {
+        display: flex;
+        align-items: center;
+        gap: 31px;
+        color: $light-color;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    &__contacts {
+        display: flex;
+        gap: 20px;
+    }
+    &__link-dev, &__link-design {
+        color: $light-color;
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration-skip-ink: none;
+        text-underline-offset: 3px;
+    }
+}
