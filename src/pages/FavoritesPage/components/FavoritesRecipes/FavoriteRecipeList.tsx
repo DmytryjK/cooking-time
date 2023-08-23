@@ -4,15 +4,18 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
 import { setCurrentFilteredRecipes, setCurrentRecipes } from '../../../../store/reducers/RecipesListSlice';
 import { fetchFavoritesRecipe, manageFavoritesRecipes } from '../../../../store/reducers/FavoritesRecipesSlice';
 import ErrorMesage from "../../../../shared-components/ErrorMesage/ErrorMesage";
+import EmptyFavoriteList from '../EmptyFavoriteList/EmptyFavoriteList';
+import UnauthorizedFavoriteList from '../UnauthorizedFavoriteList/UnauthorizedFavoriteList';
 import renderServerData from '../../../../helpers/renderServerData';
 import nextId from 'react-id-generator';
 import RecipeListItem from '../../../../shared-components/RecipeListItem/RecipeListItem';
+import { Recipe } from '../../../../types/type';
 
 const FavoritesRecipes: FC = () => {
     const favoriteRecipes = useAppSelector(state => state.favoriteRecipes.favoriteRecipes);
     const loading = useAppSelector(state => state.favoriteRecipes.loadingRecipesById);
     const error = useAppSelector(state => state.favoriteRecipes.error);
-    const filteredRecipes = useAppSelector(state => state.recipes.filteredRecipes);
+    const filteredRecipes: Recipe[] = useAppSelector(state => state.recipes.filteredRecipes);
     const {uid} = useAppSelector(state => state.authentication.user);
     const dispatch = useAppDispatch();
 
@@ -29,7 +32,7 @@ const FavoritesRecipes: FC = () => {
     }, [loading, favoriteRecipes]);
 
     const registerAttention = () => {
-        return <ErrorMesage text={'Зареєструйтесь, щоб побачити список рецептів'}/>
+        return <UnauthorizedFavoriteList />
     }
 
     const handleAddFavorite = (recepieId: string | number | null) => {
@@ -38,7 +41,7 @@ const FavoritesRecipes: FC = () => {
 
     const renderItems = () => {
         if (loading === 'succeeded' && favoriteRecipes.length === 0) {
-            return <ErrorMesage text={'Список обраного пустий'}/>;
+            return <EmptyFavoriteList />
         } else {
             return filteredRecipes.map((item) => {
                 return(
