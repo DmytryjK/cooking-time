@@ -1,3 +1,4 @@
+@use './variables' as *;
 @import '../fonts/fonst.scss';
 
 * {
@@ -8,7 +9,14 @@
 }
 
 body {
-	background-color: white;
+	background-color: $light-color;
+}
+
+#root {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .container {

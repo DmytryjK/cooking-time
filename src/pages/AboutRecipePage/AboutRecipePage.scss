@@ -1,58 +1,172 @@
+@use '../../styles/variables' as *;
 .about-recipe {
-    position: relative;
-
-    .recepie-page {
-        padding: 50px 0;
+    .recipe-page {
+        padding-top: 50px;
         position: relative;
-        &__edit {
+        &__top{
+            position: relative;
+            display: flex;
+            border-radius: 10px;
+            background-color: $bgInputs;
+            overflow: hidden;
+        }
+        &__top-btns{
             position: absolute;
-            right: 0px;
-            background: url('../../assets/icons/edit.svg') center center/cover no-repeat;
-            width: 30px;
-            height: 30px;
+            left: 20px;
+            top: 20px;
+        }
+        &__edit-btn, &__favorite-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 46px;
+            height: 42px;
+            background-color: $accent-color;
+            border-radius: 6px;
             border: none;
             cursor: pointer;
-            transition: 0.2s ease-out background;
+            transition: 0.2s ease-out background-color;
+            svg {
+                transform: scale(1.01);
+                transition: 0.2s ease-out transform;
+            }
             &:hover {
-                background: url('../../assets/icons/edit_active.svg') center center/cover no-repeat;
-                transition: 0.2s ease-out background;
+                svg {
+                    transform: scale(1.1);
+                }
+            }
+            &:not(:first-child) {
+                margin-top: 10px;
             }
         }
+        &__favorite-btn {
+            fill: transparent;
+            stroke: $light-color;
+            &.btn-active {
+                fill: $light-color;
+            }
+        }
+        &__top-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 20px 20px 70px;
+            width: 47.6%;
+            min-width: 380px;
+        }
         &__title {
+            color: $accent-color;
             text-align: center;
-            font-size: 30px;
-            padding: 0 10px;
+            line-height: 1;
+            font-size: 46px;
+            font-weight: 700;
         }
         &__photo {
             display: block;
-            margin: 0 auto;
-            margin-top: 50px;
-            max-width: 100%;
-            width: 900px;
-            height: 600px;
-            border-radius: 20px;
+            width: 100%;
+            height: 425px;
+            border-radius: 0 10px 10px 0;
             object-fit: cover;
+        }
+
+        &__content {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            margin-top: 20px;
+            padding-top: 50px;
+            border-top: 1px solid $light-grey;
+        }
+        .recipe-titles {
+            color: $accent-color;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 140%;
+            margin-bottom: 15px;
+        }
+
+        &__left-col {
+            max-width: 420px;
+            width: 100%;
+        }
+        &__time-inner {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        &__time-icon {
+            width: 20px;
+            height: 20px;
+        }
+        &__time-text {
+            color: $bgcolor;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 136.523%;
+        }
+        &__categories {
+            margin-top: 10px;
+            display: flex;
+            gap: 11px;
+            color: $bgcolor;
+            font-size: 20px;
+            font-weight: 600;
+            text-decoration-line: underline;
+            text-underline-offset: 3px;
+            text-decoration-thickness: 0.5px;
+            text-decoration-skip-ink: none;
         }
         &__ingredients {
             margin-top: 50px;
-            &-title {
-                font-size: 24px;
-                padding: 15px 0;
-            }
             &-item {
-                font-size: 18px;
-                margin: 10px 20px 0;
-                list-style-type: disc;
+                position: relative;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 100px;
+                list-style-type: none;
+                color: $bgcolor;
+                font-size: 16px;
+                font-weight: 500;
+                &:after {
+                    content: '';
+                    position: absolute;
+                    top: calc(100% - 4px);
+                    display: block;
+                    height: 1px;
+                    width: 100%;
+                    background-color: $border-input;;
+                }
             }
         }
-        &__cooking-descr {
-            margin-top: 80px;
+        .ingredients-item {
+            &__character, &__quantity {
+                white-space: nowrap;
+                position: relative;
+                display: block;
+                z-index: 1;
+                background-color: $light-color;
+            }
+            &__character {
+                padding-right: 10px;
+            }
+            &__quantity {
+                padding-left: 12px;
+            }
         }
-        &__subtitle {
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 24px;
+
+        &__cooking-descr {
+            max-width: 702px;
+            width: 100%;
+        }
+
+        &__descr {
+            font-size: 16px;
+            color: $bgcolor;
+            ol, ul {
+                padding-inline-start: 40px;
+            }
         }
     }
 }
-

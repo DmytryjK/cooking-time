@@ -1,0 +1,12 @@
+<svg width="0" height="0" class="hidden">
+  <symbol fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="edit">
+    <path d="M11.0495 3.00002L4.2078 10.2417C3.94947 10.5167 3.69947 11.0584 3.64947 11.4334L3.34114 14.1334C3.2328 15.1084 3.9328 15.775 4.89947 15.6084L7.5828 15.15C7.9578 15.0834 8.4828 14.8084 8.74114 14.525L15.5828 7.28335C16.7661 6.03335 17.2995 4.60835 15.4578 2.86668C13.6245 1.14168 12.2328 1.75002 11.0495 3.00002Z" stroke="#FDFDFD" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M9.9082 4.20801C10.2665 6.50801 12.1332 8.26634 14.4499 8.49967" stroke="#FDFDFD" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M2.5 18.333H17.5" stroke="#FDFDFD" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" id="heart">
+    <g id="Phosphor icons / Heart">
+      <path id="Vector" d="M10.9999 18.4464C10.9999 18.4464 2.44336 13.7078 2.44336 7.95382C2.44336 6.93663 2.79973 5.95085 3.45185 5.16421C4.10397 4.37756 5.01154 3.83865 6.02016 3.63916C7.02878 3.43968 8.07614 3.59193 8.98404 4.07003C9.89194 4.54812 10.6043 5.32252 10.9999 6.26147V6.26147C11.3955 5.32252 12.1079 4.54812 13.0158 4.07003C13.9237 3.59193 14.971 3.43968 15.9796 3.63916C16.9883 3.83865 17.8958 4.37756 18.548 5.16421C19.2001 5.95085 19.5565 6.93663 19.5565 7.95382C19.5565 13.7078 10.9999 18.4464 10.9999 18.4464Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+  </symbol>
+</svg>
