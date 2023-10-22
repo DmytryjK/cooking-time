@@ -35,9 +35,10 @@ const AboutRecipePage = () => {
     }, [favoriteRecipe]);
 
     useEffect(() => {
-        if (!recepieId.id || !uid) return;
-        dispatch(fetchFavoritesRecipe(uid));
+        if(!recepieId.id) return;
         dispatch(fetchRecipe(recepieId.id));
+        if (!uid) return;
+        dispatch(fetchFavoritesRecipe(uid));
     }, [uid]);
 
     useEffect(() => {
@@ -64,7 +65,6 @@ const AboutRecipePage = () => {
         if (!recipe) return '';
 
         const {title, ingredients, img, description, category, id} = recipe;
-        // const sanitizedHtml = description && sanitizeHtml(description);
         const parsedDescr = parse(description || '');
 
         return (
@@ -121,10 +121,10 @@ const AboutRecipePage = () => {
                                         key={nextId("ingredient-")}
                                         className="recipe-page__ingredients-item">
                                             <span className="ingredients-item__character">
-                                            {ingredient}
+                                            {ingredient.tagText}
                                             </span>
                                             <span className="ingredients-item__quantity">
-                                            200 г
+                                            {ingredient.tagQuantityWithUnit} {ingredient.tagUnit}
                                             </span>
                                         </li>
                                     )
@@ -147,7 +147,6 @@ const AboutRecipePage = () => {
             <Header isSearch={false} />
             <section className="about-recipe">
                 <div className="container">
-                    
                     <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
                         <div className="success-window__block">
                             <h2 className="success-window__title">Вы уверены, что хотите закрыть редактор? Все изменения будут отменены.</h2>

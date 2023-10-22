@@ -1,8 +1,15 @@
+export type IngredientsType = {
+	id: string | number;
+    tagText: string;
+    tagQuantityWithUnit: string;
+    tagUnit: string;
+}
+
 export interface Recipe {
 	id: string|number|null;
 	title: string;
-	time?: string | null;
-	ingredients?: string[];
+	time: {hours: string; minutes: string};
+	ingredients?: IngredientsType[];
 	img: string;
 	previewImg: string;
 	description?: string;

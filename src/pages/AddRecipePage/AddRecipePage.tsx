@@ -9,7 +9,8 @@ const AddRecipePage = () => {
             <Header isSearch={false} />
             <main className="add-recepie">
                 <div className="container">
-                    <h2 className="add-recepie__title">Добавьте новый рецепт</h2>
+                    <h1 className="add-recepie__title">Додати новий рецепт</h1>
+                    <p className="add-recepie__descr">Заповніть поля нижче, додайте опис та завантажте фото рецепту</p>
                     <AddingRecipesForm/>
                 </div>
             </main>

@@ -1,13 +1,43 @@
+@use '../../../../styles/variables' as *;
 .form {
     margin-top: 50px;
-    max-width: 500px;
-    &__name-recepie, &__descr {
+    margin-bottom: auto;
+    max-width: 100%;
+    &__fields-wrapper {
+        padding: 50px;
+        border-radius: 8px;
+        background-color: $bgInputs;
+        &:not(:first-child) {
+            margin-top: 10px;
+        }
+    }
+    &__label {
+        color: $accent-color;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 140%;
+    }
+    &__input {
         display: block;
-        margin-top: 10px;
-        margin-bottom: 20px;
-        width: 100%; 
-        max-width: 500px;
+        max-width: 508px;
+        width: 100%;
+        margin-top: 8px;
+        border-radius: 8px;
+        padding: 14px 14px 14px 12px;
+        border: 1px solid $border-input;
+        background: $light-color;
+        color: $bgcolor;
         font-size: 16px;
+        font-weight: 500;
+        line-height: 140%;
+        outline: none;
+        transition: 0.2s ease-out border-color;
+        &:focus {
+            border-color: $accent-color;
+        }
+    }
+    &__name-recepie {
+        margin-bottom: 20px;
     }
     &__upload-label {
         position: relative;
@@ -22,64 +52,267 @@
         border-radius: 10px;
         cursor: pointer;
     }
-    &__timer-label {
-        display: inline-block;
-        margin-top: 25px;
-    }
-    &__upload-photo {
-        background-color: red;
-        width: 0.1px;
-        height: 0.1px;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-        &:focus + .form__upload-label-name {
-            color: rgb(146, 146, 146);
-            border: 1px solid rgb(146, 146, 146);
+    .timer {
+        margin-top: 30px;
+        border: none;
+        &__wrapper {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
         }
-        &:hover + .form__upload-label-name {
-            color: rgb(3, 138, 179);
+        &__label-hours, &__label-minutes {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        &__input-hours, &__input-minutes {
+            margin: 0;
+            padding: 10px 30px;
+            text-align: center;
+            max-width: 90px;
+            -moz-appearance: textfield;
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            &::placeholder {
+                color: $border-input;
+            }
         }
     }
-    &__upload-label-name {
+    .upload-photo {
+        border: none;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding: 0 20px;
-        font-size: 1.25em;
-        font-weight: 700;
-        color: rgb(190, 190, 190);
-        border: 1px solid transparent;
-        border-radius: 10px;
-        transition: 0.2s ease-in-out color, 0.2s ease-in-out border;
-    }
-
-    &__descr-editor {
-        margin-top: 10px;
-        border-radius: 10px;
-        border: 1px solid grey;
-        font-size: inherit;
+        gap: 32px;
+        &__wrapper {
+            max-width: 380px;
+            width: 100%;
+        }
+        &__label {
+            margin-top: 8px;
+            width: 100%;
+            display: inline-block;
+        }
+        &__input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+            &:focus + .upload-photo__info {
+                color: $accent-color;
+                border-color: $accent-color;;
+            }
+            &:hover + .upload-photo__info {
+                color: $accent-color;
+            }
+        }
+        &__info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 141px;
+            padding: 0 20px;
+            color: $border-input;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 125%;
+            background-color: $light-color;
+            border: 1px solid $border-input;
+            border-radius: 10px;
+            transition: 0.2s ease-in-out color, 0.2s ease-in-out border;
+            cursor: pointer;
+        }
+        &__max-size {
+            display: inline-block;
+            margin-top: 8px;
+            color: $border-input;
+            font-size: 14px;
+            font-weight: 500;
+        }
     }
     
-    &__name-label, &__upload-label, &__descr-title, .tagsForm__header, &__timer-label {
-        font-size: 22px;
-    }
     .tagsForm {
-        margin-top: 25px;
+        flex-direction: column;
+        align-items: start;
+        width: 100%;
+        height: 100%;
+        &__tagList {
+            max-width: 480px;
+            width: 100%;
+            list-style-type: none;
+        }
+        &__createdTag {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 42px;
+            &:not(:first-child) {
+                margin-top: 8px;
+            }
+        }
+        &__tagName {
+            margin: 0;
+        }
+        &__top-wrapper {
+            margin-top: 8px;
+            max-width: 508px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        &__search-btn {
+            position: relative;
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border-radius: 6px;
+            border: 1px solid $border-input;
+            background: $light-color;
+            cursor: pointer;
+            &:after {
+                content: '';
+                position: absolute;
+                display: block;
+                top: 50%;
+                right: 50%;
+                transform: translateX(50%) translateY(-50%);
+                background: url('../../../../assets/icons/plus.svg') center center/cover no-repeat;
+                width: 18px;
+                height: 18px;
+                
+            }
+        }
+
+        .createdTag {
+            &__label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                height: 100%;
+            }
+            &__input {
+                text-align: center;
+                height: 100%;
+                max-width: 100px;
+                padding: 8px 30px;
+                border-radius: 8px;
+                border: 1px solid $border-input;
+                font-size: 16px;
+                font-weight: 500;
+                background: $light-color;
+                outline: none;
+                -moz-appearance: textfield;
+                &::placeholder {
+                    color: $border-input;
+                }
+                &:focus {
+                    border-color: $accent-color;
+                }
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+            }
+            &__delete-ingredient {
+                display: inline-block;
+                padding: 5px;
+                height: 20px;
+                margin-left: 4px;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                    text-decoration-skip-ink: none;
+                }
+            }
+            .sort {
+                &__open-btn {
+                    padding: 8px 26px 8px 12px;
+                    max-width: 100px;
+                    width: 100%;
+                    min-width: 68px;
+                    height: 42px;
+                    &::after {
+                        right: -10px
+                    }
+                }
+                &__label {
+                    padding: 5px 8px;
+                    border: 1px solid transparent;
+                    transition: 0.2s ease-out border-color;
+                    &:hover {
+                        border-color: rgba($border-input, 0.7);
+                    }
+                }
+                &__input-custom {
+                    display: none;
+                }
+            }
+        }
     }
-    .tagsForm__tagName {
-        padding: 5px 20px;
-        font-size: 16px;
-        margin-right: 0;
+    
+
+    &-descr{
+        &__editor {
+            max-width: 792px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid grey;
+            font-size: inherit;
+        }
+        .ql-editor {
+            max-height: 350px;
+        }
+        .quill.form-descr__editor, .ql-toolbar.ql-snow {
+            border-color: $border-input;;
+        }
+        .ql-container.ql-snow {
+            padding: 20px;
+            border: none;
+        }
+        .ql-editor, .ql-blank {
+            padding: 0;
+        }
+        .ql-editor.ql-blank::before {
+            color: $border-input;
+            font-family: Manrope;
+            left: 20px ;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 140%;
+            font-style: normal;
+        }
     }
+
     &__submit {
+        margin: 0 auto;
+        margin-top: 40px;
         display: block;
         text-align: center;
-        margin: 0 auto;
+        border-radius: 6px;
+        border: none;
+        max-width: 250px;
+        width: 100%;
+        padding: 15px 20px;
+        background: $accent-color;
+        color: $light-color;
+        font-family: Manrope;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        cursor: pointer;
+        transition: 0.2s ease-out background-color;
+        &:hover {
+            background-color: $second-accent-color;
+        }
     }
 }

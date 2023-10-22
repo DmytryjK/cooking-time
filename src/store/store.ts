@@ -3,13 +3,15 @@ import FiltersReducer from './reducers/FiltersSlice';
 import RecipesReducer from './reducers/RecipesListSlice';
 import AuthenticationReducer from './reducers/AuthenticationSlice';
 import FavoriteRecipesReducer from './reducers/FavoritesRecipesSlice';
+import CreateRecipeFormReducer from './reducers/CreateRecipeFormSlice';
 
 export const store = configureStore({
 	reducer: {
 		recipes: RecipesReducer,
 		filters: FiltersReducer,
 		authentication: AuthenticationReducer,
-		favoriteRecipes: FavoriteRecipesReducer
+		favoriteRecipes: FavoriteRecipesReducer,
+		createRecipeForm: CreateRecipeFormReducer,
 	}
 })
 
