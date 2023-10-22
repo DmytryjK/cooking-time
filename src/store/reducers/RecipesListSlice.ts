@@ -94,6 +94,7 @@ export const postRecipe = createAsyncThunk(
 	'recepiesList/postRecipe',
 	async function(newRecepie: Recipe, { rejectWithValue }) {
 		try{
+			console.log(newRecepie);
 			const db = getDatabase();
 			const newPostKey = push(child(ref(db), 'dishes')).key;
 			const postData = {...newRecepie, id: newPostKey};
@@ -163,7 +164,7 @@ export const recepieListSlice = createSlice({
 					.filter(recipe => {
 						return recipe.ingredients?.some(ingredient => {
 							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
 						})
 					})
 					.filter(recipe => searchCategories.includes(recipe.category) === true);
@@ -174,7 +175,7 @@ export const recepieListSlice = createSlice({
 					.filter(recipe => {
 						return recipe.ingredients?.some(ingredient => {
 							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
 						})
 					})
 					return;
@@ -188,7 +189,7 @@ export const recepieListSlice = createSlice({
 					.filter(recipe => {
 						return recipe.ingredients?.some(ingredient => {
 							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
 						})
 					})
 					.filter(recipe => searchCategories.includes(recipe.category) === true);
@@ -202,7 +203,7 @@ export const recepieListSlice = createSlice({
 					.filter(recipe => {
 						return recipe.ingredients?.some(ingredient => {
 							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.toUpperCase().includes(tag));
+							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
 						})
 					});
 					return;

@@ -13,7 +13,7 @@ const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite:
 
     const renderedTags = ingredients?.map(item => {
         return (
-            <li key={nextId("tag-id-")} className="product-tags__item">{item}</li>
+            <li key={nextId("tag-id-")} className="product-tags__item">{item.tagText}</li>
         )
     });
 
@@ -31,7 +31,7 @@ const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite:
                 <div className="recipe-card__content-text">
                     <h2 className="recipe-card__title" title={title}>{title.length > 42 ? (title.substring(0, 42) + '...') : title}</h2>
                     <div className="recipe-card__inner-wrapper">
-                        <span className={timerClass}>{time ? time + 'хв' : null}</span>
+                        {time.hours === '' && time.minutes === '' ? '' : <span className={timerClass}>{`${time.hours} ${time.minutes}`}</span>}
                         <ul className="recipe-card__product-tags product-tags">
                             {renderedTags ? renderedTags : null}
                         </ul>

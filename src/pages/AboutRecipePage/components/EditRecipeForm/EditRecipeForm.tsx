@@ -1,8 +1,7 @@
 import { FC, SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
-
-import { Recipe, uploadFileType } from '../../../../types/type';
+import { Recipe, uploadFileType, IngredientsType } from '../../../../types/type';
 
 import 'react-quill/dist/quill.snow.css';
 import './EditRecipeForm.scss';
@@ -15,7 +14,7 @@ const EditRecipeForm: FC<{recipe: Recipe, setIsAttentionOpen: React.Dispatch<Set
     const [uploadFile, setUploadFile] = useState<uploadFileType | any>({});
     const [statusUploadedPhoto, setStatusUploadedPhoto] = useState<'' | 'error' | 'success' | 'pending'>('');
     const [imageRefFromStorage, setImageRefFromStorage] = useState<string>('');
-    const [tagsValue, setTagsValue] = useState<string[] | undefined>(ingredients);
+    const [tagsValue, setTagsValue] = useState<IngredientsType[] | undefined>(ingredients);
     const [descriptionValue, setDescriptionValue] = useState<string | undefined>(description);
 
     const [attentionWindowOpen, setAttentionWindowOpen] = useState<boolean>(false);
@@ -30,7 +29,7 @@ const EditRecipeForm: FC<{recipe: Recipe, setIsAttentionOpen: React.Dispatch<Set
         setTagsValue(prevTags => {
             if (prevTags) {
                 const updatedTags = [...prevTags];
-                updatedTags[index] = e.target.value;
+                // updatedTags[index] = e.target.value;
                 return updatedTags;
             }
         })
@@ -120,7 +119,7 @@ const EditRecipeForm: FC<{recipe: Recipe, setIsAttentionOpen: React.Dispatch<Set
                         key={index}
                         className="recepie-page__ingredients-item">
                             <input type="text"
-                                value={tagsValue && tagsValue[index]} 
+                                // value={tagsValue && tagsValue[index]} 
                                 onChange={(e) => handleTagChange(e, index)}/>
                         </li>
                     )
