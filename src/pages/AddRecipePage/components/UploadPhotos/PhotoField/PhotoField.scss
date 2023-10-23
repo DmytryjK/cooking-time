@@ -1,0 +1,94 @@
+@use '../../../../../styles/variables' as *;
+.upload-photo {
+    border: none;
+    display: flex;
+    gap: 32px;
+    &__wrapper {
+        max-width: 380px;
+        width: 100%;
+    }
+    &__label {
+        position: relative;
+        margin-top: 8px;
+        width: 100%;
+        display: inline-block;
+    }
+    &__input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+        &:focus + .upload-photo__info {
+            color: $accent-color;
+            border-color: $accent-color;;
+        }
+        &:hover + .upload-photo__info {
+            color: $accent-color;
+        }
+    }
+    &__info {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 141px;
+        padding: 0 20px;
+        color: $border-input;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 125%;
+        background-color: $light-color;
+        border: 1px solid $border-input;
+        border-radius: 10px;
+        transition: 0.2s ease-in-out color, 0.2s ease-in-out border;
+        cursor: pointer;
+    }
+    &__max-size {
+        display: inline-block;
+        margin-top: 8px;
+        color: $border-input;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    &__preview {
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        object-fit: cover;
+    }
+    &__reset-photo {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        top: -10px;
+        right: -10px;
+        border: none;
+        border-radius: 50%;
+        opacity: 0;
+        visibility: hidden;
+        cursor: pointer;
+        transition: 0.2s ease-out box-shadow, 0.2s ease-out opacity, 0.2s ease-out visibility;
+        &:hover {
+            box-shadow: 0px 0px 5px rgba(black, 0.3);
+        }
+        &:after {
+            content: 'X';
+            color: red;
+        }
+        &.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
