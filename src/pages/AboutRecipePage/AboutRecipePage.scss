@@ -62,6 +62,10 @@
             font-size: 46px;
             font-weight: 700;
         }
+        &__photo-wrapper {
+            max-width: 52.4%;
+            width: 100%;
+        }
         &__photo {
             display: block;
             width: 100%;
@@ -77,6 +81,11 @@
             margin-top: 20px;
             padding-top: 50px;
             border-top: 1px solid $light-grey;
+            img {
+                display: block;
+                max-width: 100%;
+                height: auto;
+            }
         }
         .recipe-titles {
             color: $accent-color;
@@ -87,8 +96,13 @@
         }
 
         &__left-col {
+            position: relative;
             max-width: 420px;
             width: 100%;
+        }
+        &__left-fixed {
+            top: 40px;
+            position: sticky;
         }
         &__time-inner {
             display: flex;
