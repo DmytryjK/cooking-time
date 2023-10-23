@@ -105,32 +105,34 @@ const AboutRecipePage = () => {
                 </div>
                 <div className="recipe-page__content">
                     <div className="recipe-page__left-col">
-                        <div className="recipe-page__cooking-time">
-                            <h3 className="recipe-page__ingredients-title recipe-titles">Час приготування</h3>
-                            <div className="recipe-page__time-inner">
-                                <img className="recipe-page__time-icon" src={timerIcon} alt="час" />
-                                <span className="recipe-page__time-text">50 хв</span>
+                        <div className="recipe-page__left-fixed">
+                            <div className="recipe-page__cooking-time">
+                                <h3 className="recipe-page__ingredients-title recipe-titles">Час приготування</h3>
+                                <div className="recipe-page__time-inner">
+                                    <img className="recipe-page__time-icon" src={timerIcon} alt="час" />
+                                    <span className="recipe-page__time-text">50 хв</span>
+                                </div>
                             </div>
-                        </div>
-                        <div className="recipe-page__ingredients">
-                            <h3 className="recipe-page__ingredients-title recipe-titles">Інгредієнти</h3>
-                            <ul className="recipe-page__ingredients-list">
-                                {ingredients?.map(ingredient => {
-                                    return(
-                                        <li 
-                                        key={nextId("ingredient-")}
-                                        className="recipe-page__ingredients-item">
-                                            <span className="ingredients-item__character">
-                                            {ingredient.tagText}
-                                            </span>
-                                            <span className="ingredients-item__quantity">
-                                            {ingredient.tagQuantityWithUnit} {ingredient.tagUnit}
-                                            </span>
-                                        </li>
-                                    )
-                                })}
+                            <div className="recipe-page__ingredients">
+                                <h3 className="recipe-page__ingredients-title recipe-titles">Інгредієнти</h3>
+                                <ul className="recipe-page__ingredients-list">
+                                    {ingredients?.map(ingredient => {
+                                        return(
+                                            <li 
+                                            key={nextId("ingredient-")}
+                                            className="recipe-page__ingredients-item">
+                                                <span className="ingredients-item__character">
+                                                {ingredient.tagText}
+                                                </span>
+                                                <span className="ingredients-item__quantity">
+                                                {ingredient.tagQuantityWithUnit} {ingredient.tagUnit}
+                                                </span>
+                                            </li>
+                                        )
+                                    })}
 
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div className="recipe-page__cooking-descr">

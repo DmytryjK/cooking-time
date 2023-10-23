@@ -219,11 +219,13 @@
             max-height: 350px;
         }
         .quill.form-descr__editor, .ql-toolbar.ql-snow {
-            border-color: $border-input;;
+            border-color: $border-input;
         }
         .ql-container.ql-snow {
             padding: 20px;
             border: none;
+            border-radius: 0 0 10px 10px;
+            background-color: #FDFDFD;
         }
         .ql-editor, .ql-blank {
             padding: 0;
