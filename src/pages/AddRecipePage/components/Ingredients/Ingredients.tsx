@@ -1,11 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, createContext, Dispatch, SetStateAction } from 'react';
 import nextId from 'react-id-generator';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
 import { addIngredientTags } from '../../../../store/reducers/CreateRecipeFormSlice';
 import Ingredient from './Ingredient/Ingredient';
 
+type SelectUnitsType = {
+    id: string | number,
+    isOpen: boolean,
+}
+
+type SelectUnitsContextType = {
+    selectedUnits: SelectUnitsType;
+    setSelectedUnits: Dispatch<SetStateAction<SelectUnitsType>> | null;
+}
+
+export const SelectUnitContext = createContext<SelectUnitsContextType>({
+    selectedUnits: {id: '', isOpen: false},
+    setSelectedUnits: null,
+});
+
 const Ingredients = () => {
     const [tagName, setTagName] = useState<string>('');
+    const [selectedUnits, setSelectedUnits] = useState<SelectUnitsType>({id: '', isOpen: false});
     const dispatch = useAppDispatch();
     const ingredients = useAppSelector(state => state.createRecipeForm.tags);
 
@@ -54,7 +70,9 @@ const Ingredients = () => {
                     {ingredients.map((ingredient, index) => {
                         const id = `${ingredient.id}-${index}`;
                         return (
-                            <Ingredient key={id} ingredient={ingredient} />
+                            <SelectUnitContext.Provider key={id} value={{selectedUnits, setSelectedUnits}}>
+                                <Ingredient key={id} ingredient={ingredient} />
+                            </SelectUnitContext.Provider>
                         )}
                     )}
                 </ul>

@@ -1,11 +1,14 @@
-import { useState, useEffect, SetStateAction, Dispatch } from 'react';
+import { useState, useEffect, SetStateAction, Dispatch, useContext } from 'react';
+import { SelectUnitContext } from '../../Ingredients';
 import nextId from 'react-id-generator';
 import './SelectUnitsItem.scss';
 
 const SelectUnitsItem = ({tagId, setUnit, tagUnit}: {tagId: string | number; setUnit: Dispatch<SetStateAction<string>>; tagUnit: string; }) => {
-    const units = ['г', 'кг', 'шт', 'ч.л.', 'ст.л.', 'л', 'мл'];
+    const units = ['г', 'кг', 'шт.', 'ч.л.', 'ст.л.', 'л', 'мл.'];
     const [isUnitsOpen, setIsUnitsOpen] = useState<boolean>(false);
-    const [currentUnit, setCurrentUnit] = useState<string>(tagUnit || units[0]); 
+    const [currentUnit, setCurrentUnit] = useState<string>(tagUnit || units[0]);
+
+    const {selectedUnits, setSelectedUnits} = useContext(SelectUnitContext);
 
     useEffect(() => {
         setUnit(currentUnit);
@@ -14,10 +17,21 @@ const SelectUnitsItem = ({tagId, setUnit, tagUnit}: {tagId: string | number; set
     useEffect(() => {
         if (isUnitsOpen) {
             document.addEventListener('click', closeSelect);
+            if (setSelectedUnits) {
+                setSelectedUnits({
+                    id: tagId,
+                    isOpen: true,
+                })
+            }
         }
-
         return () => document.removeEventListener('click', closeSelect);
     }, [isUnitsOpen]);
+
+    useEffect(() => {
+        if (tagId !== selectedUnits.id) {
+            setIsUnitsOpen(false);
+        }
+    }, [selectedUnits, tagId])
 
     const closeSelect = (e: any) => {
         if (
@@ -29,7 +43,9 @@ const SelectUnitsItem = ({tagId, setUnit, tagUnit}: {tagId: string | number; set
     };
 
     return (
-        <div className={`sort__custom-select ${isUnitsOpen ? 'active' : ''}`}>
+        <div 
+            className={`sort__custom-select ${isUnitsOpen ? 'active' : ''}`}
+            id={`${tagId}`}>
             <button
                 className="sort__open-btn"
                 type="button"
@@ -50,6 +66,7 @@ const SelectUnitsItem = ({tagId, setUnit, tagUnit}: {tagId: string | number; set
                                 type="radio"
                                 id={`units-${tagId}${index}`}
                                 value={unit}
+                                onClick={() => setIsUnitsOpen(false)}
                                 onChange={(e) => {
                                     setCurrentUnit(e.target.value);
                                     setIsUnitsOpen(false);
