@@ -97,7 +97,8 @@
 
         &__left-col {
             position: relative;
-            max-width: 420px;
+            max-width: 30%;
+            min-width: 280px;
             width: 100%;
         }
         &__left-fixed {
@@ -171,7 +172,7 @@
         }
 
         &__cooking-descr {
-            max-width: 702px;
+            max-width: 70%;
             width: 100%;
         }
 
@@ -183,4 +184,35 @@
             }
         }
     }
+}
+
+@media screen and (max-width: 767px) {
+    .about-recipe {
+        .recipe-page {
+            &__top {
+                flex-wrap: wrap;
+                gap: 40px;
+            }
+            &__top-wrapper {
+                min-width: 100%;
+                padding: 20px 70px;
+            }
+            &__photo-wrapper {
+                width: 100%;
+                max-width: 100%;
+                img {
+                    height: 325px;
+                }
+            }
+            &__content {
+                flex-wrap: wrap;
+                gap: 50px;
+            }
+            &__left-col, &__cooking-descr {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    }
+    
 }
