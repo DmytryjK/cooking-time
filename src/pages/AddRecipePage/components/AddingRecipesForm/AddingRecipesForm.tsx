@@ -34,12 +34,13 @@ const AddingRecipesForm = () => {
     const [loadedPhotosInfo, setLoadedPhotosInfo] = useState<LoadedPhotoType[]>([]);
     const [description, setDescription] = useState<string>('');
     const categories = ['Випічка', 'Гарніри', 'Перші страви', 'Основні страви', 'Десерти', 'Салати', 'Закуски', 'Напої', 'Соуси'];
+
+    const [isSuccessPopUpShow, setIsSuccessPopUpShow] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (loadingForm === 'succeeded') {
-            const popUp = document.querySelector('.success-window');
-            popUp?.classList.add('active');
+            setIsSuccessPopUpShow(true);
         }
     }, [loadingForm]);
 
@@ -169,7 +170,9 @@ const AddingRecipesForm = () => {
                 </div>
                 <button className="form__submit addRecipe-btn" type="submit">Додати рецепт</button>
             </form>
-            {PopUp()}
+            <PopUp 
+                isPopUpShow={isSuccessPopUpShow} 
+                setIsPopUpShow={setIsSuccessPopUpShow} />
         </>
         
     )

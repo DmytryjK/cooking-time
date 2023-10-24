@@ -2,20 +2,28 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
     background-color: rgba(black, 0.4);
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
-    padding: 20px 50px;
+    padding: 10px 30px;
     opacity: 0;
     visibility: hidden;
+    user-select: none;
+    pointer-events: none;
     transition: 0.2s ease-out visibility, 0.2s ease-out opacity;
+    &.active {
+        opacity: 1;
+        visibility: visible;
+        user-select: auto;
+        pointer-events: all;
+    }
     &__block {
         position: relative;
         max-width: 500px;
-        padding: 60px 60px 20px 60px;
+        padding: 50px 30px;
         display: flex;
         gap: 50px;
         flex-direction: column;
@@ -53,31 +61,32 @@
     }
     &__close {
         display: flex;
+        justify-content: center;
+        align-items: center;
         position: absolute;
         right: -15px;
         top: -15px;
-        background-color: transparent;
+        width: 50px;
+        height: 50px;
+        background-color: rgb(250, 62, 62);
+        border-radius: 50%;
         border: none;
-        &:after {
-            content: 'x';
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            color: rgb(255, 255, 255);
-            font-size: 40px;
-            background-color: rgb(250, 62, 62);
-            cursor: pointer;
-            transition: 0.1s ease-out background-color, 0.1s ease-out color;
+        cursor: pointer;
+        transition: 0.1s ease-out background-color;
+        &-icon {
+            fill: white;
+            width: 20px;
+            height: 20px;
+            transition: 0.1s ease-out fill;
         }
         &:hover {
+            background-color: rgb(209, 42, 42);
+            .success-window__close-icon {
+                fill: rgb(214, 214, 214);
+            }
             &:after {
-                background-color: rgb(209, 42, 42);
                 color: rgb(206, 206, 206);
             }
         }
-    }
-    &.active {
-        opacity: 1;
-        visibility: visible;
     }
 }
