@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import nextId from "react-id-generator";
-import sanitizeHtml from 'sanitize-html';
 import { fetchRecipe, setFavoriteRecipes } from '../../store/reducers/RecipesListSlice';
 import { manageFavoritesRecipes, fetchFavoritesRecipe } from '../../store/reducers/FavoritesRecipesSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
@@ -12,11 +11,12 @@ import { Recipe } from '../../types/type';
 import iconsSprite from '../../assets/icons/about-recipe/sprite.svg';
 import timerIcon from '../../assets/icons/timer-line2.svg';
 import parse from 'html-react-parser';
+import renderServerData from '../../helpers/renderServerData';
 import './AboutRecipePage.scss';
 
 const AboutRecipePage = () => {
     const recepieId = useParams();
-    const { recipe } = useAppSelector(state => state.recipes);
+    const { recipe, loadingRecipe, error } = useAppSelector(state => state.recipes);
     const favoriteRecipe = useAppSelector(state => state.favoriteRecipes.favoriteRecipes).filter(recipe => recipe.id === recepieId.id);
     const loadingRecipesToFirebase = useAppSelector(state => state.favoriteRecipes.loadingRecipeIdToFirebase);
     const { uid } = useAppSelector(state => state.authentication.user);
@@ -63,10 +63,8 @@ const AboutRecipePage = () => {
 
     const renderedInfo = () => {
         if (!recipe) return '';
-
         const {title, ingredients, img, description, category, id} = recipe;
         const parsedDescr = parse(description || '');
-
         return (
             <>
                 <div className="recipe-page__top">
@@ -164,7 +162,12 @@ const AboutRecipePage = () => {
                         </div>
                     </div>
                     <main className="recipe-page">
-                        {isEditActive && currentRecipeToEdit ? <EditRecipeForm recipe={currentRecipeToEdit} setIsAttentionOpen={setAttentionWindowOpen}/> : renderedInfo()}
+                        {isEditActive && currentRecipeToEdit ? <EditRecipeForm recipe={currentRecipeToEdit} setIsAttentionOpen={setAttentionWindowOpen}/> : renderServerData({
+                                error,
+                                errorText: 'Упс, щось пішло не так :( Спробуйте оновити сторінку!',
+                                loading: loadingRecipe,
+                                content: renderedInfo,
+                        })}
                     </main>
                 </div>
             </section>
