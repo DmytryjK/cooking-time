@@ -5,7 +5,7 @@ type Props = {
     error: null | unknown;
     errorText: string;
     loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-    content: () => JSX.Element | JSX.Element[];
+    content: () => JSX.Element | JSX.Element[] | '';
 };
 
 const renderServerData = (props: Props) => {
@@ -15,7 +15,7 @@ const renderServerData = (props: Props) => {
     if (error) {
         render = <ErrorMessage text={errorText} />;
     } else if (loading === 'succeeded') {
-        render = content();
+        render = <>{content()}</>;
     }
 
     return render;

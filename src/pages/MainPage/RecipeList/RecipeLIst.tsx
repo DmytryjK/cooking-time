@@ -1,11 +1,11 @@
-import { useEffect, FC } from 'react';
+import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../hooks/hooks';
 import RecipeListItem from '../../../shared-components/RecipeListItem/RecipeListItem';
 import { setFavoriteRecipes, setCurrentFilteredRecipes } from '../../../store/reducers/RecipesListSlice';
 import { manageFavoritesRecipes } from '../../../store/reducers/FavoritesRecipesSlice';
 import renderServerData from '../../../helpers/renderServerData';
 import nextId from "react-id-generator";
-import type { Recipe, Loading } from '../../../types/type';
+import type { Recipe } from '../../../types/type';
 import './RecipeLIst.scss';
 
 const RecipeList = () => {
