@@ -39,6 +39,19 @@
     &__name-recepie {
         margin-bottom: 20px;
     }
+    &__field-category {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .custom-select {
+        max-width: 508px;
+        &__open-btn {
+            padding-top: 14px;
+            padding-bottom: 14px;
+            width: 100%;
+        }
+    }
     &__upload-label {
         position: relative;
         margin-top: 20px;
