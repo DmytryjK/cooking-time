@@ -13,8 +13,8 @@ const Footer = () => {
                 <span className="footer__copyright">©2023 Cooking time</span>
             </div>
             <div className="footer__contacts">
-                <a className="footer__link-dev" href="/">Розробка</a>
-                <a className="footer__link-design" href="/">Дизайн</a>
+                <a className="footer__link-dev" href="https://t.me/DmytryjK">Розробка</a>
+                <a className="footer__link-design" href="https://t.me/temchenkoinna">Дизайн</a>
             </div>
         </div>
     </footer>
