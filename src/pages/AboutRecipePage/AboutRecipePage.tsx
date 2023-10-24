@@ -63,7 +63,7 @@ const AboutRecipePage = () => {
 
     const renderedInfo = () => {
         if (!recipe) return '';
-        const {title, ingredients, img, description, category, id} = recipe;
+        const {title, ingredients, img, description, category, id, time} = recipe;
         const parsedDescr = parse(description || '');
         return (
             <>
@@ -108,7 +108,7 @@ const AboutRecipePage = () => {
                                 <h3 className="recipe-page__ingredients-title recipe-titles">Час приготування</h3>
                                 <div className="recipe-page__time-inner">
                                     <img className="recipe-page__time-icon" src={timerIcon} alt="час" />
-                                    <span className="recipe-page__time-text">50 хв</span>
+                                    <span className="recipe-page__time-text">{time.hours} {time.minutes}</span>
                                 </div>
                             </div>
                             <div className="recipe-page__ingredients">
