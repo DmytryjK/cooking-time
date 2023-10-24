@@ -1,10 +1,11 @@
-import { useState, useEffect, useContext, createContext, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, createContext, Dispatch, SetStateAction } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
 import { postRecipe } from '../../../../store/reducers/RecipesListSlice';
 import ReactQuill from 'react-quill';
 import { clearAllTags } from '../../../../store/reducers/CreateRecipeFormSlice';
 import Ingredients from '../Ingredients/Ingredients';
 import UploadPhotos from '../UploadPhotos/UploadPhotos';
+import CustomSelect from '../../../../shared-components/CustomSelect/CustomSelect';
 import PopUp from '../PopUp/PopUp';
 import './AddingRecipesForm.scss';
 import 'react-quill/dist/quill.snow.css';
@@ -32,6 +33,7 @@ const AddingRecipesForm = () => {
     const [timerValue, setTimerValue] = useState<{hours: string, minutes: string}>({hours: '', minutes: ''});
     const [loadedPhotosInfo, setLoadedPhotosInfo] = useState<LoadedPhotoType[]>([]);
     const [description, setDescription] = useState<string>('');
+    const categories = ['Випічка', 'Гарніри', 'Перші страви', 'Основні страви', 'Десерти', 'Салати', 'Закуски', 'Напої', 'Соуси'];
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -89,15 +91,17 @@ const AddingRecipesForm = () => {
                                 value={nameValue}
                                 onChange={(e) => setNameValue(e.target.value)}/>
                     </label>
-                    <label className="form__name-label form__label">
-                        <span>Категорія</span>
-                        <input  className="form__name-recepie form__input" 
-                                type="text" 
-                                name="Категорія"
-                                required
-                                value={categoryValue}
-                                onChange={(e) => setCategoryValue(e.target.value)}/>
-                    </label>
+                    <div className="form__field-category">
+                        <label className="form__name-label form__label">
+                            <span>Категорія</span>
+                        </label>
+                        <CustomSelect 
+                            setValue={setCategoryValue} 
+                            fieldValues={categories}
+                            selectTitle="Виберіть категорію"
+                        />
+                    </div>
+                    
                 </div>
                 <div className="form__fields-wrapper">
                     <Ingredients />

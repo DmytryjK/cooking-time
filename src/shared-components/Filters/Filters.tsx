@@ -1,6 +1,6 @@
 import React from 'react';
-import Tags from '../Tags/Tags';
-import SortByCategories from '../SortByCategories/SortByCategories';
+import Tags from './Tags/Tags';
+import SortByCategories from './SortByCategories/SortByCategories';
 import './Filters.scss';
 
 const Filters = ({title}: {title: string}) => {
