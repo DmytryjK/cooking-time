@@ -1,8 +1,7 @@
 import {useState, useEffect, ChangeEvent} from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { filterRecipes } from '../../store/reducers/RecipesListSlice';
-import { activeCategories } from '../../store/reducers/FiltersSlice';
-import Tags from '../Tags/Tags';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
+import { activeCategories } from '../../../store/reducers/FiltersSlice';
 import './SortByCategories.scss';
 
 const SortByCategories = () => {

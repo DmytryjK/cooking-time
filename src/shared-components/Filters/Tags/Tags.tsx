@@ -1,6 +1,6 @@
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { deleteSearchTag, deleteAllTags } from '../../store/reducers/FiltersSlice';
-import { tagsType } from '../../types/type';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { deleteSearchTag, deleteAllTags } from '../../../store/reducers/FiltersSlice';
+import { tagsType } from '../../../types/type';
 import './Tags.scss';
 
 const Tags = () => {
