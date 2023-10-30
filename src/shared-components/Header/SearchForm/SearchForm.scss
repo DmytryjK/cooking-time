@@ -6,10 +6,10 @@
         border-radius: 10px;
     }
     &__searchByName {
-        padding: 8px 20px 8px 45px;
+        padding: 8px 85px 8px 45px;
         border-radius: 6px;
         background-color: #EDEDED;
-        width: 235px;
+        width: 304px;
         border: 1px solid transparent;
         outline: none;
         font-weight: 400;
@@ -23,14 +23,14 @@
             background-color: $light-color;
             caret-color: $accent-color;
             color: $accent-color;
-            &::placeholder {
-                color: transparent;
-            }
         }
         &:focus ~ .searchForm__searchBtn {
             .searchForm__searchBtn-icon {
                 fill: $accent-color;
             }
+        }
+        &::placeholder {
+            padding-left: 2px;
         }
     }
     &__searchBtn {
@@ -48,6 +48,43 @@
         transition: background-color 0.3s ease, border-color 0.3s ease;
         &-icon {
             fill: $text-color;
+        }
+    }
+
+    .custom-select {
+        position: absolute;
+        right: 3px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        &__open-btn {
+            min-width: 78px;
+            width: 78px;
+            padding: 6px 20px 6px 20px;
+            border: none;
+            border-radius: 6px;
+            background-color: $accent-color;
+            &:after {
+                right: 6px;
+                width: 16px;
+                height: 16px;
+                background: url('../../../assets/icons/sort/small-arrow.svg') center center no-repeat;
+            }
+        }
+        .btn__text {
+            color: white;
+        }
+        &__input-custom {
+            display: none;
+        }
+        &__fields {
+            top: calc(100% + 3px);
+            left: -225px;
+            right: -3px;
+            border: none;
+        }
+        &__label {
+            padding-left: 12px;
         }
     }
 }

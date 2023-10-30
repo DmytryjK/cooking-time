@@ -1,10 +1,15 @@
 @use '../../../styles/variables' as *;
 .tagsForm {
+    margin-top: 20px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
     border: none;
-    max-width: 600px;
+    &__title {
+        color: $bgcolor;
+        font-size: 18px;
+        font-weight: 500;
+    }
     &__list {
         display: flex;
         flex-wrap: wrap;
@@ -13,6 +18,10 @@
         row-gap: 15px;
         column-gap: 10px;
         list-style-type: none;
+        &-title {
+            display: flex;
+            align-items: center;
+        }
     }
     &__item {
         position: relative;
@@ -45,6 +54,7 @@
     }
 
     &__clear-btn {
+        margin-top: 6px;
         text-decoration: underline;
         background-color: transparent;
         text-decoration-skip-ink: none;

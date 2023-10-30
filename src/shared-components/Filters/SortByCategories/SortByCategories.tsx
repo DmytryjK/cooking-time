@@ -84,14 +84,14 @@ const SortByCategories = () => {
                             className="sort__input"
                             id="sort-2"
                             type="checkbox"
-                            value="Десерти"
+                            value="Десерт"
                             onChange={toggleCategories}
                         />
                         <label
                             className="sort__label"
                             htmlFor="sort-2"
                         >
-                            Десерти
+                            Десерт
                         </label>
                         <span className="sort__input-custom" />
                     </div>

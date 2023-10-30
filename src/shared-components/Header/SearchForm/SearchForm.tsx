@@ -2,22 +2,35 @@ import { useState, useEffect, FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { addSearchTag, searchInputValue } from '../../../store/reducers/FiltersSlice';
 import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
-
-import './SearchForm.scss';
+import CustomSelect from '../../CustomSelect/CustomSelect';
 import nextId from "react-id-generator";
+import './SearchForm.scss';
 
 const SearchForm = () => {
     const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState<string>('');
     const {searchInput, searchTags, searchCategories} = useAppSelector(state => state.filters);
 
+    const [selectedOption, setSelectedOption] = useState('');
+    const searchTypes = [
+        {
+            id: 1,
+            title: 'По інгредієнтам',
+        },
+        {
+            id: 2,
+            title: 'По стравам',
+        },
+    ];
+    const selectFields = searchTypes.map(field => field.title);
+
     useEffect(() => {
         dispatch(filterRecipes({searchInput, searchTags, searchCategories}));
     }, [searchInput, searchTags]);
 
     useEffect(() => {
-        if (inputValue === '') dispatch(searchInputValue(''));
-    }, [inputValue]);
+        setInputValue('');
+    }, [selectedOption]);
     
     const handleSearchClick = (value: string) => {
         dispatch(searchInputValue(value));
@@ -28,17 +41,23 @@ const SearchForm = () => {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if ((event.code === 'Comma' || event.code === 'Slash') && inputValue !== '') {
-            event.preventDefault();
-            dispatch(addSearchTag({
-                id: nextId("createdTag"), 
-                tagText: inputValue
-            }));
-            setInputValue('');
-        } 
-        if (event.code === 'Enter' && inputValue !== '') {
-            dispatch(searchInputValue(inputValue));
-        } 
+        if (event.code === 'Enter') {
+            searchTypes.some((type) => {
+                if (type.title === selectedOption) {
+                    if (type.id === 1) {
+                        if (!inputValue) return;
+                        event.preventDefault();
+                        dispatch(addSearchTag({
+                            id: nextId("createdTag"), 
+                            tagText: inputValue
+                        }));
+                        setInputValue('');
+                    } else {
+                        dispatch(searchInputValue(inputValue));
+                    }
+                }
+            });
+        }
     }
 
     return (
@@ -49,7 +68,7 @@ const SearchForm = () => {
                     value={inputValue} 
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    placeholder="Пошук" />
+                    placeholder={`Пошук ${selectedOption.toLowerCase()}...`}/>
                 <button className="searchForm__searchBtn"
                     onClick={() => handleSearchClick(inputValue)}>
                     <svg className="searchForm__searchBtn-icon" width="18" height="18" viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
@@ -59,6 +78,13 @@ const SearchForm = () => {
                         </g>
                     </svg>
                 </button>
+                <CustomSelect 
+                    setValue={setSelectedOption} 
+                    fieldValues={selectFields} 
+                    selectTitle='Тип'
+                    isShowCurrentOption={false}
+                    initialCheckedValue="По стравам"
+                />
             </div>
         </div>
     )
