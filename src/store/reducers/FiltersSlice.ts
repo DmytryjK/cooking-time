@@ -5,10 +5,12 @@ type TypeFilterRecipes = {
 	searchInput: string;
 	searchTags: tagsType[];
 	searchCategories: string[];
+	// searchedNameOfDishes: string;
 }
 
 const initialState: TypeFilterRecipes = {
 	searchInput: '',
+	// searchedNameOfDishes: '',
 	searchTags: [],
 	searchCategories: [],
 }

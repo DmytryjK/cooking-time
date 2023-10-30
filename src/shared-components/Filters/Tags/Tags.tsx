@@ -7,11 +7,9 @@ const Tags = () => {
     const { searchTags } = useAppSelector(state => state.filters);
     const dispatch = useAppDispatch();
 
-
     const createNewTag = (tags: tagsType[]) => {
         const renderResult = tags.map(tag => {
             const {id, tagText} = tag;
-
             return (
                 <li className="tagsForm__item" key={id}>
                     {tagText}
@@ -42,12 +40,15 @@ const Tags = () => {
         renderedTags ?
         <fieldset className="tagsForm">
             <ul className="tagsForm__list">
+                <li className="tagsForm__list-title">
+                    <h2 className="tagsForm__title">Інгредієнти:</h2>
+                </li>
                 {renderedTags}
             </ul>
             <button 
                 className="tagsForm__clear-btn"
                 onClick={() => dispatch(deleteAllTags())}>
-                Удалить теги
+                Видалити все
             </button>
         </fieldset> : null
     )

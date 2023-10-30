@@ -17,6 +17,7 @@ type initialStateRecipes = {
 	loadingRecipes: 'idle' | 'pending' | 'succeeded' | 'failed';
 	loadingForm: 'idle' | 'pending' | 'succeeded' | 'failed';
 	error: null | unknown;
+	searchedNameOfDishes: string;
 }
 
 const initialState: initialStateRecipes = {
@@ -27,12 +28,19 @@ const initialState: initialStateRecipes = {
 	loadingRecipes: 'idle',
 	loadingForm: 'idle',
 	error: null,
+	searchedNameOfDishes: '',
 }
 
 type isFavoritePayload = {
 	recipeId: string|number|null;
 	isFavorite: boolean;
 };
+
+const filterByIngredients = (recipe: Recipe, searchTags: tagsType[]) => {
+	return searchTags.every(tag => {
+		return recipe.ingredients?.some(ingredient => ingredient.tagText.toUpperCase() === tag.tagText.toUpperCase())
+	})
+}
 
 export const fetchRecipes = createAsyncThunk(
 	'allRecipes/fetchRecipes',
@@ -155,17 +163,18 @@ export const recepieListSlice = createSlice({
 		filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
 			const {searchInput, searchTags, searchCategories} = action.payload;
 			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
-
+			if (!searchInput) {
+				state.searchedNameOfDishes = '';
+			}
 			if (!searchInput && searchTags.length === 0 && searchCategories.length === 0) return;
-			
+			if (searchInput) {
+				state.searchedNameOfDishes = searchInput;
+			}
 			if (searchInput && searchTags.length > 0 && searchCategories.length > 0) {
 				state.filteredRecipes = state.filteredRecipes
 					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
 					.filter(recipe => {
-						return recipe.ingredients?.some(ingredient => {
-							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
-						})
+						return filterByIngredients(recipe, searchTags);
 					})
 					.filter(recipe => searchCategories.includes(recipe.category) === true);
 				return;
@@ -173,10 +182,7 @@ export const recepieListSlice = createSlice({
 				state.filteredRecipes = state.filteredRecipes
 					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
 					.filter(recipe => {
-						return recipe.ingredients?.some(ingredient => {
-							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
-						})
+						return filterByIngredients(recipe, searchTags);
 					})
 					return;
 			} else if (searchInput && searchCategories.length > 0) {
@@ -187,10 +193,7 @@ export const recepieListSlice = createSlice({
 			} else if (searchTags.length > 0 && searchCategories.length > 0) {
 				state.filteredRecipes = state.filteredRecipes
 					.filter(recipe => {
-						return recipe.ingredients?.some(ingredient => {
-							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
-						})
+						return filterByIngredients(recipe, searchTags);
 					})
 					.filter(recipe => searchCategories.includes(recipe.category) === true);
 					return;
@@ -201,10 +204,7 @@ export const recepieListSlice = createSlice({
 			} else if (searchTags.length > 0) {
 				state.filteredRecipes = state.filteredRecipes
 					.filter(recipe => {
-						return recipe.ingredients?.some(ingredient => {
-							const upperTags = searchTags.map(tag => tag.tagText.toUpperCase());
-							return upperTags.some(tag => ingredient.tagText.toUpperCase().includes(tag));
-						})
+						return filterByIngredients(recipe, searchTags);
 					});
 					return;
 			} else {

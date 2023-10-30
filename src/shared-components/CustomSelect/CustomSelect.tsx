@@ -2,7 +2,7 @@ import {useState, useEffect, ChangeEvent, Dispatch, SetStateAction} from 'react'
 import nextId from 'react-id-generator';
 import './CustomSelect.scss';
 
-const CustomSelect = ({setValue, fieldValues, selectTitle} : {setValue: Dispatch<SetStateAction<string>>; fieldValues: string[]; selectTitle: string;}) => {
+const CustomSelect = ({setValue, fieldValues, selectTitle, isShowCurrentOption, initialCheckedValue} : {setValue: Dispatch<SetStateAction<string>>; fieldValues: string[]; selectTitle: string; isShowCurrentOption?: boolean; initialCheckedValue?: string}) => {
     const [isCategoryActive, setIsCategoryActive] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState<string>('');
 
@@ -10,6 +10,11 @@ const CustomSelect = ({setValue, fieldValues, selectTitle} : {setValue: Dispatch
         if(!selectedValue) return;
         setValue(selectedValue);
     }, [selectedValue]);
+
+    useEffect(() => {
+        if (!initialCheckedValue) return;
+        setSelectedValue(initialCheckedValue);
+    }, [initialCheckedValue]);
 
     useEffect(() => {
         if (isCategoryActive) {
@@ -40,7 +45,7 @@ const CustomSelect = ({setValue, fieldValues, selectTitle} : {setValue: Dispatch
             type="button"
             onClick={() => setIsCategoryActive(!isCategoryActive)}
         >
-            <span className="btn__text">{selectedValue || selectTitle}</span>{' '}
+            <span className="btn__text">{isShowCurrentOption ? selectedValue || selectTitle : selectTitle}</span>{' '}
         </button>
         <fieldset
             className="custom-select__fields"
@@ -70,6 +75,11 @@ const CustomSelect = ({setValue, fieldValues, selectTitle} : {setValue: Dispatch
         </fieldset>
     </div>
   )
+}
+
+CustomSelect.defaultProps = {
+    isShowCurrentOption: true,
+    initialCheckedValue: '',
 }
 
 export default CustomSelect
