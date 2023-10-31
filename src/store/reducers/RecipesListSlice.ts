@@ -154,14 +154,21 @@ export const recepieListSlice = createSlice({
 		},
 		setFavoriteRecipes: (state, action: PayloadAction<isFavoritePayload>) => {
 			const { recipeId, isFavorite } = action.payload;
-			state.recipes = [...state.recipes.map(recipe => {
+			state.filteredRecipes = [...state.filteredRecipes.map(recipe => {
 				recipe.id === recipeId ? recipe.favorites = isFavorite : recipe.favorites = recipe.favorites;
 				return recipe;
 			})];
-			state.filteredRecipes = [...state.recipes];
+			state.recipes = [...state.recipes];
+
+			// state.recipes = [...state.recipes.map(recipe => {
+			// 	recipe.id === recipeId ? recipe.favorites = isFavorite : recipe.favorites = recipe.favorites;
+			// 	return recipe;
+			// })];
+			// state.filteredRecipes = [...state.recipes];
 		},
 		filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
 			const {searchInput, searchTags, searchCategories} = action.payload;
+			console.log(searchCategories);
 			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
 			if (!searchInput) {
 				state.searchedNameOfDishes = '';

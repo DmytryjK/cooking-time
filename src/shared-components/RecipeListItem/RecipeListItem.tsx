@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Recipe } from "../../types/type";
 import nextId from "react-id-generator";
 import { useAppSelector } from "../../hooks/hooks";
@@ -10,6 +11,7 @@ const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite:
     const {ingredients, id, title, time, img, previewImg, favorites, category} = recipe;
     const timerClass = time ? "recipe-card__timer active" : "recipe-card__timer";
     const { uid } = useAppSelector(state => state.authentication.user);
+    const navigate = useNavigate();
 
     const renderedTags = ingredients?.map(item => {
         return (
@@ -19,7 +21,7 @@ const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite:
 
     return (
         <div className="recipe-card">
-            <a className="recipe-card__link" href={`/about-recepie/${id}`}>
+            <NavLink className="recipe-card__link" to={`/about-recepie/${id}`}>
                 <div className="recipe-card__img-wrapper">
                     <img 
                         className="recipe-card__image"
@@ -38,13 +40,13 @@ const RecipeListItem = ({recipe, addToFavorite}: {recipe: Recipe, addToFavorite:
                     </div>
                 </div>
                 <div className="recipe-card__current-category">{category}</div>
-            </a>
-            { uid ? <button 
+            </NavLink>
+            <button 
                 className = {favorites ? "recipe-card__favorite-btn active" : "recipe-card__favorite-btn"}
                 onClick={() => {
-                    addToFavorite(id, recipe);
+                    uid ? addToFavorite(id, recipe) : navigate('/favorites');
                 }}>
-            </button> : undefined }
+            </button>
         </div>
     )
 }

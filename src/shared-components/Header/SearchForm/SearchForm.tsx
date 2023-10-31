@@ -1,6 +1,7 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { addSearchTag, searchInputValue } from '../../../store/reducers/FiltersSlice';
+import { addSearchTag, searchInputValue, deleteAllTags } from '../../../store/reducers/FiltersSlice';
+import { useLocation } from 'react-router-dom';
 import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
 import CustomSelect from '../../CustomSelect/CustomSelect';
 import nextId from "react-id-generator";
@@ -8,9 +9,9 @@ import './SearchForm.scss';
 
 const SearchForm = () => {
     const dispatch = useAppDispatch();
+    const { pathname } = useLocation();
     const [inputValue, setInputValue] = useState<string>('');
     const {searchInput, searchTags, searchCategories} = useAppSelector(state => state.filters);
-
     const [selectedOption, setSelectedOption] = useState('');
     const searchTypes = [
         {
@@ -26,13 +27,21 @@ const SearchForm = () => {
 
     useEffect(() => {
         dispatch(filterRecipes({searchInput, searchTags, searchCategories}));
-    }, [searchInput, searchTags]);
+    }, [searchInput, searchTags, searchCategories]);
 
     useEffect(() => {
         setInputValue('');
     }, [selectedOption]);
+
+    useEffect(() => {
+        setInputValue('');
+        setSelectedOption('');
+        dispatch(searchInputValue(''));
+        dispatch(deleteAllTags());
+    }, [pathname]);
     
     const handleSearchClick = (value: string) => {
+        console.log(value);
         dispatch(searchInputValue(value));
     }
 
