@@ -10,6 +10,22 @@
 
 body {
 	background-color: $light-color;
+	&::-webkit-scrollbar {
+		width: 8px;
+		outline: none;
+		border: none;
+	}
+	&::-webkit-scrollbar-track {
+		background-color: $light-grey;
+		outline: none;
+		border: none;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: $border-input;
+		outline: none;
+		border-radius: 5px;
+		border: none;
+	}
 }
 
 #root {

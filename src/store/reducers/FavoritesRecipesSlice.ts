@@ -1,7 +1,14 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDatabase, ref, child, get, update } from "firebase/database";
+import { tagsType } from '../../types/type';
 
 import type { Recipe } from '../../types/type';
+
+type PayloadActionFilter = {
+	searchInput: string;
+	searchTags: tagsType[];
+	searchCategories: string[];
+}
 
 type TypeFavoriteRecipes = {
 	favoriteRecipes: Recipe[];
@@ -17,6 +24,12 @@ const initialState: TypeFavoriteRecipes = {
 	loadingRecipeIdToFirebase: 'idle',
 	error: null,
 	currentFavoriteId: null,
+}
+
+const filterByIngredients = (recipe: Recipe, searchTags: tagsType[]) => {
+	return searchTags.every(tag => {
+		return recipe.ingredients?.some(ingredient => ingredient.tagText.toUpperCase() === tag.tagText.toUpperCase())
+	})
 }
 
 export const fetchFavoritesRecipe = createAsyncThunk(
@@ -110,7 +123,7 @@ export const favoriteRecipesSlice = createSlice({
 	reducers: {
 		setCurrentFavoriteId: (state, action: PayloadAction<string | number | null>) => {
 			state.currentFavoriteId = action.payload;
-		}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchFavoritesRecipe.pending, (state) => {

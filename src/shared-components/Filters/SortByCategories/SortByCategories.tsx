@@ -5,28 +5,40 @@ import { activeCategories } from '../../../store/reducers/FiltersSlice';
 import './SortByCategories.scss';
 
 const SortByCategories = () => {
-    const [isCategoryActive, setIsCategoryActive] = useState<boolean>(false);
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [isSelectActive, setIsSelectActive] = useState<boolean>(false);
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
     const {searchInput, searchTags, searchCategories} = useAppSelector(state => state.filters);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const recipes = useAppSelector(state => state.recipes.recipes);
+    const [listOfCategories, setListOfCategories] = useState<string[]>([]);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (isCategoryActive) {
+        if (recipes.length > 0) {
+            setListOfCategories(Array.from(new Set(recipes.map(recipe => recipe.category))))
+        }
+    }, [recipes]);
+
+    useEffect(() => {
+        if (isSelectActive) {
             document.addEventListener('click', closeSelect);
         }
 
         return () => document.removeEventListener('click', closeSelect);
-    }, [isCategoryActive]);
+    }, [isSelectActive]);
 
-    useEffect(() => {
-        if (!isFilterActive) return;
-        dispatch(activeCategories(selectedCategories));
-    }, [isFilterActive]);
+    // useEffect(() => {
+    //     if (!isFilterActive) return;
+    //     dispatch(activeCategories(selectedCategories));
+    // }, [isFilterActive]);
 
-    useEffect(() => {
-        setIsFilterActive(false);
-    }, [selectedCategories]);
+    // useEffect(() => {
+    //     setIsFilterActive(false);
+    // }, [selectedCategories]);
+
+    // useEffect(() => {
+    //     console.log(selectedCategories);
+    // }, [selectedCategories]);
 
     useEffect(() => {
         dispatch(filterRecipes({searchInput, searchTags, searchCategories}));
@@ -37,91 +49,58 @@ const SortByCategories = () => {
             !e.target.closest('.sort__custom-fields') &&
             !e.target.closest('.sort__custom-select')
         ) {
-            setIsCategoryActive(false);
+            setIsSelectActive(false);
         }
     };
 
     const toggleCategories = (e: ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
         if (target.checked) {
-            setSelectedCategories((prev) => [...prev, target.value])
+            setSelectedCategories((prev) => [...prev, target.value]);
         } else {
-            setSelectedCategories((prev) => [...prev].filter(item => item !== target.value))
+            setSelectedCategories((prev) => [...prev].filter(item => item !== target.value));
         }
     };
 
     return (
         <div className="sort">
-            <div className={`sort__custom-select ${isCategoryActive ? 'active' : ''}`}>
+            <div className={`sort__custom-select ${isSelectActive ? 'active' : ''}`}>
                 <button
                     className="sort__open-btn"
                     type="button"
-                    onClick={() => setIsCategoryActive(!isCategoryActive)}
+                    onClick={() => setIsSelectActive(!isSelectActive)}
                 >
                     <span className="btn__text">Категорії</span>{' '}
                 </button>
                 <fieldset
                     className="sort__custom-fields"
-                >
-                    <div className="sort__field">
-                        <input
-                            className="sort__input"
-                            id="sort-1"
-                            type="checkbox"
-                            value="Перші страви"
-                            onChange={toggleCategories}
-                        />
-                        <label
-                            className="sort__label"
-                            htmlFor="sort-1"
-                        >
-                            Перші страви
-                        </label>
-                        <span className="sort__input-custom" />
-                    </div>
-                    <div className="sort__field">
-                        <input
-                            className="sort__input"
-                            id="sort-2"
-                            type="checkbox"
-                            value="Десерт"
-                            onChange={toggleCategories}
-                        />
-                        <label
-                            className="sort__label"
-                            htmlFor="sort-2"
-                        >
-                            Десерт
-                        </label>
-                        <span className="sort__input-custom" />
-                    </div>
-                    <div className="sort__field">
-                        <input
-                            className="sort__input"
-                            id="sort-3"
-                            type="checkbox"
-                            value="Випічка"
-                            onChange={toggleCategories}
-                        />
-                        <label className="sort__label" htmlFor="sort-3">
-                            Випічка
-                        </label>
-                        <span className="sort__input-custom" />
-                    </div>
-                    <div className="sort__field">
-                        <input
-                            className="sort__input"
-                            id="sort-4"
-                            type="checkbox"
-                            value="Гарнір"
-                            onChange={toggleCategories}
-                        />
-                        <label className="sort__label" htmlFor="sort-4">
-                            Гарнір
-                        </label>
-                        <span className="sort__input-custom" />
-                    </div>
-                    <button className="sort__accept-btn" onClick={() => setIsFilterActive(true)} >Показати</button>
+                >   {listOfCategories.map((category, index) => {
+                        return (
+                            <div className="sort__field" key={`${category}-${index}`}>
+                                <input
+                                    className="sort__input"
+                                    id={`sort-${category}`}
+                                    type="checkbox"
+                                    value={category}
+                                    checked={selectedCategories.some(selectedName => selectedName === category)}
+                                    onChange={toggleCategories}
+                                />
+                                <label
+                                    className="sort__label"
+                                    htmlFor={`sort-${category}`}
+                                >
+                                    {category}
+                                </label>
+                                <span className="sort__input-custom" />
+                            </div>
+                        )
+                    })}
+                    <button 
+                        className="sort__accept-btn" 
+                        onClick={() => {
+                            dispatch(activeCategories(selectedCategories));
+                        }}
+                    >Показати</button>
                 </fieldset>
             </div>
         </div>
