@@ -7,14 +7,15 @@ export type IngredientsType = {
 
 export interface Recipe {
 	id: string|number|null;
+	author: string;
 	title: string;
 	time: {hours: string; minutes: string};
 	ingredients?: IngredientsType[];
 	img: string;
 	previewImg: string;
-	description?: string;
 	favorites: boolean;
 	category: string;
+	description?: string;
 }
 
 export interface Recipes {

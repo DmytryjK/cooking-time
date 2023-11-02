@@ -35,7 +35,8 @@ const Ingredient = ({ ingredient }: { ingredient: IngredientsType }) => {
                 <SelectUnitsItem tagId={id} setUnit={setTagUnitLocal} tagUnit={tagUnitLocal}/>
                 <button 
                     className="createdTag__delete-ingredient"
-                    onClick={() => dispatch(deleteIngredientTags(id))}>
+                    onClick={() => dispatch(deleteIngredientTags(id))}
+                    type="button">
                     видалити
                 </button>
             </label>

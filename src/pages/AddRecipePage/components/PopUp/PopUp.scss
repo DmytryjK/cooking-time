@@ -54,7 +54,9 @@
         text-decoration: none;
         text-transform: uppercase;
         font-weight: 600;
+        border: none;
         transition: 0.1s ease-out background-color;
+        cursor: pointer;
         &:hover {
             background-color: rgb(255, 103, 103);
         }
@@ -71,6 +73,8 @@
         background-color: rgb(250, 62, 62);
         border-radius: 50%;
         border: none;
+        color: white;
+        font-size: 25px;
         cursor: pointer;
         transition: 0.1s ease-out background-color;
         &-icon {

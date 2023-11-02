@@ -7,36 +7,59 @@ import Ingredients from '../Ingredients/Ingredients';
 import UploadPhotos from '../UploadPhotos/UploadPhotos';
 import CustomSelect from '../../../../shared-components/CustomSelect/CustomSelect';
 import PopUp from '../PopUp/PopUp';
+import { IngredientsType, uploadFileType } from '../../../../types/type';
 import './AddingRecipesForm.scss';
 import 'react-quill/dist/quill.snow.css';
 
 type LoadedPhotoType = {
-    id: string,
-    imageRefFromStorage: string,
+    id: string;
+    imageRefFromStorage: string;
+    uploadFile?: uploadFileType;
 }
 
 type LoadedPhotoContextType = {
     loadedPhotosInfo: LoadedPhotoType[];
-    setLoadedPhotosInfo: Dispatch<SetStateAction<LoadedPhotoType[]>> | null;
+    setLoadedPhotosInfo: Dispatch<SetStateAction<LoadedPhotoType[]>>;
 }
 
 export const LoadedPhotoContext = createContext<LoadedPhotoContextType>({
     loadedPhotosInfo: [],
-    setLoadedPhotosInfo: null,
+    setLoadedPhotosInfo: () => {},
 });
 
-const AddingRecipesForm = () => {
+const AddingRecipesForm = (
+    {   
+        name, 
+        category, 
+        timer, 
+        loadedPhotos, 
+        descr, 
+        ingredients
+    } : 
+    {
+        name?: string; 
+        category?: string; 
+        timer?: {hours: string, minutes: string}; 
+        descr?: string; 
+        loadedPhotos?: LoadedPhotoType[]; 
+        ingredients?: IngredientsType[];
+    }
+    ) => {
     const {error, loadingForm} = useAppSelector(state => state.recipes);
-    const [nameValue, setNameValue] = useState<string>('');
-    const [categoryValue, setCategoryValue] = useState<string>('');
-    const tags = useAppSelector(state => state.createRecipeForm.tags);
-    const [timerValue, setTimerValue] = useState<{hours: string, minutes: string}>({hours: '', minutes: ''});
-    const [loadedPhotosInfo, setLoadedPhotosInfo] = useState<LoadedPhotoType[]>([]);
-    const [description, setDescription] = useState<string>('');
+    
     const categories = ['Випічка', 'Гарніри', 'Перші страви', 'Основні страви', 'Десерти', 'Салати', 'Закуски', 'Напої', 'Соуси'];
 
-    const [isSuccessPopUpShow, setIsSuccessPopUpShow] = useState<boolean>(false);
+    const [nameValue, setNameValue] = useState(name || '');
+    const [categoryValue, setCategoryValue] = useState(category || '');
+    const [timerValue, setTimerValue] = useState({hours: timer?.hours || '', minutes: timer?.minutes || ''});
+    const [loadedPhotosInfo, setLoadedPhotosInfo] = useState<LoadedPhotoType[]>(loadedPhotos || []);
+    const [description, setDescription] = useState(descr || '');
+    const tags =  useAppSelector(state => state.createRecipeForm.tags);
+
+    const [isSuccessPopUpShow, setIsSuccessPopUpShow] = useState(false);
     const dispatch = useAppDispatch();
+
+    // ////////
 
     useEffect(() => {
         if (loadingForm === 'succeeded') {
@@ -48,6 +71,7 @@ const AddingRecipesForm = () => {
         if (nameValue && tags.length > 0 && description) {
             dispatch(postRecipe({
                     id: '',
+                    author: '',
                     title: nameValue,
                     time: {
                         hours: timerValue.hours ? timerValue.hours + ' год.' : '',
@@ -99,13 +123,14 @@ const AddingRecipesForm = () => {
                         <CustomSelect 
                             setValue={setCategoryValue} 
                             fieldValues={categories}
+                            initialCheckedValue={categoryValue}
                             selectTitle="Виберіть категорію"
                         />
                     </div>
                     
                 </div>
                 <div className="form__fields-wrapper">
-                    <Ingredients />
+                    <Ingredients localingredients={ingredients}/>
                     <fieldset className="form__timer-fiedls timer">
                         <legend className="form__label">Час приготування</legend>
                         <div className="timer__wrapper">
@@ -155,7 +180,10 @@ const AddingRecipesForm = () => {
                     </fieldset>
                 </div>
                 <div className="form__fields-wrapper">
-                    <LoadedPhotoContext.Provider value={{loadedPhotosInfo, setLoadedPhotosInfo}}>
+                    <LoadedPhotoContext.Provider value={{
+                            loadedPhotosInfo, 
+                            setLoadedPhotosInfo,
+                        }}>
                         <UploadPhotos />
                     </LoadedPhotoContext.Provider>
                 </div>

@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext, createContext, Dispatch, SetStateAction } from 'react';
 import nextId from 'react-id-generator';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
-import { addIngredientTags } from '../../../../store/reducers/CreateRecipeFormSlice';
+import { addIngredientTags, setAllIngredients, clearAllTags } from '../../../../store/reducers/CreateRecipeFormSlice';
+import { IngredientsType } from '../../../../types/type';
 import Ingredient from './Ingredient/Ingredient';
 
 type SelectUnitsType = {
@@ -19,11 +20,19 @@ export const SelectUnitContext = createContext<SelectUnitsContextType>({
     setSelectedUnits: null,
 });
 
-const Ingredients = () => {
+const Ingredients = ({localingredients} : {localingredients?: IngredientsType[]}) => {
     const [tagName, setTagName] = useState<string>('');
     const [selectedUnits, setSelectedUnits] = useState<SelectUnitsType>({id: '', isOpen: false});
     const dispatch = useAppDispatch();
     const ingredients = useAppSelector(state => state.createRecipeForm.tags);
+
+    useEffect(() => {
+        if (localingredients) {
+            dispatch(setAllIngredients(localingredients));
+        } else {
+            dispatch(clearAllTags());
+        }
+    }, [localingredients]);
 
     const handlePlusBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();

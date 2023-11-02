@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import nextId from "react-id-generator";
 import { fetchRecipe, setFavoriteRecipes } from '../../store/reducers/RecipesListSlice';
 import { manageFavoritesRecipes, fetchFavoritesRecipe } from '../../store/reducers/FavoritesRecipesSlice';
@@ -24,7 +24,19 @@ const AboutRecipePage = () => {
     const [isEditActive, setIsEditActive] = useState<boolean>(false);
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const [currentRecipeToEdit, setCurrentRecipeToEdit] = useState<Recipe | null>(null);
+    const [isShowEditBtn, setIsShowEditBtn] = useState(false);
     const [attentionWindowOpen, setAttentionWindowOpen] = useState<boolean>(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!recipe) return;
+        if (recipe.author === uid) {
+            setIsShowEditBtn(true);
+        } else {
+            setIsShowEditBtn(false);
+        }
+    }, [uid, recipe]);
 
     useEffect(() => {
         if (favoriteRecipe.length === 0) {
@@ -69,7 +81,7 @@ const AboutRecipePage = () => {
             <>
                 <div className="recipe-page__top">
                     <div className="recipe-page__top-btns">
-                        <button className="recipe-page__edit-btn"
+                        {isShowEditBtn ? <button className="recipe-page__edit-btn"
                             title="редактировать"
                             onClick={() => handleEditRecipe(recipe)}>
                                 <svg 
@@ -79,7 +91,7 @@ const AboutRecipePage = () => {
                                 >
                                     <use href={`${iconsSprite}/#edit`}></use>
                                 </svg>
-                        </button>
+                        </button> : ''}
                         <button className={`recipe-page__favorite-btn ${isFavorite ? 'btn-active' : ''}`}
                             title="в обране"
                             onClick={() => handleAddFavorite(id, recipe)}>
@@ -147,28 +159,34 @@ const AboutRecipePage = () => {
             <Header isSearch={false} />
             <section className="about-recipe">
                 <div className="container">
-                    <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
-                        <div className="success-window__block">
-                            <h2 className="success-window__title">Вы уверены, что хотите закрыть редактор? Все изменения будут отменены.</h2>
-                            <div className="success-window__links">
-                                <button 
-                                    className="success-window__back-main">Закрыть редактор</button>
-                                <button 
-                                    className="success-window__back">Вернуться</button>
-                            </div>
-                            <button          
-                                className="success-window__close"
-                            ></button>
-                        </div>
-                    </div>
-                    <main className="recipe-page">
+                    {/* <main className="recipe-page">
                         {isEditActive && currentRecipeToEdit ? <EditRecipeForm recipe={currentRecipeToEdit} setIsAttentionOpen={setAttentionWindowOpen}/> : renderServerData({
                                 error,
                                 errorText: 'Упс, щось пішло не так :( Спробуйте оновити сторінку!',
                                 loading: loadingRecipe,
                                 content: renderedInfo,
                         })}
-                    </main>
+                    </main> */}
+                    <div className={attentionWindowOpen ? "success-window active" : "success-window"}> 
+                        <div className="success-window__block">
+                            <h2 className="success-window__title">Ви впевнені, що хочете закрити редактор? Зміни не буде збережено.</h2>
+                            <div className="success-window__links">
+                                <button 
+                                    className="success-window__back-main"
+                                    onClick={() => navigate(0)}
+                                >Так, закрити</button>
+                                    
+                                <button 
+                                    className="success-window__back"
+                                    onClick={() => setAttentionWindowOpen(false)}
+                                >Продовжити зміни</button>
+                            </div>
+                            <button          
+                                className="success-window__close"
+                                onClick={() => setAttentionWindowOpen(false)}
+                            >X</button>
+                        </div>
+                    </div>
                 </div>
             </section>
             <Footer />

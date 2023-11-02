@@ -38,9 +38,12 @@ export const createRecipeFormSlice = createSlice({
 		clearAllTags: (state) => {
 			state.tags = [];
 		},
+		setAllIngredients: (state, action: PayloadAction<IngredientsType[]>) => {
+			state.tags = action.payload;
+		},
 	}
 })
 
-export const { addIngredientTags, deleteIngredientTags, updateIngredientInfoById, clearAllTags } = createRecipeFormSlice.actions;
+export const { addIngredientTags, deleteIngredientTags, updateIngredientInfoById, clearAllTags, setAllIngredients } = createRecipeFormSlice.actions;
 
 export default createRecipeFormSlice.reducer;

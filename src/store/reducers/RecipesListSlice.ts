@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDatabase, ref, child, get, push, update } from "firebase/database";
-
+import { RootState } from '../store';
 import type { Recipes, Recipe, tagsType } from '../../types/type';
 
 type PayloadActionFilter = {
@@ -100,12 +100,19 @@ export const fetchRecipe = createAsyncThunk(
 
 export const postRecipe = createAsyncThunk(
 	'recepiesList/postRecipe',
-	async function(newRecepie: Recipe, { rejectWithValue }) {
+	async function(newRecepie: Recipe, { rejectWithValue, getState }) {
 		try{
-			console.log(newRecepie);
+			const state = getState() as RootState;
+			const { uid } = state.authentication.user;
+
 			const db = getDatabase();
 			const newPostKey = push(child(ref(db), 'dishes')).key;
-			const postData = {...newRecepie, id: newPostKey};
+
+			const postData = {
+				...newRecepie, 
+				author: uid || '', 
+				id: newPostKey
+			};
 
 			const updates: any = {};
 			updates['/dishes/' + newPostKey] = postData;
@@ -159,16 +166,9 @@ export const recepieListSlice = createSlice({
 				return recipe;
 			})];
 			state.recipes = [...state.recipes];
-
-			// state.recipes = [...state.recipes.map(recipe => {
-			// 	recipe.id === recipeId ? recipe.favorites = isFavorite : recipe.favorites = recipe.favorites;
-			// 	return recipe;
-			// })];
-			// state.filteredRecipes = [...state.recipes];
 		},
 		filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
 			const {searchInput, searchTags, searchCategories} = action.payload;
-			console.log(searchCategories);
 			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
 			if (!searchInput) {
 				state.searchedNameOfDishes = '';

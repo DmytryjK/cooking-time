@@ -1,9 +1,10 @@
 @use '../../styles/variables' as *;
 .recipe-card {
     width: 100%;
-    max-width: 320px;
+    max-width: 420px;
     min-width: 250px;
     position: relative;
+    margin: 0 auto;
     &__link {
         display: flex;
         flex-direction: column;

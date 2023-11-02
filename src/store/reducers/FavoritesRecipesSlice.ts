@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDatabase, ref, child, get, update } from "firebase/database";
 import { tagsType } from '../../types/type';
-
 import type { Recipe } from '../../types/type';
 
 type PayloadActionFilter = {
