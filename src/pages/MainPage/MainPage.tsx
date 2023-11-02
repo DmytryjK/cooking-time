@@ -19,12 +19,12 @@ const MainPage = () => {
     return (
         <>
             <Header isSearch={true} /> 
-            <section className="main">
+            {/* <section className="main">
                 <div className="container">
                     <Filters title="Всі рецепти"/>
                     <RecipeList />
                 </div>
-            </section>
+            </section> */}
             <Footer />
         </>
     )

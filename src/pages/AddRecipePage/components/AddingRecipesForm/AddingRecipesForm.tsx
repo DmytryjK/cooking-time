@@ -179,14 +179,14 @@ const AddingRecipesForm = (
                         </div>
                     </fieldset>
                 </div>
-                <div className="form__fields-wrapper">
+                {/* <div className="form__fields-wrapper">
                     <LoadedPhotoContext.Provider value={{
                             loadedPhotosInfo, 
                             setLoadedPhotosInfo,
                         }}>
                         <UploadPhotos />
                     </LoadedPhotoContext.Provider>
-                </div>
+                </div> */}
                 <div className="form__fields-wrapper form-descr">
                     <span className="form-descr__title form__label">Процес приготування</span>
                     <ReactQuill 

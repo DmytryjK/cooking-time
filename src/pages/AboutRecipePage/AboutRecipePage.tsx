@@ -73,86 +73,86 @@ const AboutRecipePage = () => {
         dispatch(setFavoriteRecipes({recipeId: recepieId, isFavorite: !item.favorites}));
     };
 
-    const renderedInfo = () => {
-        if (!recipe) return '';
-        const {title, ingredients, img, description, category, id, time} = recipe;
-        const parsedDescr = parse(description || '');
-        return (
-            <>
-                <div className="recipe-page__top">
-                    <div className="recipe-page__top-btns">
-                        {isShowEditBtn ? <button className="recipe-page__edit-btn"
-                            title="редактировать"
-                            onClick={() => handleEditRecipe(recipe)}>
-                                <svg 
-                                    width="20" 
-                                    height="20" 
-                                    viewBox="0 0 20 20"
-                                >
-                                    <use href={`${iconsSprite}/#edit`}></use>
-                                </svg>
-                        </button> : ''}
-                        <button className={`recipe-page__favorite-btn ${isFavorite ? 'btn-active' : ''}`}
-                            title="в обране"
-                            onClick={() => handleAddFavorite(id, recipe)}>
-                                <svg 
-                                    width="22" 
-                                    height="22" 
-                                    viewBox="0 0 22 22"
-                                >
-                                    <use href={`${iconsSprite}#heart`}></use>
-                                </svg>
+    // const renderedInfo = () => {
+    //     if (!recipe) return '';
+    //     const {title, ingredients, img, description, category, id, time} = recipe;
+    //     const parsedDescr = parse(description || '');
+    //     return (
+    //         <>
+    //             <div className="recipe-page__top">
+    //                 <div className="recipe-page__top-btns">
+    //                     {isShowEditBtn ? <button className="recipe-page__edit-btn"
+    //                         title="редактировать"
+    //                         onClick={() => handleEditRecipe(recipe)}>
+    //                             <svg 
+    //                                 width="20" 
+    //                                 height="20" 
+    //                                 viewBox="0 0 20 20"
+    //                             >
+    //                                 <use href={`${iconsSprite}/#edit`}></use>
+    //                             </svg>
+    //                     </button> : ''}
+    //                     <button className={`recipe-page__favorite-btn ${isFavorite ? 'btn-active' : ''}`}
+    //                         title="в обране"
+    //                         onClick={() => handleAddFavorite(id, recipe)}>
+    //                             <svg 
+    //                                 width="22" 
+    //                                 height="22" 
+    //                                 viewBox="0 0 22 22"
+    //                             >
+    //                                 <use href={`${iconsSprite}#heart`}></use>
+    //                             </svg>
 
-                        </button>
-                    </div>
-                    <div className="recipe-page__top-wrapper">
-                        <h2 className="recipe-page__title">{title}</h2>
-                        <span className="recipe-page__categories">{category}</span>
-                    </div>
-                    <div className="recipe-page__photo-wrapper">
-                        <img className="recipe-page__photo" src={img} alt="фото" />
-                    </div>
-                </div>
-                <div className="recipe-page__content">
-                    <div className="recipe-page__left-col">
-                        <div className="recipe-page__left-fixed">
-                            <div className="recipe-page__cooking-time">
-                                <h3 className="recipe-page__ingredients-title recipe-titles">Час приготування</h3>
-                                <div className="recipe-page__time-inner">
-                                    <img className="recipe-page__time-icon" src={timerIcon} alt="час" />
-                                    <span className="recipe-page__time-text">{time.hours} {time.minutes}</span>
-                                </div>
-                            </div>
-                            <div className="recipe-page__ingredients">
-                                <h3 className="recipe-page__ingredients-title recipe-titles">Інгредієнти</h3>
-                                <ul className="recipe-page__ingredients-list">
-                                    {ingredients?.map(ingredient => {
-                                        return(
-                                            <li 
-                                            key={nextId("ingredient-")}
-                                            className="recipe-page__ingredients-item">
-                                                <span className="ingredients-item__character">
-                                                {ingredient.tagText}
-                                                </span>
-                                                <span className="ingredients-item__quantity">
-                                                {ingredient.tagQuantityWithUnit} {ingredient.tagUnit}
-                                                </span>
-                                            </li>
-                                        )
-                                    })}
+    //                     </button>
+    //                 </div>
+    //                 <div className="recipe-page__top-wrapper">
+    //                     <h2 className="recipe-page__title">{title}</h2>
+    //                     <span className="recipe-page__categories">{category}</span>
+    //                 </div>
+    //                 <div className="recipe-page__photo-wrapper">
+    //                     <img className="recipe-page__photo" src={img} alt="фото" />
+    //                 </div>
+    //             </div>
+    //             <div className="recipe-page__content">
+    //                 <div className="recipe-page__left-col">
+    //                     <div className="recipe-page__left-fixed">
+    //                         <div className="recipe-page__cooking-time">
+    //                             <h3 className="recipe-page__ingredients-title recipe-titles">Час приготування</h3>
+    //                             <div className="recipe-page__time-inner">
+    //                                 <img className="recipe-page__time-icon" src={timerIcon} alt="час" />
+    //                                 <span className="recipe-page__time-text">{time.hours} {time.minutes}</span>
+    //                             </div>
+    //                         </div>
+    //                         <div className="recipe-page__ingredients">
+    //                             <h3 className="recipe-page__ingredients-title recipe-titles">Інгредієнти</h3>
+    //                             <ul className="recipe-page__ingredients-list">
+    //                                 {ingredients?.map(ingredient => {
+    //                                     return(
+    //                                         <li 
+    //                                         key={nextId("ingredient-")}
+    //                                         className="recipe-page__ingredients-item">
+    //                                             <span className="ingredients-item__character">
+    //                                             {ingredient.tagText}
+    //                                             </span>
+    //                                             <span className="ingredients-item__quantity">
+    //                                             {ingredient.tagQuantityWithUnit} {ingredient.tagUnit}
+    //                                             </span>
+    //                                         </li>
+    //                                     )
+    //                                 })}
 
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="recipe-page__cooking-descr">
-                        <h3 className="recipe-page__descr-title recipe-titles">Процес приготування</h3>
-                        <div className="recipe-page__descr">{parsedDescr}</div>
-                    </div>
-                </div>
-            </>
-        );
-    }
+    //                             </ul>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //                 <div className="recipe-page__cooking-descr">
+    //                     <h3 className="recipe-page__descr-title recipe-titles">Процес приготування</h3>
+    //                     <div className="recipe-page__descr">{parsedDescr}</div>
+    //                 </div>
+    //             </div>
+    //         </>
+    //     );
+    // }
     
     return(
         <>

@@ -11,7 +11,7 @@ const AddRecipePage = () => {
                 <div className="container">
                     <h1 className="add-recepie__title">Додати новий рецепт</h1>
                     <p className="add-recepie__descr">Заповніть поля нижче, додайте опис та завантажте фото рецепту</p>
-                    <AddingRecipesForm/>
+                    {/* <AddingRecipesForm/> */}
                 </div>
             </main>
             <Footer />
