@@ -1,16 +1,19 @@
-import Header from "../../shared-components/Header/Header";
+import { useEffect } from 'react';
+import Header from '../../shared-components/Header/Header';
 import Footer from '../../shared-components/Footer/Footer';
-import RecipeList from "./RecipeList/RecipeLIst";
-import {useEffect} from 'react';
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { fetchRecipes, setCurrentFilteredRecipes } from '../../store/reducers/RecipesListSlice';
-import Filters from "../../shared-components/Filters/Filters";
+import RecipeList from './RecipeList/RecipeLIst';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import {
+    fetchRecipes,
+    setCurrentFilteredRecipes,
+} from '../../store/reducers/RecipesListSlice';
+import Filters from '../../shared-components/Filters/Filters';
 import './MainPage.scss';
 
 const MainPage = () => {
     const dispatch = useAppDispatch();
     const localUser = localStorage.getItem('user');
-    const localUserParsedId = localUser && JSON.parse(localUser)["uid"];
+    const localUserParsedId = localUser && JSON.parse(localUser).uid;
 
     useEffect(() => {
         dispatch(fetchRecipes(localUserParsedId));
@@ -18,16 +21,16 @@ const MainPage = () => {
 
     return (
         <>
-            <Header isSearch={true} /> 
+            <Header isSearch />
             <section className="main">
                 <div className="container">
-                    <Filters title="Всі рецепти"/>
+                    <Filters title="Всі рецепти" />
                     <RecipeList />
                 </div>
             </section>
             <Footer />
         </>
-    )
-}
+    );
+};
 
 export default MainPage;
