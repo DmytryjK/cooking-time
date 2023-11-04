@@ -1,76 +1,126 @@
 import { useState, useEffect, createContext, Dispatch, SetStateAction } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
-import { postRecipe } from '../../../../store/reducers/RecipesListSlice';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from '../../../../firebase/firebase';
 import ReactQuill from 'react-quill';
-import { clearAllTags } from '../../../../store/reducers/CreateRecipeFormSlice';
 import Ingredients from '../Ingredients/Ingredients';
 import UploadPhotos from '../UploadPhotos/UploadPhotos';
 import CustomSelect from '../../../../shared-components/CustomSelect/CustomSelect';
 import PopUp from '../PopUp/PopUp';
+import { uploadFileType } from '../../../../types/type';
+import nextId from 'react-id-generator';
+import { postRecipe, resetLoadingForm } from '../../../../store/reducers/RecipesListSlice';
+import { clearAllTags, getCategories } from '../../../../store/reducers/CreateRecipeFormSlice';
 import './AddingRecipesForm.scss';
 import 'react-quill/dist/quill.snow.css';
 
 type LoadedPhotoType = {
-    id: string,
-    imageRefFromStorage: string,
+    id: string;
+    loadedSrc: string;
+    localSrc: string;
+    uploadFile?: uploadFileType | any;
 }
 
 type LoadedPhotoContextType = {
     loadedPhotosInfo: LoadedPhotoType[];
-    setLoadedPhotosInfo: Dispatch<SetStateAction<LoadedPhotoType[]>> | null;
+    setLoadedPhotosInfo: Dispatch<SetStateAction<LoadedPhotoType[]>>;
 }
 
 export const LoadedPhotoContext = createContext<LoadedPhotoContextType>({
     loadedPhotosInfo: [],
-    setLoadedPhotosInfo: null,
+    setLoadedPhotosInfo: () => {},
 });
 
 const AddingRecipesForm = () => {
-    const {error, loadingForm} = useAppSelector(state => state.recipes);
-    const [nameValue, setNameValue] = useState<string>('');
-    const [categoryValue, setCategoryValue] = useState<string>('');
-    const tags = useAppSelector(state => state.createRecipeForm.tags);
-    const [timerValue, setTimerValue] = useState<{hours: string, minutes: string}>({hours: '', minutes: ''});
+    const { error, loadingForm } = useAppSelector(state => state.recipes);
+    const [nameValue, setNameValue] = useState('');
+    const [categoryValue, setCategoryValue] = useState('');
+    const [timerValue, setTimerValue] = useState({hours: '', minutes: ''});
+    const [description, setDescription] = useState('');
     const [loadedPhotosInfo, setLoadedPhotosInfo] = useState<LoadedPhotoType[]>([]);
-    const [description, setDescription] = useState<string>('');
-    const categories = ['Випічка', 'Гарніри', 'Перші страви', 'Основні страви', 'Десерти', 'Салати', 'Закуски', 'Напої', 'Соуси'];
+    
+    const tags = useAppSelector(state => state.createRecipeForm.tags);
+    const { categories } = useAppSelector(state => state.createRecipeForm);
 
     const [isSuccessPopUpShow, setIsSuccessPopUpShow] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        dispatch(getCategories());
+    }, [dispatch]);
+
+    useEffect(() => {
         if (loadingForm === 'succeeded') {
             setIsSuccessPopUpShow(true);
+            dispatch(resetLoadingForm());
         }
     }, [loadingForm]);
 
-    const handleSubmitForm = () => {
-        if (nameValue && tags.length > 0 && description) {
+    useEffect(() => {
+        if (loadingForm === 'succeeded') {
+            setNameValue('');
+            setCategoryValue('');
+            dispatch(clearAllTags());
+            setLoadedPhotosInfo([]);
+            setDescription('');
+            setTimerValue({hours: '', minutes: ''});
+        }
+    }, [loadingForm])
+
+    const uploadPhotos = async(loadedPhotosInfo: LoadedPhotoType[]) => {
+        const data: LoadedPhotoType[] = [];
+        const uploadPhotoPromises = loadedPhotosInfo.map(async (item) => {
+            const { uploadFile, id } = item;
+            if (!uploadFile || item.loadedSrc) return;
+
+            const imageRef = ref(storage, `recipes/${nextId(`photo-${id}`)}-${uploadFile.name}`);
+            const snapshot = await uploadBytes(imageRef, uploadFile);
+            const reflink = await getDownloadURL(snapshot.ref);
+
+            data.push ({
+                id: item.id,
+                loadedSrc: reflink,
+                localSrc: '',
+            });
+        })
+        
+        return Promise.all(uploadPhotoPromises)
+            .then(() => {
+            return data;
+        });
+    }
+
+    const handleSubmitForm = async () => {
+        if (loadedPhotosInfo.length < 2) {
+            alert('Завантажте 2 фото');
+            return;
+        };
+        if (!nameValue || tags.length === 0 || !description) {
+            alert('Всі поля мають бути заповнені');
+            return;
+        }
+    
+        try {
+            const updatedPhotosInfo = await uploadPhotos(loadedPhotosInfo);
+            if (!updatedPhotosInfo) return;
+
             dispatch(postRecipe({
-                    id: '',
-                    title: nameValue,
-                    time: {
-                        hours: timerValue.hours ? timerValue.hours + ' год.' : '',
-                        minutes: timerValue.minutes ? timerValue.minutes + ' хв.' : '',
-                    },
-                    ingredients: tags,
-                    description: description,
-                    previewImg: loadedPhotosInfo[0].imageRefFromStorage,
-                    img: loadedPhotosInfo[1].imageRefFromStorage,
-                    favorites: false,
-                    category: categoryValue,
-                }));
-            if (!error) {
-                setNameValue('');
-                setCategoryValue('');
-                dispatch(clearAllTags());
-                setLoadedPhotosInfo([]);
-                setDescription('');
-                setTimerValue({hours: '', minutes: ''});
-            };
-            
-        } else {
-            alert('all fields must be fills');
+                id: '',
+                title: nameValue,
+                time: {
+                    hours: timerValue.hours ? timerValue.hours + ' год.' : '',
+                    minutes: timerValue.minutes ? timerValue.minutes + ' хв.' : '',
+                },
+                ingredients: tags,
+                description: description,
+                previewImg: updatedPhotosInfo[0].loadedSrc,
+                img: updatedPhotosInfo[1].loadedSrc,
+                favorites: false,
+                category: categoryValue,
+            }));
+
+        } catch(error) {
+            console.error('Error uploading photos:', error);
         }
     }
 

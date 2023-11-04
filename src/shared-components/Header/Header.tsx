@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import SearchForm from "./SearchForm/SearchForm";
 import { getAuth, signOut } from "firebase/auth";
+import { auth } from '../../firebase/firebase';
 import { createUser } from '../../store/reducers/AuthenticationSlice';
 import { NavLink } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
@@ -12,7 +13,6 @@ const Header = ({isSearch}:{isSearch: boolean}) => {
     const [userAuthToLocalStorage, setUserAuthToLocalStorage] = useState<string | null>(null);
 
     const dispatch = useAppDispatch();
-    const auth = getAuth();
     const savedUser = localStorage.getItem('user');
 
     useEffect(() => {

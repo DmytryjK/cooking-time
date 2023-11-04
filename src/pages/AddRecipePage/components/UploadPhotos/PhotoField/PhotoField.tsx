@@ -20,37 +20,43 @@ const PhotoField = (
     }) => {
 
     const {loadedPhotosInfo, setLoadedPhotosInfo} = useContext(LoadedPhotoContext);
-    const [loadingStatus, setLoadingStatus] = useState<'idle' | 'pending' | 'success' | 'failed'>('idle');
     const [loadedPhotoSrc, setLoadedPhotoSrc] = useState<string>('');
     const [uploadInputValue, setUploadInputValue] = useState<string>('');
-    const [uploadFile, setUploadFile] = useState<uploadFileType | any>({});
-
-    useEffect(() => {
-        if (!uploadFile.name) return;
-        const imageRef = ref(storage, `${uploadFile.name}${id}`);
-        uploadBytes(imageRef, uploadFile)
-            .then((snapshot) => {
-                setLoadingStatus('success');
-                getDownloadURL(snapshot.ref)
-                    .then(ref => {
-                        if (!setLoadedPhotosInfo) return;
-                        setLoadedPhotosInfo((prev) => {
-                            return [...prev, {
-                                    id: id,
-                                    imageRefFromStorage: ref,
-                                }]
-                        })
-                        setLoadedPhotoSrc(ref);
-                    })
-        });
-    }, [uploadFile]);
 
     useEffect(() => {
         if (loadedPhotosInfo.length === 0) {
-            setLoadingStatus('idle');
-            setUploadFile({});
+            setUploadInputValue('');
+            setLoadedPhotoSrc('');
         }
     }, [loadedPhotosInfo]);
+
+    useEffect(() => {
+        if (!loadedPhotosInfo || loadedPhotosInfo.length === 0) return;
+        const foundIndexOfPhoto = loadedPhotosInfo.findIndex(photo => photo.id === id);
+        if (foundIndexOfPhoto === -1) return;
+        setLoadedPhotoSrc(loadedPhotosInfo[foundIndexOfPhoto].localSrc);
+    }, [loadedPhotosInfo]);
+
+    const readFile = (file: uploadFileType) => {
+        return new Promise((resolve, reject) => {
+            var fr = new FileReader();  
+            fr.onload = () => {
+                setLoadedPhotosInfo((prev) => {
+                    return [
+                        ...prev.filter(prevItem => prevItem.id !== id), 
+                        {
+                            id,
+                            localSrc: fr.result?.toString() || '',
+                            loadedSrc: '',
+                            uploadFile: file,
+                        }]
+                })
+            
+            };
+            fr.onerror = reject;
+            fr.readAsDataURL(file as any);
+        });
+    }
 
     const handleUploadPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -61,7 +67,7 @@ const PhotoField = (
                 if (maxSize && currentSizeOfImg > +maxSize) {
                     alert(`Виберіть файл до ${maxSize} кБ`);
                 } else {
-                    setUploadFile(files[0]);
+                    readFile(files[0]);
                 }
             } else {
                 alert('виберіть інший тип файлу для зображення');
@@ -70,32 +76,13 @@ const PhotoField = (
     }
 
     const handleRemovePhoto = () => {
-        const imageRef = ref(storage, loadedPhotoSrc);
-        deleteObject(imageRef)
-            .then(() => {
-                setLoadedPhotoSrc('');
-                setUploadInputValue('');
-                setLoadingStatus('idle');
-                setUploadFile({});
-                if (setLoadedPhotosInfo) {
-                    setLoadedPhotosInfo((prev) => {
-                        return prev.filter(item => item.imageRefFromStorage !== loadedPhotoSrc)
-                    })
-                }
-            }).catch((error) => {
-                alert('something went wrong');
-            });
+        setLoadedPhotosInfo((prev) => {
+            return [
+                ...prev.filter(item => item.id !== id),
+            ]
+        });
+        setLoadedPhotoSrc('');
     };
-
-    let uploadInfo;
-    if (loadingStatus === 'pending') {
-        uploadInfo = 'loading...'
-    }
-    else if (loadingStatus === 'success' && uploadFile) {
-        uploadInfo = uploadFile.name;
-    } else if (loadingStatus === 'failed') {
-        uploadInfo = 'Sorry, try to load another type of image file' 
-    }
 
   return (
     <div className="upload-photo__wrapper">
@@ -106,12 +93,10 @@ const PhotoField = (
                 type="file"
                 onChange={handleUploadPhoto}
                 value={uploadInputValue}
-                disabled = {loadingStatus === 'success' ? true : false}
+                disabled = {loadedPhotoSrc ? true : false}
                 />
             <div className="upload-photo__info">
-                {uploadInfo ? 
-                    loadedPhotoSrc ? <img className="upload-photo__preview" src={loadedPhotoSrc} alt="" /> : '' 
-                : 'Завантажити фото'}
+                {loadedPhotoSrc ? <img className="upload-photo__preview" src={loadedPhotoSrc} alt="" /> : 'Завантажити фото' }
             </div>
             <button 
                 className={`upload-photo__reset-photo ${loadedPhotoSrc ? 'active' : ''} `} 

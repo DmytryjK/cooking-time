@@ -1,14 +1,42 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IngredientsType } from '../../types/type'
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { getDatabase, ref, get } from '@firebase/database';
+import { IngredientsType, Loading } from '../../types/type';
 
 
-type TagsType = {
-    tags: IngredientsType[],
+type initialStateType = {
+    tags: IngredientsType[];
+	categories: string[];
+	loading: Loading;
+	error: unknown;
 }
 
-const initialState: TagsType = {
+const initialState: initialStateType = {
     tags: [],
+	categories: [],
+	loading: 'idle',
+	error: null,
 }
+
+
+export const getCategories = createAsyncThunk(
+	'createRecipeForm/getCategories',
+	async function(_, { rejectWithValue }) {
+		try{
+			const db = getDatabase();
+			const userRef = ref(db, `Categories/`);
+
+			const snapshot = await get(userRef);
+			const categories: string[] = [];
+			if (snapshot.exists()) {
+				categories.push(...snapshot.val());
+			}
+			return categories;
+		} catch (error: unknown) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
 
 export const createRecipeFormSlice = createSlice({
 	name: 'createRecipeForm',
@@ -38,7 +66,21 @@ export const createRecipeFormSlice = createSlice({
 		clearAllTags: (state) => {
 			state.tags = [];
 		},
-	}
+	},
+	extraReducers: (builder) => {
+		builder.addCase(getCategories.pending, (state) => {
+			state.loading = 'pending';
+			state.error = null;
+		})
+		builder.addCase(getCategories.fulfilled, (state, action: PayloadAction<string[]>) => {
+			state.categories = action.payload;
+			state.loading = 'succeeded';
+		})
+		builder.addCase(getCategories.rejected, (state, action: PayloadAction<unknown>) => {
+			state.loading = 'failed';
+			state.error = action.payload;
+		})
+	},
 })
 
 export const { addIngredientTags, deleteIngredientTags, updateIngredientInfoById, clearAllTags } = createRecipeFormSlice.actions;

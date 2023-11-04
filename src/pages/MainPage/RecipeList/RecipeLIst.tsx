@@ -41,7 +41,7 @@ const RecipeList = () => {
             {renderServerData({
                 loading,
                 error,
-                errorText: 'Щось пішло не так, спробуйте ще раз',
+                errorText: `${error}`,
                 content: renderItems,
             })}
         </ul>
