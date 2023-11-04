@@ -49,7 +49,9 @@ export const fetchRecipes = createAsyncThunk(
 			const dbRef = ref(getDatabase());
 			const responseRecipe = await get(child(dbRef, 'dishes'));
 
-			if (!responseRecipe.exists()) throw new Error('Something went wrong');
+			if (!responseRecipe.exists()) {
+				throw new Error('Наразі на сайті немає рецептів.');
+			} 
 
 			const originalData: Recipe[] = await responseRecipe.val();
 			const transformRecepiesToArr: Recipe[]= [];
@@ -77,6 +79,9 @@ export const fetchRecipes = createAsyncThunk(
 				originalFetchedRecepies: originalData
 			};
 		} catch (error: unknown) {
+			if (error instanceof Error) {
+				return rejectWithValue(error.message);
+			}
 			return rejectWithValue(error);
 		}
 	}
@@ -102,7 +107,6 @@ export const postRecipe = createAsyncThunk(
 	'recepiesList/postRecipe',
 	async function(newRecepie: Recipe, { rejectWithValue }) {
 		try{
-			console.log(newRecepie);
 			const db = getDatabase();
 			const newPostKey = push(child(ref(db), 'dishes')).key;
 			const postData = {...newRecepie, id: newPostKey};
@@ -159,16 +163,13 @@ export const recepieListSlice = createSlice({
 				return recipe;
 			})];
 			state.recipes = [...state.recipes];
-
-			// state.recipes = [...state.recipes.map(recipe => {
-			// 	recipe.id === recipeId ? recipe.favorites = isFavorite : recipe.favorites = recipe.favorites;
-			// 	return recipe;
-			// })];
-			// state.filteredRecipes = [...state.recipes];
+		},
+		resetLoadingForm: (state) => {
+			state.loadingForm = 'idle';
 		},
 		filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
 			const {searchInput, searchTags, searchCategories} = action.payload;
-			console.log(searchCategories);
+
 			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
 			if (!searchInput) {
 				state.searchedNameOfDishes = '';
@@ -261,6 +262,13 @@ export const recepieListSlice = createSlice({
 	},
 })
 
-export const { addNewRecipe, setFavoriteRecipes, setCurrentRecipes, filterRecipes, setCurrentFilteredRecipes } = recepieListSlice.actions;
+export const { 
+	addNewRecipe, 
+	setFavoriteRecipes, 
+	setCurrentRecipes, 
+	filterRecipes, 
+	setCurrentFilteredRecipes, 
+	resetLoadingForm 
+} = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;
