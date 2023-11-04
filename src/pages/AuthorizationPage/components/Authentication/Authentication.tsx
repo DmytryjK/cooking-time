@@ -1,9 +1,15 @@
-import {FC} from 'react';
-import { useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useState, useEffect, useRef } from 'react';
-import { createUser } from "../../../../store/reducers/AuthenticationSlice";
-import { useAppDispatch } from "../../../../hooks/hooks";
+import { FC, useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+} from 'firebase/auth';
+
+import { createUser } from '../../../../store/reducers/AuthenticationSlice';
+import { useAppDispatch } from '../../../../hooks/hooks';
 import AuthLogin from './AuthLogin/AuthLogin';
 import AuthRegister from './AuthRegister/AuthRegister';
 import './Authentication.scss';
@@ -13,9 +19,9 @@ type AuthorizationPageProps = {
     login?: boolean;
 };
 
-const Authentication: FC<AuthorizationPageProps> = ({register, login}) => {
+const Authentication: FC<AuthorizationPageProps> = ({ register, login }) => {
     const navigate = useNavigate();
-    
+
     const [inputMail, setInputMail] = useState<string>('sdfasdfgs');
     const [inputPass, setInputPass] = useState<string>('');
     const loginByEmailPassInput = useRef<HTMLInputElement>(null);
@@ -25,7 +31,7 @@ const Authentication: FC<AuthorizationPageProps> = ({register, login}) => {
     const provider = new GoogleAuthProvider();
 
     useEffect(() => {
-        if (localStorage.getItem('user')) navigate("/");
+        if (localStorage.getItem('user')) navigate('/');
     }, []);
 
     useEffect(() => {
@@ -43,102 +49,100 @@ const Authentication: FC<AuthorizationPageProps> = ({register, login}) => {
             setInputMail('');
             setInputPass('');
         });
-      
+
         return () => {
-          unsubscribe(); // Отписываемся от слушателя при размонтировании компонента
+            unsubscribe(); // Отписываемся от слушателя при размонтировании компонента
         };
     }, []);
 
     const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         createUserWithEmailAndPassword(auth, inputMail, inputPass)
-            .then(({user}) => {
+            .then(({ user }) => {
                 navigate('/');
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
             });
-    }
+    };
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+
         signInWithEmailAndPassword(auth, inputMail, inputPass)
-            .then(({user}) => {
+            .then(({ user }) => {
                 navigate('/');
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
             });
-    }
+    };
 
     const authWithGoogle = () => {
         signInWithPopup(auth, provider)
             .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const credential =
+                    GoogleAuthProvider.credentialFromResult(result);
                 const token = credential?.accessToken;
-                const user = result.user;
+                const { user } = result;
                 navigate('/');
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                const email = error.customData.email;
-                const credential = GoogleAuthProvider.credentialFromError(error);
+                const { email } = error.customData;
+                const credential =
+                    GoogleAuthProvider.credentialFromError(error);
             });
     };
 
     const handleMailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputMail(e.currentTarget.value);
-    }
+    };
 
     const handlePassChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputPass(e.currentTarget.value);
-    }
+    };
 
     const handleHidePass = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (loginByEmailPassInput.current) {
-            loginByEmailPassInput.current.type === 'password' ? loginByEmailPassInput.current.type = 'text' : loginByEmailPassInput.current.type = 'password';
-        } 
-    }
-
-    const ChoiceAuthWindow = () => {
-        return (
-            <>
-                <AuthLogin 
-                    isOpen={login || false}
-                    handleLogin={handleLogin}
-                    handleMailChange={handleMailChange}
-                    handlePassChange={handlePassChange}
-                    handleHidePass={handleHidePass}
-                    inputMail={inputMail}
-                    inputPass={inputPass}
-                    loginByEmailPassInput={loginByEmailPassInput}
-                    authWithGoogle={authWithGoogle}
-                />
-                <AuthRegister 
-                    isOpen={register || false}
-                    handleCreateUser={handleCreateUser}
-                    handleMailChange={handleMailChange}
-                    handlePassChange={handlePassChange}
-                    handleHidePass={handleHidePass}
-                    inputMail={inputMail}
-                    inputPass={inputPass}
-                    loginByEmailPassInput={loginByEmailPassInput}
-                    authWithGoogle={authWithGoogle}
-                />
-            </>
-        )
-    }
+            if (loginByEmailPassInput.current.type === 'password') {
+                loginByEmailPassInput.current.type = 'text';
+            } else {
+                loginByEmailPassInput.current.type = 'password';
+            }
+        }
+    };
 
     return (
         <div className="authentication__wrapper">
-            {ChoiceAuthWindow()}
+            <AuthLogin
+                isOpen={login || false}
+                handleLogin={handleLogin}
+                handleMailChange={handleMailChange}
+                handlePassChange={handlePassChange}
+                handleHidePass={handleHidePass}
+                inputMail={inputMail}
+                inputPass={inputPass}
+                loginByEmailPassInput={loginByEmailPassInput}
+                authWithGoogle={authWithGoogle}
+            />
+            <AuthRegister
+                isOpen={register || false}
+                handleCreateUser={handleCreateUser}
+                handleMailChange={handleMailChange}
+                handlePassChange={handlePassChange}
+                handleHidePass={handleHidePass}
+                inputMail={inputMail}
+                inputPass={inputPass}
+                loginByEmailPassInput={loginByEmailPassInput}
+                authWithGoogle={authWithGoogle}
+            />
         </div>
-    )
-}
+    );
+};
 
 export default Authentication;

@@ -1,125 +1,145 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, child, get, push, update } from "firebase/database";
+import { getDatabase, ref, child, get, push, update } from 'firebase/database';
 
-import type { Recipes, Recipe, tagsType } from '../../types/type';
+import type { Recipes, Recipe, TagsType } from '../../types/type';
 
 type PayloadActionFilter = {
-	searchInput: string;
-	searchTags: tagsType[];
-	searchCategories: string[];
-}
-
-type initialStateRecipes = {
-	recipes: Recipe[];
-	filteredRecipes: Recipe[];
-	recipe: Recipe | null;
-	loadingRecipe: 'idle' | 'pending' | 'succeeded' | 'failed';
-	loadingRecipes: 'idle' | 'pending' | 'succeeded' | 'failed';
-	loadingForm: 'idle' | 'pending' | 'succeeded' | 'failed';
-	error: null | unknown;
-	searchedNameOfDishes: string;
-}
-
-const initialState: initialStateRecipes = {
-	recipes: [],
-	filteredRecipes: [],
-	recipe: null,
-	loadingRecipe: 'idle',
-	loadingRecipes: 'idle',
-	loadingForm: 'idle',
-	error: null,
-	searchedNameOfDishes: '',
-}
-
-type isFavoritePayload = {
-	recipeId: string|number|null;
-	isFavorite: boolean;
+    searchInput: string;
+    searchTags: TagsType[];
+    searchCategories: string[];
 };
 
-const filterByIngredients = (recipe: Recipe, searchTags: tagsType[]) => {
-	return searchTags.every(tag => {
-		return recipe.ingredients?.some(ingredient => ingredient.tagText.toUpperCase() === tag.tagText.toUpperCase())
-	})
-}
+type InitialStateRecipes = {
+    recipes: Recipe[];
+    filteredRecipes: Recipe[];
+    recipe: Recipe | null;
+    loadingRecipe: 'idle' | 'pending' | 'succeeded' | 'failed';
+    loadingRecipes: 'idle' | 'pending' | 'succeeded' | 'failed';
+    loadingForm: 'idle' | 'pending' | 'succeeded' | 'failed';
+    error: null | unknown;
+    searchedNameOfDishes: string;
+};
+
+type IsFavoritePayload = {
+    recipeId: string | number | null;
+    isFavorite: boolean;
+};
+
+const initialState: InitialStateRecipes = {
+    recipes: [],
+    filteredRecipes: [],
+    recipe: null,
+    loadingRecipe: 'idle',
+    loadingRecipes: 'idle',
+    loadingForm: 'idle',
+    error: null,
+    searchedNameOfDishes: '',
+};
+
+const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
+    return searchTags.every((tag) => {
+        return recipe.ingredients?.some(
+            (ingredient) =>
+                ingredient.tagText.toUpperCase() === tag.tagText.toUpperCase()
+        );
+    });
+};
 
 export const fetchRecipes = createAsyncThunk(
-	'allRecipes/fetchRecipes',
-	async function(uid:string, { rejectWithValue }) {
-		try {
-			const dbRef = ref(getDatabase());
-			const responseRecipe = await get(child(dbRef, 'dishes'));
+    'allRecipes/fetchRecipes',
+    async function (uid: string, { rejectWithValue }) {
+        try {
+            const dbRef = ref(getDatabase());
+            const responseRecipe = await get(child(dbRef, 'dishes'));
 
-			if (!responseRecipe.exists()) {
-				throw new Error('Наразі на сайті немає рецептів.');
-			} 
+            if (!responseRecipe.exists()) {
+                throw new Error('Наразі на сайті немає рецептів.');
+            }
 
-			const originalData: Recipe[] = await responseRecipe.val();
-			const transformRecepiesToArr: Recipe[]= [];
+            const originalData: Recipe[] = await responseRecipe.val();
+            const transformRecepiesToArr: Recipe[] = [];
 
-			const responseFavoritesId = await get(child(dbRef, `favorites/${uid}`));
-			const favoriteId:string[] = await responseFavoritesId.val();
+            const responseFavoritesId = await get(
+                child(dbRef, `favorites/${uid}`)
+            );
+            const favoriteId: string[] = await responseFavoritesId.val();
 
-			if (favoriteId) {
-				for (const key in originalData) {
-					originalData[key].favorites = false;
-					favoriteId.forEach(favoriteId => {
-						if (originalData[key].id === favoriteId) {
-							originalData[key].favorites = true;
-						} 
-					})
-				}
-			}
+            // if (favoriteId) {
+            //     for (const key in originalData) {
+            //         originalData[key].favorites = false;
+            //         favoriteId.forEach((favoriteId) => {
+            //             if (originalData[key].id === favoriteId) {
+            //                 originalData[key].favorites = true;
+            //             }
+            //         });
+            //     }
+            // }
 
-			for (const key in originalData) {
-				transformRecepiesToArr.push(originalData[key]);
-			}
+            // for (const key in originalData) {
+            //     transformRecepiesToArr.push(originalData[key]);
+            // }
 
-			return { 
-				recipes: transformRecepiesToArr,
-				originalFetchedRecepies: originalData
-			};
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				return rejectWithValue(error.message);
-			}
-			return rejectWithValue(error);
-		}
-	}
-)
+            if (favoriteId) {
+                Object.entries(originalData).forEach((item) => {
+                    item[1].favorites = false;
+                    favoriteId.forEach((favoriteId) => {
+                        if (item[1].id === favoriteId) {
+                            item[1].favorites = true;
+                        }
+                    });
+                });
+            }
+
+            Object.entries(originalData).forEach((item) => {
+                transformRecepiesToArr.push(item[1]);
+            });
+
+            return {
+                recipes: transformRecepiesToArr,
+                originalFetchedRecepies: originalData,
+            };
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return rejectWithValue(error.message);
+            }
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const fetchRecipe = createAsyncThunk(
-	'recepiesList/fetchRecipe',
-	async function(id: number | string | undefined, { rejectWithValue }) {
-		try {
-			const dbRef = ref(getDatabase());
-			const response = await get(child(dbRef, 'dishes/' + id));
-			
-			if (!response.exists()) throw new Error('Something went wrong');
-			const data: Recipe = await response.val();
-			return data;
-		} catch (error: unknown) {
-			return rejectWithValue(error);
-		}
-	}
-)
+    'recepiesList/fetchRecipe',
+    async function (id: number | string | undefined, { rejectWithValue }) {
+        try {
+            const dbRef = ref(getDatabase());
+            const response = await get(child(dbRef, `dishes/${id}`));
+
+            if (!response.exists()) throw new Error('Something went wrong');
+            const data: Recipe = await response.val();
+            return data;
+        } catch (error: unknown) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const postRecipe = createAsyncThunk(
-	'recepiesList/postRecipe',
-	async function(newRecepie: Recipe, { rejectWithValue }) {
-		try{
-			const db = getDatabase();
-			const newPostKey = push(child(ref(db), 'dishes')).key;
-			const postData = {...newRecepie, id: newPostKey};
+    'recepiesList/postRecipe',
+    async function (newRecepie: Recipe, { rejectWithValue }) {
+        try {
+            const db = getDatabase();
+            const newPostKey = push(child(ref(db), 'dishes')).key;
+            const postData = { ...newRecepie, id: newPostKey };
 
-			const updates: any = {};
-			updates['/dishes/' + newPostKey] = postData;
+            const updates: any = {};
+            updates[`/dishes/${newPostKey}`] = postData;
 
-			update(ref(db), updates);
-			return postData;
-		} catch (error: unknown) {
-			return rejectWithValue(error);
-		}
-	}
+            update(ref(db), updates);
+            return postData;
+        } catch (error: unknown) {
+            return rejectWithValue(error);
+        }
+    }
 );
 
 // export const updateRecipeInfo = createAsyncThunk(
@@ -144,131 +164,190 @@ export const postRecipe = createAsyncThunk(
 // );
 
 export const recepieListSlice = createSlice({
-	name: 'recepiesList',
-	initialState,
-	reducers: {
-		setCurrentRecipes: (state, action: PayloadAction<Recipe[]>) => {
-			state.recipes = action.payload;
-		},
-		setCurrentFilteredRecipes: (state, action: PayloadAction<Recipe[]>) => {
-			state.filteredRecipes = action.payload;
-		},
-		addNewRecipe: (state, action: PayloadAction<Recipe>) => {
-			state.recipes.push(action.payload);
-		},
-		setFavoriteRecipes: (state, action: PayloadAction<isFavoritePayload>) => {
-			const { recipeId, isFavorite } = action.payload;
-			state.filteredRecipes = [...state.filteredRecipes.map(recipe => {
-				recipe.id === recipeId ? recipe.favorites = isFavorite : recipe.favorites = recipe.favorites;
-				return recipe;
-			})];
-			state.recipes = [...state.recipes];
-		},
-		resetLoadingForm: (state) => {
-			state.loadingForm = 'idle';
-		},
-		filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
-			const {searchInput, searchTags, searchCategories} = action.payload;
+    name: 'recepiesList',
+    initialState,
+    reducers: {
+        setCurrentRecipes: (state, action: PayloadAction<Recipe[]>) => {
+            state.recipes = action.payload;
+        },
+        setCurrentFilteredRecipes: (state, action: PayloadAction<Recipe[]>) => {
+            state.filteredRecipes = action.payload;
+        },
+        addNewRecipe: (state, action: PayloadAction<Recipe>) => {
+            state.recipes.push(action.payload);
+        },
+        setFavoriteRecipes: (
+            state,
+            action: PayloadAction<IsFavoritePayload>
+        ) => {
+            const { recipeId, isFavorite } = action.payload;
+            state.filteredRecipes = [
+                ...state.filteredRecipes.map((recipe) => {
+                    if (recipe.id === recipeId) {
+                        recipe.favorites = isFavorite;
+                    }
+                    return recipe;
+                }),
+            ];
+            state.recipes = [...state.recipes];
+        },
+        resetLoadingForm: (state) => {
+            state.loadingForm = 'idle';
+        },
+        filterRecipes: (state, action: PayloadAction<PayloadActionFilter>) => {
+            const { searchInput, searchTags, searchCategories } =
+                action.payload;
 
-			state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
-			if (!searchInput) {
-				state.searchedNameOfDishes = '';
-			}
-			if (!searchInput && searchTags.length === 0 && searchCategories.length === 0) return;
-			if (searchInput) {
-				state.searchedNameOfDishes = searchInput;
-			}
-			if (searchInput && searchTags.length > 0 && searchCategories.length > 0) {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
-					.filter(recipe => {
-						return filterByIngredients(recipe, searchTags);
-					})
-					.filter(recipe => searchCategories.includes(recipe.category) === true);
-				return;
-			} else if (searchInput && searchTags.length > 0) {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
-					.filter(recipe => {
-						return filterByIngredients(recipe, searchTags);
-					})
-					return;
-			} else if (searchInput && searchCategories.length > 0) {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1)
-					.filter(recipe => searchCategories.includes(recipe.category) === true);
-					return;
-			} else if (searchTags.length > 0 && searchCategories.length > 0) {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => {
-						return filterByIngredients(recipe, searchTags);
-					})
-					.filter(recipe => searchCategories.includes(recipe.category) === true);
-					return;
-			} else if (searchInput) {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => recipe.title.toLowerCase().indexOf(searchInput.toLowerCase()) > -1);
-					return;
-			} else if (searchTags.length > 0) {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => {
-						return filterByIngredients(recipe, searchTags);
-					});
-					return;
-			} else {
-				state.filteredRecipes = state.filteredRecipes
-					.filter(recipe => searchCategories.includes(recipe.category) === true);
-					return;
-			}
-		},
-	},
-	extraReducers: (builder) => {
-		builder.addCase(fetchRecipe.pending, (state) => {
-			state.loadingRecipe = 'pending';
-			state.error = null;
-		})
-		builder.addCase(fetchRecipe.fulfilled, (state, action: PayloadAction<Recipe>) => {
-			state.loadingRecipe = 'succeeded';
-			state.recipe = action.payload;
-		})
-		builder.addCase(fetchRecipe.rejected, (state, action: PayloadAction<unknown>) => {
-			state.loadingRecipe = 'failed';
-			state.error = action.payload;
-		})
-		builder.addCase(postRecipe.pending, (state) => {
-			state.loadingForm = 'pending';
-			state.error = null;
-		})
-		builder.addCase(postRecipe.fulfilled, (state, action: PayloadAction<Recipe>) => {
-			state.loadingForm = 'succeeded';
-			state.recipes = [...state.recipes, action.payload];
-		})
-		builder.addCase(postRecipe.rejected, (state, action: PayloadAction<unknown>) => {
-			state.loadingForm = 'failed';
-			state.error = action.payload;
-		})
-		builder.addCase(fetchRecipes.pending, (state) => {
-			state.loadingRecipes = 'pending';
-			state.error = null;
-		})
-		builder.addCase(fetchRecipes.fulfilled, (state, action: PayloadAction<Recipes>) => {
-			state.loadingRecipes = 'succeeded';
-			state.recipes = action.payload.recipes;
-		})
-		builder.addCase(fetchRecipes.rejected, (state, action: PayloadAction<unknown>) => {
-			state.loadingRecipes = 'failed';
-			state.error = action.payload;
-		})
-	},
-})
+            state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
+            if (!searchInput) {
+                state.searchedNameOfDishes = '';
+            }
+            if (
+                !searchInput &&
+                searchTags.length === 0 &&
+                searchCategories.length === 0
+            )
+                return;
+            if (searchInput) {
+                state.searchedNameOfDishes = searchInput;
+            }
+            if (
+                searchInput &&
+                searchTags.length > 0 &&
+                searchCategories.length > 0
+            ) {
+                state.filteredRecipes = state.filteredRecipes
+                    .filter(
+                        (recipe) =>
+                            recipe.title
+                                .toLowerCase()
+                                .indexOf(searchInput.toLowerCase()) > -1
+                    )
+                    .filter((recipe) => {
+                        return filterByIngredients(recipe, searchTags);
+                    })
+                    .filter(
+                        (recipe) =>
+                            searchCategories.includes(recipe.category) === true
+                    );
+            } else if (searchInput && searchTags.length > 0) {
+                state.filteredRecipes = state.filteredRecipes
+                    .filter(
+                        (recipe) =>
+                            recipe.title
+                                .toLowerCase()
+                                .indexOf(searchInput.toLowerCase()) > -1
+                    )
+                    .filter((recipe) => {
+                        return filterByIngredients(recipe, searchTags);
+                    });
+            } else if (searchInput && searchCategories.length > 0) {
+                state.filteredRecipes = state.filteredRecipes
+                    .filter(
+                        (recipe) =>
+                            recipe.title
+                                .toLowerCase()
+                                .indexOf(searchInput.toLowerCase()) > -1
+                    )
+                    .filter(
+                        (recipe) =>
+                            searchCategories.includes(recipe.category) === true
+                    );
+            } else if (searchTags.length > 0 && searchCategories.length > 0) {
+                state.filteredRecipes = state.filteredRecipes
+                    .filter((recipe) => {
+                        return filterByIngredients(recipe, searchTags);
+                    })
+                    .filter(
+                        (recipe) =>
+                            searchCategories.includes(recipe.category) === true
+                    );
+            } else if (searchInput) {
+                state.filteredRecipes = state.filteredRecipes.filter(
+                    (recipe) =>
+                        recipe.title
+                            .toLowerCase()
+                            .indexOf(searchInput.toLowerCase()) > -1
+                );
+            } else if (searchTags.length > 0) {
+                state.filteredRecipes = state.filteredRecipes.filter(
+                    (recipe) => {
+                        return filterByIngredients(recipe, searchTags);
+                    }
+                );
+            } else {
+                state.filteredRecipes = state.filteredRecipes.filter(
+                    (recipe) =>
+                        searchCategories.includes(recipe.category) === true
+                );
+            }
+        },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchRecipe.pending, (state) => {
+            state.loadingRecipe = 'pending';
+            state.error = null;
+        });
+        builder.addCase(
+            fetchRecipe.fulfilled,
+            (state, action: PayloadAction<Recipe>) => {
+                state.loadingRecipe = 'succeeded';
+                state.recipe = action.payload;
+            }
+        );
+        builder.addCase(
+            fetchRecipe.rejected,
+            (state, action: PayloadAction<unknown>) => {
+                state.loadingRecipe = 'failed';
+                state.error = action.payload;
+            }
+        );
+        builder.addCase(postRecipe.pending, (state) => {
+            state.loadingForm = 'pending';
+            state.error = null;
+        });
+        builder.addCase(
+            postRecipe.fulfilled,
+            (state, action: PayloadAction<Recipe>) => {
+                state.loadingForm = 'succeeded';
+                state.recipes = [...state.recipes, action.payload];
+            }
+        );
+        builder.addCase(
+            postRecipe.rejected,
+            (state, action: PayloadAction<unknown>) => {
+                state.loadingForm = 'failed';
+                state.error = action.payload;
+            }
+        );
+        builder.addCase(fetchRecipes.pending, (state) => {
+            state.loadingRecipes = 'pending';
+            state.error = null;
+        });
+        builder.addCase(
+            fetchRecipes.fulfilled,
+            (state, action: PayloadAction<Recipes>) => {
+                state.loadingRecipes = 'succeeded';
+                state.recipes = action.payload.recipes;
+            }
+        );
+        builder.addCase(
+            fetchRecipes.rejected,
+            (state, action: PayloadAction<unknown>) => {
+                state.loadingRecipes = 'failed';
+                state.error = action.payload;
+            }
+        );
+    },
+});
 
-export const { 
-	addNewRecipe, 
-	setFavoriteRecipes, 
-	setCurrentRecipes, 
-	filterRecipes, 
-	setCurrentFilteredRecipes, 
-	resetLoadingForm 
+export const {
+    addNewRecipe,
+    setFavoriteRecipes,
+    setCurrentRecipes,
+    filterRecipes,
+    setCurrentFilteredRecipes,
+    resetLoadingForm,
 } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;
