@@ -142,26 +142,25 @@ export const postRecipe = createAsyncThunk(
     }
 );
 
-// export const updateRecipeInfo = createAsyncThunk(
-// 	'recepiesList/updateRecipeInfo',
-// 	async function(recipeInfo: Recepie, { rejectWithValue }) {
-// 		try{
-// 			const db = getDatabase();
-// 			const recipeId = recipeInfo.id;
+export const updateRecipe = createAsyncThunk(
+    'recepiesList/updateRecipe',
+    async function (recipeInfo: Recipe, { rejectWithValue }) {
+        try {
+            const db = getDatabase();
+            const recipeId = recipeInfo.id;
 
-// 			const updates: any = {};
-// 			updates[`dishes/${recipeId}`] = {...recipeInfo};
+            const updates: any = {};
+            updates[`/dishes/${recipeId}`] = { ...recipeInfo };
 
-// 			update(ref(db), updates)
-// 				.then(() => {
-// 					console.log('Поле рецепта успешно обновлено');
-// 				});
-
-// 		} catch (error: unknown) {
-// 			return rejectWithValue(error);
-// 		}
-// 	}
-// );
+            update(ref(db), updates).catch((error: unknown) => {
+                alert('Щось пішло не так, спробуйте ще раз');
+            });
+            return recipeInfo;
+        } catch (error: unknown) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const recepieListSlice = createSlice({
     name: 'recepiesList',
@@ -282,6 +281,11 @@ export const recepieListSlice = createSlice({
                 );
             }
         },
+        resetRecipes: (state) => {
+            state.recipes = [];
+            state.filteredRecipes = [];
+            state.recipe = null;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchRecipe.pending, (state) => {
@@ -320,6 +324,24 @@ export const recepieListSlice = createSlice({
                 state.error = action.payload;
             }
         );
+        builder.addCase(updateRecipe.pending, (state) => {
+            state.loadingForm = 'pending';
+            state.error = null;
+        });
+        builder.addCase(
+            updateRecipe.fulfilled,
+            (state, action: PayloadAction<Recipe>) => {
+                state.loadingForm = 'succeeded';
+                state.recipes = [...state.recipes, action.payload];
+            }
+        );
+        builder.addCase(
+            updateRecipe.rejected,
+            (state, action: PayloadAction<unknown>) => {
+                state.loadingForm = 'failed';
+                state.error = action.payload;
+            }
+        );
         builder.addCase(fetchRecipes.pending, (state) => {
             state.loadingRecipes = 'pending';
             state.error = null;
@@ -348,6 +370,7 @@ export const {
     filterRecipes,
     setCurrentFilteredRecipes,
     resetLoadingForm,
+    resetRecipes,
 } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;

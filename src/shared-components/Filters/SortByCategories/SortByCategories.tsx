@@ -40,19 +40,6 @@ const SortByCategories = () => {
         return () => document.removeEventListener('click', closeSelect);
     }, [isSelectActive]);
 
-    // useEffect(() => {
-    //     if (!isFilterActive) return;
-    //     dispatch(activeCategories(selectedCategories));
-    // }, [isFilterActive]);
-
-    // useEffect(() => {
-    //     setIsFilterActive(false);
-    // }, [selectedCategories]);
-
-    // useEffect(() => {
-    //     console.log(selectedCategories);
-    // }, [selectedCategories]);
-
     useEffect(() => {
         dispatch(filterRecipes({ searchInput, searchTags, searchCategories }));
     }, [searchCategories]);

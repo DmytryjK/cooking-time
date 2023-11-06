@@ -17,16 +17,10 @@ const RecipeListItem = ({
     recipe: Recipe;
     addToFavorite: HandleAddToFavorite;
 }) => {
-    const {
-        ingredients,
-        id,
-        title,
-        time,
-        img,
-        previewImg,
-        favorites,
-        category,
-    } = recipe;
+    const { ingredients, id, title, time, imgDto, favorites, category } =
+        recipe;
+
+    const previewImg = imgDto.find((img) => img.id === 'previewImg');
     const timerClass = time
         ? 'recipe-card__timer active'
         : 'recipe-card__timer';
@@ -49,7 +43,7 @@ const RecipeListItem = ({
                         className="recipe-card__image"
                         width={290}
                         height={290}
-                        src={previewImg}
+                        src={previewImg?.src || ''}
                         alt={title}
                     />
                 </div>
@@ -63,9 +57,10 @@ const RecipeListItem = ({
                         {time.hours === '' && time.minutes === '' ? (
                             ''
                         ) : (
-                            <span
-                                className={timerClass}
-                            >{`${time.hours} ${time.minutes}`}</span>
+                            <span className={timerClass}>
+                                {time.hours ? `${time.hours} год.` : ''}{' '}
+                                {time.minutes ? `${time.minutes} хв.` : ''}
+                            </span>
                         )}
                         <ul className="recipe-card__product-tags product-tags">
                             {renderedTags || null}

@@ -22,13 +22,13 @@ const PhotoField = ({
 }) => {
     const { loadedPhotosInfo, setLoadedPhotosInfo } =
         useContext(LoadedPhotoContext);
-    const [loadedPhotoSrc, setLoadedPhotoSrc] = useState<string>('');
+    const [loadedPhotoSrc, setLocalPhotoSrc] = useState<string>('');
     const [uploadInputValue, setUploadInputValue] = useState<string>('');
 
     useEffect(() => {
         if (loadedPhotosInfo.length === 0) {
             setUploadInputValue('');
-            setLoadedPhotoSrc('');
+            setLocalPhotoSrc('');
         }
     }, [loadedPhotosInfo]);
 
@@ -38,7 +38,7 @@ const PhotoField = ({
             (photo) => photo.id === id
         );
         if (foundIndexOfPhoto === -1) return;
-        setLoadedPhotoSrc(loadedPhotosInfo[foundIndexOfPhoto].localSrc);
+        setLocalPhotoSrc(loadedPhotosInfo[foundIndexOfPhoto].localSrc);
     }, [loadedPhotosInfo]);
 
     const readFile = (file: UploadFileType) => {
@@ -53,6 +53,9 @@ const PhotoField = ({
                             localSrc: fr.result?.toString() || '',
                             loadedSrc: '',
                             uploadFile: file,
+                            srcForRemove:
+                                prev.find((item) => item.id === id)
+                                    ?.srcForRemove || '',
                         },
                     ];
                 });
@@ -80,10 +83,35 @@ const PhotoField = ({
     };
 
     const handleRemovePhoto = () => {
+        // const promises = loadedPhotosInfo.map((photo) => {
+        //     let result;
+        //     if (photo.id === id && photo.loadedSrc) {
+        //         const imageRef = ref(storage, `recipes/${photo.loadedSrc}`);
+        //         result = deleteObject(imageRef).catch((error) => {
+        //             alert('something went wrong');
+        //             return Promise.reject();
+        //         });
+        //     } else {
+        //         result = Promise.resolve();
+        //     }
+        //     return result;
+        // });
+
         setLoadedPhotosInfo((prev) => {
-            return [...prev.filter((item) => item.id !== id)];
+            return [
+                ...prev.map((item) => {
+                    if (item.id === id) {
+                        return {
+                            ...item,
+                            localSrc: '',
+                            srcForRemove: item.loadedSrc,
+                        };
+                    }
+                    return item;
+                }),
+            ];
         });
-        setLoadedPhotoSrc('');
+        setLocalPhotoSrc('');
     };
 
     return (

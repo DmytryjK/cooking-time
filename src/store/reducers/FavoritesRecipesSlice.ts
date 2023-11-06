@@ -146,6 +146,9 @@ export const favoriteRecipesSlice = createSlice({
         ) => {
             state.currentFavoriteId = action.payload;
         },
+        resetFavoriteRecipes: (state) => {
+            state.favoriteRecipes = [];
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchFavoritesRecipe.pending, (state) => {
@@ -188,5 +191,6 @@ export const favoriteRecipesSlice = createSlice({
         );
     },
 });
-export const { setCurrentFavoriteId } = favoriteRecipesSlice.actions;
+export const { setCurrentFavoriteId, resetFavoriteRecipes } =
+    favoriteRecipesSlice.actions;
 export default favoriteRecipesSlice.reducer;

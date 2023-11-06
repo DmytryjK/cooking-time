@@ -47,7 +47,6 @@ const SearchForm = () => {
     }, [pathname]);
 
     const handleSearchClick = (value: string) => {
-        console.log(value);
         dispatch(searchInputValue(value));
     };
 

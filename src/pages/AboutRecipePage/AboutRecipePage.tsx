@@ -85,8 +85,9 @@ const AboutRecipePage = () => {
 
     const renderedInfo = () => {
         if (!recipe) return '';
-        const { title, ingredients, img, description, category, id, time } =
+        const { title, ingredients, imgDto, description, category, id, time } =
             recipe;
+        const mainImg = imgDto.find((img) => img.id === 'main');
         const parsedDescr = parse(description || '');
         return (
             <>
@@ -124,7 +125,7 @@ const AboutRecipePage = () => {
                     <div className="recipe-page__photo-wrapper">
                         <img
                             className="recipe-page__photo"
-                            src={img}
+                            src={mainImg?.src || ''}
                             alt="фото"
                         />
                     </div>
@@ -143,7 +144,10 @@ const AboutRecipePage = () => {
                                         alt="час"
                                     />
                                     <span className="recipe-page__time-text">
-                                        {time.hours} {time.minutes}
+                                        {time.hours ? `${time.hours} год.` : ''}{' '}
+                                        {time.minutes
+                                            ? `${time.minutes} хв.`
+                                            : ''}
                                     </span>
                                 </div>
                             </div>
