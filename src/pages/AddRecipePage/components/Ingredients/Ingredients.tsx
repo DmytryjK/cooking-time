@@ -1,7 +1,6 @@
 import {
     useState,
     useEffect,
-    useContext,
     createContext,
     Dispatch,
     SetStateAction,
@@ -9,7 +8,12 @@ import {
 } from 'react';
 import nextId from 'react-id-generator';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
-import { addIngredientTags } from '../../../../store/reducers/CreateRecipeFormSlice';
+import {
+    addIngredientTags,
+    setAllIngredients,
+    clearAllTags,
+} from '../../../../store/reducers/CreateRecipeFormSlice';
+import { IngredientsType } from '../../../../types/type';
 import Ingredient from './Ingredient/Ingredient';
 
 type SelectUnitsType = {
@@ -27,7 +31,11 @@ export const SelectUnitContext = createContext<SelectUnitsContextType>({
     setSelectedUnits: null,
 });
 
-const Ingredients = () => {
+const Ingredients = ({
+    localingredients,
+}: {
+    localingredients: IngredientsType[] | undefined;
+}) => {
     const [tagName, setTagName] = useState<string>('');
     const [selectedUnits, setSelectedUnits] = useState<SelectUnitsType>({
         id: '',
@@ -39,6 +47,14 @@ const Ingredients = () => {
         () => ({ selectedUnits, setSelectedUnits }),
         [selectedUnits, setSelectedUnits]
     );
+
+    useEffect(() => {
+        if (localingredients) {
+            dispatch(setAllIngredients(localingredients));
+        } else {
+            dispatch(clearAllTags());
+        }
+    }, [localingredients]);
 
     const changeTagsStatesOnEvent = () => {
         if (tagName.length === 0) return;

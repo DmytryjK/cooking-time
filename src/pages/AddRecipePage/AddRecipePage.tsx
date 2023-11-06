@@ -14,7 +14,7 @@ const AddRecipePage = () => {
                         Заповніть поля нижче, додайте опис та завантажте фото
                         рецепту
                     </p>
-                    <AddingRecipesForm />
+                    <AddingRecipesForm id="" method="POST" />
                 </div>
             </main>
             <Footer />

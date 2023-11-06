@@ -5,13 +5,16 @@ export type IngredientsType = {
     tagUnit: string;
 };
 
+type ImgDto = {
+    id: string;
+    src: string;
+};
 export interface Recipe {
     id: string | number | null;
     title: string;
     time: { hours: string; minutes: string };
     ingredients?: IngredientsType[];
-    img: string;
-    previewImg: string;
+    imgDto: ImgDto[];
     description?: string;
     favorites: boolean;
     category: string;

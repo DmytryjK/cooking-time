@@ -69,6 +69,12 @@ export const createRecipeFormSlice = createSlice({
         clearAllTags: (state) => {
             state.tags = [];
         },
+        setAllIngredients: (
+            state,
+            action: PayloadAction<IngredientsType[]>
+        ) => {
+            state.tags = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getCategories.pending, (state) => {
@@ -97,6 +103,7 @@ export const {
     deleteIngredientTags,
     updateIngredientInfoById,
     clearAllTags,
+    setAllIngredients,
 } = createRecipeFormSlice.actions;
 
 export default createRecipeFormSlice.reducer;

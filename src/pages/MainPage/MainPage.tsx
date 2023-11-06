@@ -17,7 +17,7 @@ const MainPage = () => {
 
     useEffect(() => {
         dispatch(fetchRecipes(localUserParsedId));
-    }, [dispatch]);
+    }, []);
 
     return (
         <>

@@ -9,12 +9,14 @@ import nextId from 'react-id-generator';
 import './CustomSelect.scss';
 
 const CustomSelect = ({
+    value,
     setValue,
     fieldValues,
     selectTitle,
     isShowCurrentOption,
     initialCheckedValue,
 }: {
+    value?: string;
     setValue: Dispatch<SetStateAction<string>>;
     fieldValues: string[];
     selectTitle: string;
@@ -23,6 +25,13 @@ const CustomSelect = ({
 }) => {
     const [isCategoryActive, setIsCategoryActive] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState<string>('');
+
+    useEffect(() => {
+        if (value === undefined) return;
+        if (value === '') {
+            setSelectedValue(value);
+        }
+    }, [value]);
 
     useEffect(() => {
         if (!selectedValue) return;
