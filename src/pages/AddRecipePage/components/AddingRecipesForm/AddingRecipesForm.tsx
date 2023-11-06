@@ -14,6 +14,7 @@ import {
 } from 'firebase/storage';
 import ReactQuill from 'react-quill';
 import nextId from 'react-id-generator';
+import Compressor from 'compressorjs';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
 import { storage } from '../../../../firebase/firebase';
 import Ingredients from '../Ingredients/Ingredients';
@@ -134,11 +135,28 @@ const AddingRecipesForm = (props: Props) => {
             }
 
             if (uploadFile) {
+                let compressedFile: any;
+                const compressImage = async () => {
+                    return new Promise((resolve, reject) => {
+                        const compressor = new Compressor(uploadFile, {
+                            quality: 0.5,
+                            success(result) {
+                                compressedFile = result;
+                                resolve(result);
+                            },
+                            error(err) {
+                                console.log(err.message);
+                                reject(err.message);
+                            },
+                        });
+                    });
+                };
+                await compressImage();
                 const imageRef = ref(
                     storage,
-                    `recipes/${nextId(`photo-${id}`)}-${uploadFile.name}`
+                    `recipes/${nextId(`photo-${id}`)}-${compressedFile.name}`
                 );
-                const snapshot = await uploadBytes(imageRef, uploadFile);
+                const snapshot = await uploadBytes(imageRef, compressedFile);
                 const reflink = await getDownloadURL(snapshot.ref);
                 data.push({
                     id,
