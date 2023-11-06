@@ -11,7 +11,7 @@ const UploadPhotos = () => {
     const photoFields: PhotoFieldType[] = [
         {
             name: 'Фотографія мініатюри',
-            maxSize: '350',
+            maxSize: '1000',
             id: 'previewImg',
         },
         {
