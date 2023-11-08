@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import nextId from 'react-id-generator';
+import { useEffect, useRef, useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useAppSelector, useAppDispatch } from '../../../hooks/hooks';
 import RecipeListItem from '../../../shared-components/RecipeListItem/RecipeListItem';
 import {
@@ -20,6 +20,7 @@ const RecipeList = () => {
     const loading = useAppSelector((state) => state.recipes.loadingRecipes);
     const error = useAppSelector((state) => state.recipes.error);
     const dispatch = useAppDispatch();
+    const nodeRef = useRef(null);
 
     useEffect(() => {
         if (loading !== 'succeeded') return;
@@ -42,24 +43,34 @@ const RecipeList = () => {
     const renderItems = () => {
         return filteredRecipes.map((item) => {
             return (
-                <li key={nextId('recipe-card-')} className="recipe-list__item">
-                    <RecipeListItem
-                        recipe={item}
-                        addToFavorite={handleAddFavorite}
-                    />
-                </li>
+                <CSSTransition
+                    key={`all-recipes-${item.id}`}
+                    in={loading === 'succeeded'}
+                    nodeRef={nodeRef.current}
+                    timeout={500}
+                    className="recipe-list__item"
+                >
+                    <li className="recipe-list__item" ref={nodeRef.current}>
+                        <RecipeListItem
+                            recipe={item}
+                            addToFavorite={handleAddFavorite}
+                        />
+                    </li>
+                </CSSTransition>
             );
         });
     };
 
     return (
-        <ul className="recipe-list">
-            {renderServerData({
-                loading,
-                error,
-                errorText: `${error}`,
-                content: renderItems,
-            })}
+        <ul className="recipe-list-main">
+            <TransitionGroup className="recipe-list">
+                {renderServerData({
+                    loading,
+                    error,
+                    errorText: `${error}`,
+                    content: renderItems,
+                })}
+            </TransitionGroup>
         </ul>
     );
 };
