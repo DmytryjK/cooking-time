@@ -21,9 +21,16 @@ const RecipeList = () => {
     const error = useAppSelector((state) => state.recipes.error);
     const dispatch = useAppDispatch();
     const nodeRef = useRef(null);
+    const [animateOnLoading, setAnimateOnLoading] = useState(false);
 
     useEffect(() => {
-        if (loading !== 'succeeded') return;
+        if (loading !== 'succeeded') {
+            setAnimateOnLoading(false);
+            return;
+        }
+        setTimeout(() => {
+            setAnimateOnLoading(true);
+        }, 200);
         dispatch(setCurrentFilteredRecipes(recipes));
     }, [loading]);
 
@@ -45,10 +52,12 @@ const RecipeList = () => {
             return (
                 <CSSTransition
                     key={`all-recipes-${item.id}`}
-                    in={loading === 'succeeded'}
+                    in={animateOnLoading}
                     nodeRef={nodeRef.current}
-                    timeout={500}
-                    className="recipe-list__item"
+                    timeout={400}
+                    className={`recipe-list__item ${
+                        animateOnLoading ? '' : 'recipe-list__item_not-show'
+                    }`}
                 >
                     <li className="recipe-list__item" ref={nodeRef.current}>
                         <RecipeListItem

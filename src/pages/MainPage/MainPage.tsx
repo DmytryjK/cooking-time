@@ -20,16 +20,12 @@ const MainPage = () => {
     }, []);
 
     return (
-        <>
-            <Header isSearch />
-            <section className="main">
-                <div className="container">
-                    <Filters title="Всі рецепти" />
-                    <RecipeList />
-                </div>
-            </section>
-            <Footer />
-        </>
+        <section className="main">
+            <div className="container">
+                <Filters title="Всі рецепти" />
+                <RecipeList />
+            </div>
+        </section>
     );
 };
 

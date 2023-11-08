@@ -31,6 +31,7 @@ const FavoritesRecipes: FC = () => {
         id: string | number | null;
         animate: boolean;
     }>({ id: null, animate: false });
+    const [animateOnLoading, setAnimateOnLoading] = useState(false);
 
     const dispatch = useAppDispatch();
     const nodeRef = useRef(null);
@@ -46,6 +47,16 @@ const FavoritesRecipes: FC = () => {
         dispatch(setCurrentRecipes(favoriteRecipes));
         dispatch(setCurrentFilteredRecipes(favoriteRecipes));
     }, [loading, favoriteRecipes]);
+
+    useEffect(() => {
+        if (loading !== 'succeeded') {
+            setAnimateOnLoading(false);
+            return;
+        }
+        setTimeout(() => {
+            setAnimateOnLoading(true);
+        }, 200);
+    }, [loading]);
 
     const registerAttention = () => {
         return <UnauthorizedFavoriteList />;
@@ -63,10 +74,12 @@ const FavoritesRecipes: FC = () => {
             return (
                 <CSSTransition
                     key={`favorites-${item.id}`}
-                    className="recipe-list__item"
-                    in={loading === 'succeeded'}
+                    className={`recipe-list__item ${
+                        animateOnLoading ? '' : 'recipe-list__item_not-show'
+                    }`}
+                    in={animateOnLoading}
                     nodeRef={nodeRef.current}
-                    timeout={500}
+                    timeout={400}
                 >
                     <li className="recipe-list__item" ref={nodeRef.current}>
                         <RecipeListItem
