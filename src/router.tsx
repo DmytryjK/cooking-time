@@ -1,4 +1,3 @@
-import { createBrowserRouter } from 'react-router-dom';
 import {
     MainPage,
     AddRecipePage,
@@ -7,18 +6,10 @@ import {
     AuthorizationPage,
 } from './pages';
 
-const router = createBrowserRouter([
+export const router = [
     {
         path: '/',
         element: <MainPage />,
-    },
-    {
-        path: '/auth-register',
-        element: <AuthorizationPage register />,
-    },
-    {
-        path: '/auth-login',
-        element: <AuthorizationPage login />,
     },
     {
         path: '/add-recipe',
@@ -32,6 +23,15 @@ const router = createBrowserRouter([
         path: '/about-recepie/:id',
         element: <AboutRecipePage />,
     },
-]);
+];
 
-export default router;
+export const routerNoLoyout = [
+    {
+        path: '/auth-register',
+        element: <AuthorizationPage register />,
+    },
+    {
+        path: '/auth-login',
+        element: <AuthorizationPage login />,
+    },
+];

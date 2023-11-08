@@ -11,8 +11,6 @@ import {
     fetchFavoritesRecipe,
 } from '../../store/reducers/FavoritesRecipesSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import Header from '../../shared-components/Header/Header';
-import Footer from '../../shared-components/Footer/Footer';
 import EditRecipeForm from './components/EditRecipeForm/EditRecipeForm';
 import { Recipe } from '../../types/type';
 import iconsSprite from '../../assets/icons/about-recipe/sprite.svg';
@@ -190,63 +188,59 @@ const AboutRecipePage = () => {
     };
 
     return (
-        <>
-            <Header isSearch={false} />
-            <section className="about-recipe">
-                <div className="container">
-                    <div
-                        className={
-                            attentionWindowOpen
-                                ? 'success-window active'
-                                : 'success-window'
-                        }
-                    >
-                        <div className="success-window__block">
-                            <h2 className="success-window__title">
-                                Вы уверены, что хотите закрыть редактор? Все
-                                изменения будут отменены.
-                            </h2>
-                            <div className="success-window__links">
-                                <button
-                                    className="success-window__back-main"
-                                    type="button"
-                                >
-                                    Закрыть редактор
-                                </button>
-                                <button
-                                    className="success-window__back"
-                                    type="button"
-                                >
-                                    Вернуться
-                                </button>
-                            </div>
+        <section className="about-recipe">
+            <div className="container">
+                <div
+                    className={
+                        attentionWindowOpen
+                            ? 'success-window active'
+                            : 'success-window'
+                    }
+                >
+                    <div className="success-window__block">
+                        <h2 className="success-window__title">
+                            Вы уверены, что хотите закрыть редактор? Все
+                            изменения будут отменены.
+                        </h2>
+                        <div className="success-window__links">
                             <button
-                                className="success-window__close"
+                                className="success-window__back-main"
                                 type="button"
-                                aria-label="закрити вікно"
-                            />
+                            >
+                                Закрыть редактор
+                            </button>
+                            <button
+                                className="success-window__back"
+                                type="button"
+                            >
+                                Вернуться
+                            </button>
                         </div>
+                        <button
+                            className="success-window__close"
+                            type="button"
+                            aria-label="закрити вікно"
+                        />
                     </div>
-                    <main className="recipe-page">
-                        {isEditActive && currentRecipeToEdit ? (
-                            <EditRecipeForm
-                                recipe={currentRecipeToEdit}
-                                setIsAttentionOpen={setAttentionWindowOpen}
-                            />
-                        ) : (
-                            renderServerData({
-                                error,
-                                errorText:
-                                    'Упс, щось пішло не так :( Спробуйте оновити сторінку!',
-                                loading: loadingRecipe,
-                                content: renderedInfo,
-                            })
-                        )}
-                    </main>
                 </div>
-            </section>
-            <Footer />
-        </>
+                <main className="recipe-page">
+                    {isEditActive && currentRecipeToEdit ? (
+                        <EditRecipeForm
+                            recipe={currentRecipeToEdit}
+                            setIsAttentionOpen={setAttentionWindowOpen}
+                        />
+                    ) : (
+                        renderServerData({
+                            error,
+                            errorText:
+                                'Упс, щось пішло не так :( Спробуйте оновити сторінку!',
+                            loading: loadingRecipe,
+                            content: renderedInfo,
+                        })
+                    )}
+                </main>
+            </div>
+        </section>
     );
 };
 
