@@ -10,31 +10,31 @@ type Props = {
 const Layout = ({ children }: Props) => {
     const { pathname } = useLocation();
 
-    useEffect(() => {
-        const body = document.querySelector('body');
-        let isScroll = false;
-        if (!body) return;
-        const checkHeight = () => {
-            if (
-                document.body.offsetHeight < window.innerHeight ||
-                document.body.offsetHeight >
-                    document.documentElement.clientHeight
-            ) {
-                isScroll = true;
-            } else {
-                isScroll = false;
-            }
-        };
-        checkHeight();
-        if (isScroll) {
-            body.style.cssText = 'margin-right: -8px; overflow-x: hidden';
-        } else {
-            body.style.cssText = 'margin-right: 0; overflow: auto';
-        }
-        window.addEventListener('resize', () => {
-            checkHeight();
-        });
-    }, [pathname]);
+    // useEffect(() => {
+    //     const body = document.querySelector('body');
+    //     let isScroll = false;
+    //     if (!body) return;
+    //     const checkHeight = () => {
+    //         if (
+    //             document.body.offsetHeight < window.innerHeight ||
+    //             document.body.offsetHeight >
+    //                 document.documentElement.clientHeight
+    //         ) {
+    //             isScroll = true;
+    //         } else {
+    //             isScroll = false;
+    //         }
+    //     };
+    //     checkHeight();
+    //     if (isScroll) {
+    //         body.style.cssText = 'margin-right: -8px; overflow-x: hidden';
+    //     } else {
+    //         body.style.cssText = 'margin-right: 0; overflow: auto';
+    //     }
+    //     window.addEventListener('resize', () => {
+    //         checkHeight();
+    //     });
+    // }, [pathname]);
 
     return (
         <>
