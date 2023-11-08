@@ -1,12 +1,7 @@
 import { useEffect } from 'react';
-import Header from '../../shared-components/Header/Header';
-import Footer from '../../shared-components/Footer/Footer';
 import RecipeList from './RecipeList/RecipeLIst';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import {
-    fetchRecipes,
-    setCurrentFilteredRecipes,
-} from '../../store/reducers/RecipesListSlice';
+import { useAppDispatch } from '../../hooks/hooks';
+import { fetchRecipes } from '../../store/reducers/RecipesListSlice';
 import Filters from '../../shared-components/Filters/Filters';
 import './MainPage.scss';
 

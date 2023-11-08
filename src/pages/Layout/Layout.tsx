@@ -38,7 +38,7 @@ const Layout = ({ children }: Props) => {
 
     return (
         <>
-            <Header isSearch />
+            <Header />
             {children}
             <Footer />
         </>
