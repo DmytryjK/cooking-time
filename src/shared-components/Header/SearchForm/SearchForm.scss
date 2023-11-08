@@ -85,6 +85,10 @@
         }
         &__label {
             padding-left: 12px;
+            transition: 0.2s ease-out color;
+            &:hover {
+                color: $accent-color;
+            }
         }
     }
 }

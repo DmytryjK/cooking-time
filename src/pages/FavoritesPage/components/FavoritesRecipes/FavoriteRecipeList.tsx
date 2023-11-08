@@ -1,6 +1,5 @@
-import { FC, useEffect } from 'react';
-
-import nextId from 'react-id-generator';
+import { FC, useEffect, useRef, useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
 import {
     setCurrentFilteredRecipes,
@@ -10,7 +9,6 @@ import {
     fetchFavoritesRecipe,
     manageFavoritesRecipes,
 } from '../../../../store/reducers/FavoritesRecipesSlice';
-import ErrorMesage from '../../../../shared-components/ErrorMesage/ErrorMesage';
 import EmptyFavoriteList from '../EmptyFavoriteList/EmptyFavoriteList';
 import UnauthorizedFavoriteList from '../UnauthorizedFavoriteList/UnauthorizedFavoriteList';
 import renderServerData from '../../../../helpers/renderServerData';
@@ -29,7 +27,13 @@ const FavoritesRecipes: FC = () => {
         (state) => state.recipes.filteredRecipes
     );
     const { uid } = useAppSelector((state) => state.authentication.user);
+    const [isAnimate, setIsAnimate] = useState<{
+        id: string | number | null;
+        animate: boolean;
+    }>({ id: null, animate: false });
+
     const dispatch = useAppDispatch();
+    const nodeRef = useRef(null);
 
     useEffect(() => {
         if (uid) {
@@ -57,26 +61,38 @@ const FavoritesRecipes: FC = () => {
         }
         return filteredRecipes.map((item) => {
             return (
-                <li key={nextId('recipe-card-')} className="recipe-list__item">
-                    <RecipeListItem
-                        recipe={item}
-                        addToFavorite={handleAddFavorite}
-                    />
-                </li>
+                <CSSTransition
+                    key={`favorites-${item.id}`}
+                    className="recipe-list__item"
+                    in={loading === 'succeeded'}
+                    nodeRef={nodeRef.current}
+                    timeout={500}
+                >
+                    <li className="recipe-list__item" ref={nodeRef.current}>
+                        <RecipeListItem
+                            recipe={item}
+                            addToFavorite={handleAddFavorite}
+                            isAnimate={isAnimate}
+                            setIsAnimate={setIsAnimate}
+                        />
+                    </li>
+                </CSSTransition>
             );
         });
     };
 
     return (
-        <ul className="recipe-list">
-            {uid
-                ? renderServerData({
-                      loading,
-                      error,
-                      errorText: 'Щось пішло не так, спробуйте ще раз',
-                      content: renderItems,
-                  })
-                : registerAttention()}
+        <ul className="recipe-list-favorites">
+            <TransitionGroup className="recipe-list">
+                {uid
+                    ? renderServerData({
+                          loading,
+                          error,
+                          errorText: 'Щось пішло не так, спробуйте ще раз',
+                          content: renderItems,
+                      })
+                    : registerAttention()}
+            </TransitionGroup>
         </ul>
     );
 };
