@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from 'react';
-import { getAuth, signOut } from 'firebase/auth';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { signOut } from 'firebase/auth';
+import { NavLink, useLocation } from 'react-router-dom';
 import SearchForm from './SearchForm/SearchForm';
 import { auth } from '../../firebase/firebase';
 import { createUser } from '../../store/reducers/AuthenticationSlice';
@@ -8,18 +8,28 @@ import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import logo from '../../assets/icons/logo.svg';
 import './Header.scss';
 
-const Header = ({ isSearch }: { isSearch: boolean }) => {
+const Header = () => {
     const { uid } = useAppSelector((state) => state.authentication.user);
     const [userAuthToLocalStorage, setUserAuthToLocalStorage] = useState<
         string | null
     >(null);
+    const [isShouldRenderSearch, setIsShouldRenderSearch] = useState(true);
 
     const dispatch = useAppDispatch();
     const savedUser = localStorage.getItem('user');
+    const { pathname } = useLocation();
 
     useEffect(() => {
         setUserAuthToLocalStorage(savedUser);
     }, [savedUser]);
+
+    useEffect(() => {
+        if (pathname === '/' || pathname === '/favorites') {
+            setIsShouldRenderSearch(true);
+        } else {
+            setIsShouldRenderSearch(false);
+        }
+    }, [pathname]);
 
     useEffect(() => {
         if (!uid && savedUser) {
@@ -98,7 +108,7 @@ const Header = ({ isSearch }: { isSearch: boolean }) => {
                         </nav>
                     </div>
                     <div className="header__right">
-                        {isSearch ? <SearchForm /> : null}
+                        {isShouldRenderSearch ? <SearchForm /> : null}
                         {userAuthToLocalStorage ? (
                             <button
                                 onClick={handleLogout}
