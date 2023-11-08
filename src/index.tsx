@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import React from 'react';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
