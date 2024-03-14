@@ -106,8 +106,8 @@ const Ingredients = ({
                 ''
             ) : (
                 <ul className="tagsForm__tagList tagsForm__tagList_ingredients">
-                    {ingredients.map((ingredient, index) => {
-                        const id = `${ingredient.id}-${index}`;
+                    {ingredients.map((ingredient) => {
+                        const id = `${ingredient.id}`;
                         return (
                             <SelectUnitContext.Provider
                                 key={id}

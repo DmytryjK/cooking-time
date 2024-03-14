@@ -78,25 +78,23 @@ function levenshteinDistance(a: string, b: string) {
 const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
     return searchTags.every((tag) => {
         return recipe.ingredients?.some((ingredient) => {
-            const tagLower = tag.tagText.toLowerCase();
-            const ingredientLower = ingredient.tagText.toLowerCase();
-            const ingredientParts = ingredientLower.split(' ');
+            const tagLower = tag.tagText.toLowerCase().trim();
+            const ingredientLower = ingredient.tagText.toLowerCase().trim();
+            const ingredientParts = ingredientLower.split(/[' '-]/g);
             const tagParts =
-                tagLower.length > 1 ? tagLower.split(' ') : [tagLower];
+                tagLower.length > 1 ? tagLower.split(/[' '-]/g) : [tagLower];
             let result = false;
-
             ingredientParts.some((part, index) => {
-                const distance = levenshteinDistance(
-                    part,
-                    tagParts[index] || ''
-                );
-                result = distance <= 3;
-                if (part.includes(tagParts[index])) {
-                    const str = part.replace(tagParts[index], '');
-                    result = tagParts[index].length > str.length;
-                }
-                if (result) return true;
-                return false;
+                return tagParts.some((tagPart) => {
+                    const distance = levenshteinDistance(part, tagPart);
+                    result = distance <= part.length / 2.2;
+                    if (part.includes(tagParts[index])) {
+                        const str = part.replace(tagParts[index], '');
+                        result = tagParts[index].length > str.length;
+                    }
+                    if (result) return true;
+                    return false;
+                });
             });
             return result;
         });
