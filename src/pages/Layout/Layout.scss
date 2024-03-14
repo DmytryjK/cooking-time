@@ -8,6 +8,9 @@
 
 @media screen and (max-width: 767px) {
     .layout {
-        padding-top: 130px;
+        padding-top: 110px;
+        &.search-disable {
+            padding-top: 70px;
+        }
 	}
 }

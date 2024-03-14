@@ -53,7 +53,11 @@ const Header = () => {
     };
 
     return (
-        <header className="header">
+        <header
+            className={`header ${
+                isShouldRenderSearch ? '' : 'search-disabled'
+            }`}
+        >
             <div className="container">
                 <div className="header__wrapper">
                     <div className="header__left">
@@ -62,7 +66,7 @@ const Header = () => {
                             className={({ isActive }) =>
                                 isActive
                                     ? 'header__logo active'
-                                    : 'header__nav-link'
+                                    : 'header__logo'
                             }
                             onClick={() => setIsBurgerOpen(false)}
                         >

@@ -151,9 +151,9 @@ const AddingRecipesForm = (props: Props) => {
                 const compressImage = async () => {
                     return new Promise((resolve, reject) => {
                         const compressor = new Compressor(uploadFile, {
-                            quality: 0.7,
-                            maxWidth: 550,
-                            maxHeight: 500,
+                            quality: 0.9,
+                            maxWidth: id === 'main' ? 800 : 450,
+                            maxHeight: id === 'main' ? 600 : 370,
                             success(result) {
                                 compressedFile = result;
                                 resolve(result);
@@ -220,6 +220,7 @@ const AddingRecipesForm = (props: Props) => {
         if (!description) {
             alert('Опишіть процес приготування страви');
         }
+
         try {
             const updatedPhotosInfo = await uploadPhotos(loadedPhotosInfo);
             if (!updatedPhotosInfo) return;

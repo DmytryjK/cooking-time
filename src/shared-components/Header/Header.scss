@@ -121,6 +121,9 @@
 @media screen and (max-width: 767px) {
     .header {
         padding: 10px 0 45px 0;
+        &.search-disabled {
+            padding: 10px 0 10px 0;
+        }
         &__right {
             gap: 10px;
         }
