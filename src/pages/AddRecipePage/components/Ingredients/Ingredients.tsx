@@ -15,6 +15,7 @@ import {
 } from '../../../../store/reducers/CreateRecipeFormSlice';
 import { IngredientsType } from '../../../../types/type';
 import Ingredient from './Ingredient/Ingredient';
+import './Ingredients.scss';
 
 type SelectUnitsType = {
     id: string | number;
@@ -104,7 +105,7 @@ const Ingredients = ({
             {ingredients.length === 0 ? (
                 ''
             ) : (
-                <ul className="tagsForm__tagList">
+                <ul className="tagsForm__tagList tagsForm__tagList_ingredients">
                     {ingredients.map((ingredient, index) => {
                         const id = `${ingredient.id}-${index}`;
                         return (

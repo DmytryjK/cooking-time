@@ -1,8 +1,10 @@
-import AddRecipePage from './AddRecipePage/AddRecipePage';
-import MainPage from './MainPage/MainPage';
-import AboutRecipePage from './AboutRecipePage/AboutRecipePage';
-import FavoritesPage from './FavoritesPage/FavoritesPage';
+import { lazy } from 'react';
 import AuthorizationPage from './AuthorizationPage/AuthorizationPage';
+
+const AddRecipePage = lazy(() => import('./AddRecipePage/AddRecipePage'));
+const MainPage = lazy(() => import('./MainPage/MainPage'));
+const AboutRecipePage = lazy(() => import('./AboutRecipePage/AboutRecipePage'));
+const FavoritesPage = lazy(() => import('./FavoritesPage/FavoritesPage'));
 
 export {
     AddRecipePage,

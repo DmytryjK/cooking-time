@@ -18,7 +18,17 @@ const SelectUnitsItem = ({
     setUnit: Dispatch<SetStateAction<string>>;
     tagUnit: string;
 }) => {
-    const units = ['г', 'кг', 'шт.', 'ч.л.', 'ст.л.', 'л', 'мл.'];
+    const units = [
+        'г',
+        'кг',
+        'шт.',
+        'ч.л.',
+        'ст.л.',
+        'л',
+        'мл.',
+        'зубч.',
+        'стак.',
+    ];
     const [isUnitsOpen, setIsUnitsOpen] = useState<boolean>(false);
     const [currentUnit, setCurrentUnit] = useState<string>(tagUnit || units[0]);
 
@@ -30,8 +40,8 @@ const SelectUnitsItem = ({
 
     const closeSelect = (e: any) => {
         if (
-            !e.target.closest('.sort__custom-fields') &&
-            !e.target.closest('.sort__custom-select')
+            !e.target.closest('.sort-unit__custom-fields') &&
+            !e.target.closest('.sort-unit')
         ) {
             setIsUnitsOpen(false);
         }
@@ -58,22 +68,22 @@ const SelectUnitsItem = ({
 
     return (
         <div
-            className={`sort__custom-select ${isUnitsOpen ? 'active' : ''}`}
+            className={`sort-unit ${isUnitsOpen ? 'active' : ''}`}
             id={`${tagId}`}
         >
             <button
-                className="sort__open-btn"
+                className="sort-unit__open-btn"
                 type="button"
                 onClick={() => setIsUnitsOpen(!isUnitsOpen)}
             >
                 <span className="btn__text">{currentUnit}</span>{' '}
             </button>
-            <fieldset className="sort__custom-fields">
+            <fieldset className="sort-unit__custom-fields">
                 {units.map((unit, index) => {
                     return (
-                        <div className="sort__field" key={nextId('units')}>
+                        <div className="sort-unit__field" key={nextId('units')}>
                             <input
-                                className="sort__input"
+                                className="sort-unit__input"
                                 name={tagId.toString()}
                                 checked={unit === currentUnit}
                                 type="radio"
@@ -86,12 +96,11 @@ const SelectUnitsItem = ({
                                 }}
                             />
                             <label
-                                className="sort__label"
+                                className="sort-unit__label"
                                 htmlFor={`units-${tagId}${index}`}
                             >
                                 {unit}
                             </label>
-                            <span className="sort__input-custom" />
                         </div>
                     );
                 })}

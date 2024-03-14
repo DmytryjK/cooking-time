@@ -26,3 +26,11 @@
         grid-column: 1 / 4;
     }
 }
+
+@media screen and (max-width: 550px) {
+    .filters {
+        &__title {
+            font-size: 20px;
+        }
+    }
+}

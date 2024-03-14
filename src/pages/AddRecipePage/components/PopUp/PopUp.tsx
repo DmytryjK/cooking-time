@@ -5,9 +5,11 @@ import './PopUp.scss';
 const PopUp = ({
     isPopUpShow,
     setIsPopUpShow,
+    text,
 }: {
     isPopUpShow: boolean;
     setIsPopUpShow: Dispatch<SetStateAction<boolean>>;
+    text?: string;
 }) => {
     const closePopUp = (e: Event) => {
         const target = e.target as HTMLElement;
@@ -29,7 +31,7 @@ const PopUp = ({
         <div className={`success-window ${isPopUpShow ? 'active' : ''}`}>
             <div className="success-window__block">
                 <h2 className="success-window__title">
-                    Ваш рецепт успішно доданий на сайт
+                    {text || 'Ваш рецепт успішно доданий на сайт'}
                 </h2>
                 <div className="success-window__links">
                     <NavLink to="/" className="success-window__back-main">

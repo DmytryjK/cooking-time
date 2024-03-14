@@ -11,6 +11,7 @@ type ImgDto = {
 };
 export interface Recipe {
     id: string | number | null;
+    authorId: string;
     title: string;
     time: { hours: string; minutes: string };
     ingredients?: IngredientsType[];
@@ -54,6 +55,7 @@ export interface UserType {
     user: {
         uid: string;
         email: string;
+        isAdmin: boolean;
     };
 }
 

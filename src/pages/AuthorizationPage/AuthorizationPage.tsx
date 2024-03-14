@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import LazyLoad from 'react-lazy-load';
 import Authentication from './components/Authentication/Authentication';
 import Logo from '../../assets/icons/logo.svg';
 import './AuthorizationPage.scss';
@@ -13,7 +14,9 @@ const AuthorizationPage = (props: AuthorizationPageProps) => {
     const navigate = useNavigate();
     return (
         <section className="authorization">
-            <div className="authorization__image" />
+            <LazyLoad>
+                <div className="authorization__image" />
+            </LazyLoad>
             <div className="authorization__content">
                 <nav className="authorization__nav">
                     <NavLink className="authorization__logo" to="/">

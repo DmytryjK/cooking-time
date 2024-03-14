@@ -1,7 +1,15 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDatabase, ref, child, get, push, update } from 'firebase/database';
+import {
+    getDatabase,
+    ref,
+    child,
+    get,
+    push,
+    update,
+    remove,
+} from 'firebase/database';
 
-import type { Recipes, Recipe, TagsType } from '../../types/type';
+import type { Recipes, Recipe, TagsType, Loading } from '../../types/type';
 
 type PayloadActionFilter = {
     searchInput: string;
@@ -13,10 +21,12 @@ type InitialStateRecipes = {
     recipes: Recipe[];
     filteredRecipes: Recipe[];
     recipe: Recipe | null;
-    loadingRecipe: 'idle' | 'pending' | 'succeeded' | 'failed';
-    loadingRecipes: 'idle' | 'pending' | 'succeeded' | 'failed';
-    loadingForm: 'idle' | 'pending' | 'succeeded' | 'failed';
+    loadingRecipe: Loading;
+    loadingRecipes: Loading;
+    loadingForm: Loading;
+    removeRecipeLoading: Loading;
     error: null | unknown;
+    removeRecipeError: null | unknown;
     searchedNameOfDishes: string;
 };
 
@@ -32,22 +42,70 @@ const initialState: InitialStateRecipes = {
     loadingRecipe: 'idle',
     loadingRecipes: 'idle',
     loadingForm: 'idle',
+    removeRecipeLoading: 'idle',
     error: null,
+    removeRecipeError: null,
     searchedNameOfDishes: '',
 };
 
+function levenshteinDistance(a: string, b: string) {
+    const distanceMatrix = Array(b.length + 1)
+        .fill(null)
+        .map(() => Array(a.length + 1).fill(null));
+
+    for (let i = 0; i <= a.length; i += 1) {
+        distanceMatrix[0][i] = i;
+    }
+
+    for (let j = 0; j <= b.length; j += 1) {
+        distanceMatrix[j][0] = j;
+    }
+
+    for (let j = 1; j <= b.length; j += 1) {
+        for (let i = 1; i <= a.length; i += 1) {
+            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
+            distanceMatrix[j][i] = Math.min(
+                distanceMatrix[j][i - 1] + 1,
+                distanceMatrix[j - 1][i] + 1,
+                distanceMatrix[j - 1][i - 1] + indicator
+            );
+        }
+    }
+
+    return distanceMatrix[b.length][a.length];
+}
+
 const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
     return searchTags.every((tag) => {
-        return recipe.ingredients?.some(
-            (ingredient) =>
-                ingredient.tagText.toUpperCase() === tag.tagText.toUpperCase()
-        );
+        return recipe.ingredients?.some((ingredient) => {
+            const tagLower = tag.tagText.toLowerCase();
+            const ingredientLower = ingredient.tagText.toLowerCase();
+            const ingredientParts = ingredientLower.split(' ');
+            const tagParts =
+                tagLower.length > 1 ? tagLower.split(' ') : [tagLower];
+            let result = false;
+
+            ingredientParts.some((part, index) => {
+                const distance = levenshteinDistance(
+                    part,
+                    tagParts[index] || ''
+                );
+                result = distance <= 3;
+                if (part.includes(tagParts[index])) {
+                    const str = part.replace(tagParts[index], '');
+                    result = tagParts[index].length > str.length;
+                }
+                if (result) return true;
+                return false;
+            });
+            return result;
+        });
     });
 };
 
 export const fetchRecipes = createAsyncThunk(
     'allRecipes/fetchRecipes',
-    async function (uid: string, { rejectWithValue }) {
+    async function (uid: string | null, { rejectWithValue }) {
         try {
             const dbRef = ref(getDatabase());
             const responseRecipe = await get(child(dbRef, 'dishes'));
@@ -59,35 +117,22 @@ export const fetchRecipes = createAsyncThunk(
             const originalData: Recipe[] = await responseRecipe.val();
             const transformRecepiesToArr: Recipe[] = [];
 
-            const responseFavoritesId = await get(
-                child(dbRef, `favorites/${uid}`)
-            );
-            const favoriteId: string[] = await responseFavoritesId.val();
+            if (uid) {
+                const responseFavoritesId = await get(
+                    child(dbRef, `favorites/${uid}`)
+                );
+                const favoriteId: string[] = await responseFavoritesId.val();
 
-            // if (favoriteId) {
-            //     for (const key in originalData) {
-            //         originalData[key].favorites = false;
-            //         favoriteId.forEach((favoriteId) => {
-            //             if (originalData[key].id === favoriteId) {
-            //                 originalData[key].favorites = true;
-            //             }
-            //         });
-            //     }
-            // }
-
-            // for (const key in originalData) {
-            //     transformRecepiesToArr.push(originalData[key]);
-            // }
-
-            if (favoriteId) {
-                Object.entries(originalData).forEach((item) => {
-                    item[1].favorites = false;
-                    favoriteId.forEach((favoriteId) => {
-                        if (item[1].id === favoriteId) {
-                            item[1].favorites = true;
-                        }
+                if (favoriteId) {
+                    Object.entries(originalData).forEach((item) => {
+                        item[1].favorites = false;
+                        favoriteId.forEach((favoriteId) => {
+                            if (item[1].id === favoriteId) {
+                                item[1].favorites = true;
+                            }
+                        });
                     });
-                });
+                }
             }
 
             Object.entries(originalData).forEach((item) => {
@@ -156,6 +201,44 @@ export const updateRecipe = createAsyncThunk(
                 alert('Щось пішло не так, спробуйте ще раз');
             });
             return recipeInfo;
+        } catch (error: unknown) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
+export const deleteRecipe = createAsyncThunk(
+    'recepiesList/deleteRecipe',
+    async function (id: string | number, { rejectWithValue }) {
+        try {
+            const db = getDatabase();
+            const itemRef = ref(db, `/dishes/${id}`);
+            const favoritesRef = ref(db, `favorites`);
+            remove(itemRef).catch((error: unknown) => {
+                alert('Щось пішло не так, спробуйте ще раз');
+            });
+            get(favoritesRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const userData = childSnapshot.val(); // Данные пользователя
+                        const userId = childSnapshot.key; // ID пользователя
+                        if (
+                            userData &&
+                            userData.some((data: string) => data === id) &&
+                            userId
+                        ) {
+                            const userDishesRef = ref(
+                                db,
+                                `/favorites/${userId}/${userData.indexOf(id)}`
+                            );
+                            remove(userDishesRef).catch((error) => {
+                                alert('Щось пішло не так, спробуйте ще раз');
+                            });
+                        }
+                    });
+                }
+            });
+            return true;
         } catch (error: unknown) {
             return rejectWithValue(error);
         }
@@ -286,6 +369,14 @@ export const recepieListSlice = createSlice({
             state.filteredRecipes = [];
             state.recipe = null;
         },
+        localRemoveRecipe: (state, action: PayloadAction<string | number>) => {
+            state.recipes = state.recipes.filter(
+                (recipe) => recipe.id !== action.payload
+            );
+            state.filteredRecipes = state.filteredRecipes.filter(
+                (recipe) => recipe.id !== action.payload
+            );
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchRecipe.pending, (state) => {
@@ -360,6 +451,21 @@ export const recepieListSlice = createSlice({
                 state.error = action.payload;
             }
         );
+
+        builder.addCase(deleteRecipe.pending, (state) => {
+            state.removeRecipeLoading = 'pending';
+            state.removeRecipeError = null;
+        });
+        builder.addCase(deleteRecipe.fulfilled, (state) => {
+            state.removeRecipeLoading = 'succeeded';
+        });
+        builder.addCase(
+            deleteRecipe.rejected,
+            (state, action: PayloadAction<unknown>) => {
+                state.removeRecipeLoading = 'failed';
+                state.removeRecipeError = action.payload;
+            }
+        );
     },
 });
 
@@ -371,6 +477,7 @@ export const {
     setCurrentFilteredRecipes,
     resetLoadingForm,
     resetRecipes,
+    localRemoveRecipe,
 } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;
