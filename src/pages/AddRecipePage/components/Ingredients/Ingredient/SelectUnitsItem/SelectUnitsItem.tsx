@@ -19,7 +19,7 @@ const SelectUnitsItem = ({
     tagUnit: string;
 }) => {
     const units = [
-        'г',
+        'гр',
         'кг',
         'шт.',
         'ч.л.',
