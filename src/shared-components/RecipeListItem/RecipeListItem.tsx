@@ -205,12 +205,14 @@ const RecipeListItem = ({
                 aria-label="додати в обране"
                 onClick={() => {
                     if (uid) {
+                        console.log('dfasfd');
                         if (setIsAnimate) {
                             setIsAnimate({
                                 id,
                                 animate: true,
                             });
                         } else {
+                            console.log('sfasdfas');
                             addToFavorite(id, recipe);
                         }
                     } else {
