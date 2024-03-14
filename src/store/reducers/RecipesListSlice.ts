@@ -439,7 +439,7 @@ export const recepieListSlice = createSlice({
             fetchRecipes.fulfilled,
             (state, action: PayloadAction<Recipes>) => {
                 state.loadingRecipes = 'succeeded';
-                state.recipes = action.payload.recipes;
+                state.recipes = action.payload.recipes.reverse();
             }
         );
         builder.addCase(
