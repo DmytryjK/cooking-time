@@ -1,4 +1,4 @@
-import FavoriteRecipeList from './components/FavoritesRecipes/FavoriteRecipeList';
+import FavoriteRecipeList from './components/FavoriteRecipeList/FavoriteRecipeList';
 import Filters from '../../shared-components/Filters/Filters';
 import './FavoritesPage.scss';
 import { useAppSelector } from '../../hooks/hooks';
