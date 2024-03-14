@@ -14,6 +14,14 @@ const Ingredient = ({ ingredient }: { ingredient: IngredientsType }) => {
     const [tagUnitLocal, setTagUnitLocal] = useState<string>(tagUnit);
     const dispatch = useAppDispatch();
 
+    const handleCheckInput = () => {
+        if (tagQuantity) {
+            const regex = /[^\d.]+|(?<=\d)\.(?!\d)/g;
+            const replaced = tagQuantity.replace(regex, '');
+            setTagQuantity(replaced);
+        }
+    };
+
     useEffect(() => {
         if (!tagUnitLocal) return;
         dispatch(
@@ -32,12 +40,13 @@ const Ingredient = ({ ingredient }: { ingredient: IngredientsType }) => {
             <label className="createdTag__label">
                 <input
                     className="createdTag__input"
-                    type="number"
+                    type="text"
                     placeholder="10"
                     value={tagQuantity}
                     onChange={(e) => {
                         setTagQuantity(e.target.value);
                     }}
+                    onBlur={handleCheckInput}
                 />
                 <SelectUnitsItem
                     tagId={id}

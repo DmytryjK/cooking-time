@@ -1,4 +1,4 @@
-import { FC, SetStateAction, useState } from 'react';
+import { FC, SetStateAction } from 'react';
 import { Recipe } from '../../../../types/type';
 import AddingRecipesForm from '../../../AddRecipePage/components/AddingRecipesForm/AddingRecipesForm';
 import 'react-quill/dist/quill.snow.css';
@@ -46,6 +46,7 @@ const EditRecipeForm: FC<{
                 ingredients={ingredients}
                 isFavorite={favorites}
                 method="UPDATE"
+                text="Рецепт успішно оновлено"
             />
         </>
     );

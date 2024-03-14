@@ -1,4 +1,3 @@
-import nextId from 'react-id-generator';
 import PhotoField from './PhotoField/PhotoField';
 
 type PhotoFieldType = {

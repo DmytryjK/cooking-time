@@ -1,14 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import {
-    getDownloadURL,
-    ref,
-    uploadBytes,
-    deleteObject,
-} from 'firebase/storage';
-import { storage } from '../../../../../firebase/firebase';
-
-import { LoadedPhotoContext } from '../../AddingRecipesForm/AddingRecipesForm';
 import { UploadFileType } from '../../../../../types/type';
+import { LoadedPhotoContext } from '../../AddingRecipesForm/AddingRecipesForm';
 import './PhotoField.scss';
 
 const PhotoField = ({
@@ -59,6 +51,7 @@ const PhotoField = ({
                         },
                     ];
                 });
+                resolve('');
             };
             fr.onerror = reject;
             fr.readAsDataURL(file as any);
@@ -83,20 +76,6 @@ const PhotoField = ({
     };
 
     const handleRemovePhoto = () => {
-        // const promises = loadedPhotosInfo.map((photo) => {
-        //     let result;
-        //     if (photo.id === id && photo.loadedSrc) {
-        //         const imageRef = ref(storage, `recipes/${photo.loadedSrc}`);
-        //         result = deleteObject(imageRef).catch((error) => {
-        //             alert('something went wrong');
-        //             return Promise.reject();
-        //         });
-        //     } else {
-        //         result = Promise.resolve();
-        //     }
-        //     return result;
-        // });
-
         setLoadedPhotosInfo((prev) => {
             return [
                 ...prev.map((item) => {

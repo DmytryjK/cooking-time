@@ -6,6 +6,7 @@ import { auth } from '../../firebase/firebase';
 import { createUser } from '../../store/reducers/AuthenticationSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import logo from '../../assets/icons/logo.svg';
+import BurgerBtn from './BurgerBtn/BurgerBtn';
 import './Header.scss';
 
 const Header = () => {
@@ -14,6 +15,7 @@ const Header = () => {
         string | null
     >(null);
     const [isShouldRenderSearch, setIsShouldRenderSearch] = useState(true);
+    const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
     const dispatch = useAppDispatch();
     const savedUser = localStorage.getItem('user');
@@ -57,16 +59,20 @@ const Header = () => {
                     <div className="header__left">
                         <NavLink
                             to="/"
-                            reloadDocument
                             className={({ isActive }) =>
                                 isActive
                                     ? 'header__logo active'
                                     : 'header__nav-link'
                             }
+                            onClick={() => setIsBurgerOpen(false)}
                         >
                             <img width={100} height={54} src={logo} alt="" />
                         </NavLink>
-                        <nav className="header__nav">
+                        <nav
+                            className={`header__nav ${
+                                isBurgerOpen ? 'mobile-active' : ''
+                            }`}
+                        >
                             <ul className="header__nav-list">
                                 <li className="header__nav-item">
                                     <NavLink
@@ -76,6 +82,7 @@ const Header = () => {
                                                 ? 'header__nav-link active'
                                                 : 'header__nav-link'
                                         }
+                                        onClick={() => setIsBurgerOpen(false)}
                                     >
                                         Головна
                                     </NavLink>
@@ -88,6 +95,7 @@ const Header = () => {
                                                 ? 'header__nav-link active'
                                                 : 'header__nav-link'
                                         }
+                                        onClick={() => setIsBurgerOpen(false)}
                                     >
                                         Обране
                                     </NavLink>
@@ -100,6 +108,7 @@ const Header = () => {
                                                 ? 'header__nav-link active'
                                                 : 'header__nav-link'
                                         }
+                                        onClick={() => setIsBurgerOpen(false)}
                                     >
                                         Додати рецепт
                                     </NavLink>
@@ -127,6 +136,10 @@ const Header = () => {
                                 Увійти | Зареєструватись
                             </NavLink>
                         )}
+                        <BurgerBtn
+                            isBurgerOpen={isBurgerOpen}
+                            setIsBurgerOpen={setIsBurgerOpen}
+                        />
                     </div>
                 </div>
             </div>

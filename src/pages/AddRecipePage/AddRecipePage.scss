@@ -14,3 +14,11 @@
         font-weight: 500;
     }
 }
+
+@media screen and (max-width: 767px) {
+    .add-recepie {
+        &__descr {
+            margin-top: 20px;
+        }
+    }
+}

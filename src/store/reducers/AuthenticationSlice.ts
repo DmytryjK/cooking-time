@@ -5,6 +5,7 @@ const initialState: UserType = {
     user: {
         uid: '',
         email: '',
+        isAdmin: false,
     },
 };
 
@@ -13,7 +14,17 @@ export const authenticationSlice = createSlice({
     initialState,
     reducers: {
         createUser: (state, action: PayloadAction<User>) => {
-            state.user = { ...action.payload };
+            state.user = { ...action.payload, isAdmin: false };
+            const { email } = state.user;
+            const admins = [
+                'vampiryshka777@gmail.com',
+                'dmytryj.kyzyma@gmail.com',
+                'innatemchenkoo@gmail.com',
+                'temchenkoinna19@gmail.com',
+            ];
+            if (admins.some((adminMail) => adminMail === email)) {
+                state.user.isAdmin = true;
+            }
         },
     },
 });

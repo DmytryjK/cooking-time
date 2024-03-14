@@ -14,6 +14,7 @@
     user-select: none;
     pointer-events: none;
     transition: 0.2s ease-out visibility, 0.2s ease-out opacity;
+    z-index: 1;
     &.active {
         opacity: 1;
         visibility: visible;
@@ -28,13 +29,14 @@
         gap: 50px;
         flex-direction: column;
         background-color: white;
-        border-radius: 30px;
+        border-radius: 20px;
     }
     &__title {
         text-align: center;
         font-size: 30px;
         font-weight: 600;
         color: black;
+        max-width: 420px;
         text-transform: uppercase;
     }
     &__links {

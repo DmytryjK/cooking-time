@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+import { ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import nextId from 'react-id-generator';
 import parse from 'html-react-parser';
+import LazyLoad from 'react-lazy-load';
 import {
     fetchRecipe,
     setFavoriteRecipes,
@@ -10,6 +12,7 @@ import {
     manageFavoritesRecipes,
     fetchFavoritesRecipe,
 } from '../../store/reducers/FavoritesRecipesSlice';
+import PopUp from '../AddRecipePage/components/PopUp/PopUp';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import EditRecipeForm from './components/EditRecipeForm/EditRecipeForm';
 import { Recipe } from '../../types/type';
@@ -29,7 +32,9 @@ const AboutRecipePage = () => {
     const loadingRecipesToFirebase = useAppSelector(
         (state) => state.favoriteRecipes.loadingRecipeIdToFirebase
     );
-    const { uid } = useAppSelector((state) => state.authentication.user);
+    const { uid, isAdmin } = useAppSelector(
+        (state) => state.authentication.user
+    );
     const dispatch = useAppDispatch();
     const [isEditActive, setIsEditActive] = useState<boolean>(false);
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
@@ -83,24 +88,37 @@ const AboutRecipePage = () => {
 
     const renderedInfo = () => {
         if (!recipe) return '';
-        const { title, ingredients, imgDto, description, category, id, time } =
-            recipe;
+        const {
+            title,
+            ingredients,
+            imgDto,
+            description,
+            category,
+            id,
+            time,
+            authorId,
+        } = recipe;
         const mainImg = imgDto.find((img) => img.id === 'main');
+
         const parsedDescr = parse(description || '');
         return (
             <>
                 <div className="recipe-page__top">
                     <div className="recipe-page__top-btns">
-                        <button
-                            className="recipe-page__edit-btn"
-                            title="редактировать"
-                            type="button"
-                            onClick={() => handleEditRecipe(recipe)}
-                        >
-                            <svg width="20" height="20" viewBox="0 0 20 20">
-                                <use href={`${iconsSprite}/#edit`} />
-                            </svg>
-                        </button>
+                        {!authorId || uid === authorId || isAdmin ? (
+                            <button
+                                className="recipe-page__edit-btn"
+                                title="редагувати"
+                                type="button"
+                                onClick={() => handleEditRecipe(recipe)}
+                            >
+                                <svg width="20" height="20" viewBox="0 0 20 20">
+                                    <use href={`${iconsSprite}/#edit`} />
+                                </svg>
+                            </button>
+                        ) : (
+                            ''
+                        )}
                         <button
                             className={`recipe-page__favorite-btn ${
                                 isFavorite ? 'btn-active' : ''
@@ -121,11 +139,13 @@ const AboutRecipePage = () => {
                         </span>
                     </div>
                     <div className="recipe-page__photo-wrapper">
-                        <img
-                            className="recipe-page__photo"
-                            src={mainImg?.src || ''}
-                            alt="фото"
-                        />
+                        <LazyLoad>
+                            <img
+                                className="recipe-page__photo"
+                                src={mainImg?.src || ''}
+                                alt="фото"
+                            />
+                        </LazyLoad>
                     </div>
                 </div>
                 <div className="recipe-page__content">
@@ -190,39 +210,11 @@ const AboutRecipePage = () => {
     return (
         <section className="about-recipe">
             <div className="container">
-                <div
-                    className={
-                        attentionWindowOpen
-                            ? 'success-window active'
-                            : 'success-window'
-                    }
-                >
-                    <div className="success-window__block">
-                        <h2 className="success-window__title">
-                            Вы уверены, что хотите закрыть редактор? Все
-                            изменения будут отменены.
-                        </h2>
-                        <div className="success-window__links">
-                            <button
-                                className="success-window__back-main"
-                                type="button"
-                            >
-                                Закрыть редактор
-                            </button>
-                            <button
-                                className="success-window__back"
-                                type="button"
-                            >
-                                Вернуться
-                            </button>
-                        </div>
-                        <button
-                            className="success-window__close"
-                            type="button"
-                            aria-label="закрити вікно"
-                        />
-                    </div>
-                </div>
+                <PopUp
+                    isPopUpShow={attentionWindowOpen}
+                    setIsPopUpShow={setAttentionWindowOpen}
+                    text="Якщо Ви закриєте редактор, то зміни не буде збережено."
+                />
                 <main className="recipe-page">
                     {isEditActive && currentRecipeToEdit ? (
                         <EditRecipeForm

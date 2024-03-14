@@ -13,6 +13,7 @@ import {
     deleteObject,
 } from 'firebase/storage';
 import ReactQuill from 'react-quill';
+import ImageCompress from 'quill-image-compress';
 import nextId from 'react-id-generator';
 import Compressor from 'compressorjs';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
@@ -21,7 +22,11 @@ import Ingredients from '../Ingredients/Ingredients';
 import UploadPhotos from '../UploadPhotos/UploadPhotos';
 import CustomSelect from '../../../../shared-components/CustomSelect/CustomSelect';
 import PopUp from '../PopUp/PopUp';
-import { UploadFileType, IngredientsType } from '../../../../types/type';
+import {
+    UploadFileType,
+    IngredientsType,
+    Loading,
+} from '../../../../types/type';
 import {
     postRecipe,
     updateRecipe,
@@ -46,6 +51,7 @@ type Props = {
     loadedPhotos?: LoadedPhotoType[];
     ingredients?: IngredientsType[] | undefined;
     method: 'POST' | 'UPDATE';
+    text?: string;
 };
 
 type LoadedPhotoType = {
@@ -66,6 +72,8 @@ export const LoadedPhotoContext = createContext<LoadedPhotoContextType>({
     setLoadedPhotosInfo: () => {},
 });
 
+ReactQuill.Quill.register('modules/imageCompress', ImageCompress);
+
 const AddingRecipesForm = (props: Props) => {
     const {
         id,
@@ -77,6 +85,7 @@ const AddingRecipesForm = (props: Props) => {
         ingredients,
         isFavorite,
         method,
+        text,
     } = props;
 
     const { error, loadingForm } = useAppSelector((state) => state.recipes);
@@ -89,9 +98,12 @@ const AddingRecipesForm = (props: Props) => {
     const [loadedPhotosInfo, setLoadedPhotosInfo] = useState<LoadedPhotoType[]>(
         loadedPhotos || []
     );
+    const [uploadPhotoLoading, setUploadPhotoLoading] =
+        useState<Loading>('idle');
 
     const tags = useAppSelector((state) => state.createRecipeForm.tags);
     const { categories } = useAppSelector((state) => state.createRecipeForm);
+    const { uid } = useAppSelector((state) => state.authentication.user);
 
     const [isSuccessPopUpShow, setIsSuccessPopUpShow] =
         useState<boolean>(false);
@@ -122,6 +134,7 @@ const AddingRecipesForm = (props: Props) => {
     }, [loadingForm]);
 
     const uploadPhotos = async (loadedPhotosInfo: LoadedPhotoType[]) => {
+        setUploadPhotoLoading('pending');
         const data: LoadedPhotoType[] = [];
         const uploadPhotoPromises = loadedPhotosInfo.map(async (item) => {
             const { id, loadedSrc, uploadFile, srcForRemove } = item;
@@ -133,13 +146,14 @@ const AddingRecipesForm = (props: Props) => {
                     const removePhoto = await deleteObject(imageRef);
                 }
             }
-
             if (uploadFile) {
                 let compressedFile: any;
                 const compressImage = async () => {
                     return new Promise((resolve, reject) => {
                         const compressor = new Compressor(uploadFile, {
-                            quality: 0.5,
+                            quality: 0.7,
+                            maxWidth: 550,
+                            maxHeight: 500,
                             success(result) {
                                 compressedFile = result;
                                 resolve(result);
@@ -151,7 +165,7 @@ const AddingRecipesForm = (props: Props) => {
                         });
                     });
                 };
-                await compressImage();
+                const image = await compressImage();
                 const imageRef = ref(
                     storage,
                     `recipes/${nextId(`photo-${id}`)}-${compressedFile.name}`
@@ -177,20 +191,35 @@ const AddingRecipesForm = (props: Props) => {
         });
 
         return Promise.all(uploadPhotoPromises).then(() => {
+            setUploadPhotoLoading('succeeded');
             return data;
         });
     };
 
     const handleSubmitForm = async (method: string) => {
+        if (!nameValue) {
+            alert('Введіть назву страви');
+            return;
+        }
+        if (tags.length === 0) {
+            alert('Додайте інгредієнти');
+            return;
+        }
+        if (tags.some((tag) => !tag.tagQuantityWithUnit)) {
+            alert('Введіть кількість інгредієнтів');
+            return;
+        }
+        if (!timerValue.hours) {
+            alert('Вкажіть час приготування страви');
+            return;
+        }
         if (loadedPhotosInfo.length < 2) {
             alert('Завантажте 2 фото');
             return;
         }
-        if (!nameValue || tags.length === 0 || !description) {
-            alert('Всі поля мають бути заповнені');
-            return;
+        if (!description) {
+            alert('Опишіть процес приготування страви');
         }
-
         try {
             const updatedPhotosInfo = await uploadPhotos(loadedPhotosInfo);
             if (!updatedPhotosInfo) return;
@@ -198,6 +227,7 @@ const AddingRecipesForm = (props: Props) => {
                 dispatch(
                     postRecipe({
                         id: '',
+                        authorId: uid || '',
                         title: nameValue,
                         time: {
                             hours: timerValue.hours
@@ -227,6 +257,7 @@ const AddingRecipesForm = (props: Props) => {
                 dispatch(
                     updateRecipe({
                         id,
+                        authorId: uid || '',
                         title: nameValue,
                         time: {
                             hours: timerValue.hours
@@ -256,6 +287,25 @@ const AddingRecipesForm = (props: Props) => {
         } catch (error) {
             console.error('Error uploading photos:', error);
         }
+    };
+
+    const options = [
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['blockquote'],
+        ['link', 'image'],
+        [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+        [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+        [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+        [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+        [{ font: [] }],
+        [{ align: [] }],
+        ['clean'],
+    ];
+
+    const test = () => {
+        console.log('sdfasdf');
     };
 
     return (
@@ -369,17 +419,50 @@ const AddingRecipesForm = (props: Props) => {
                         className="form-descr__editor"
                         placeholder="Опишіть процес приготування..."
                         theme="snow"
+                        modules={{
+                            toolbar: {
+                                container: options,
+                            },
+                            imageCompress: {
+                                quality: 0.6,
+                                maxWidth: 400,
+                                maxHeight: 300,
+                                imageType: 'image/jpeg',
+                                debug: true,
+                                suppressErrorLogging: false,
+                                insertIntoEditor: undefined,
+                            },
+                        }}
                         value={description}
                         onChange={setDescription}
                     />
                 </div>
-                <button className="form__submit addRecipe-btn" type="submit">
-                    Додати рецепт
+                <button
+                    className={`form__submit addRecipe-btn ${
+                        loadingForm === 'pending' ||
+                        uploadPhotoLoading === 'pending'
+                            ? 'loading'
+                            : ''
+                    }`}
+                    type="submit"
+                >
+                    {method === 'POST' ? 'Додати рецепт' : 'Оновити рецепт'}
+                    {loadingForm === 'pending' ||
+                    uploadPhotoLoading === 'pending' ? (
+                        <span className="addRecipe-btn__loading-dots">
+                            <span className="addRecipe-btn__loading-dot" />
+                            <span className="addRecipe-btn__loading-dot" />
+                            <span className="addRecipe-btn__loading-dot" />
+                        </span>
+                    ) : (
+                        ''
+                    )}
                 </button>
             </form>
             <PopUp
                 isPopUpShow={isSuccessPopUpShow}
                 setIsPopUpShow={setIsSuccessPopUpShow}
+                text={text}
             />
         </>
     );

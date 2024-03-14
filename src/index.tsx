@@ -14,15 +14,17 @@ root.render(
     <Provider store={store}>
         <BrowserRouter>
             <Routes>
-                {router.map((link) => {
-                    return (
-                        <Route
-                            key={link.path}
-                            path={link.path}
-                            element={<Layout>{link.element}</Layout>}
-                        />
-                    );
-                })}
+                <Route path="/" element={<Layout />}>
+                    {router.map((link) => {
+                        return (
+                            <Route
+                                key={link.path}
+                                path={link.path}
+                                element={link.element}
+                            />
+                        );
+                    })}
+                </Route>
                 {routerNoLoyout.map((link) => {
                     return (
                         <Route

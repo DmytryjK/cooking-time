@@ -241,4 +241,21 @@
     }
 }
 
-
+@media screen and (max-width: 767px) {
+    .authentication {
+        &__wrapper {
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            max-width: 100%;
+        }
+        &__block-btn {
+            width: 100%;
+            width: 100%;
+        }
+        &__block {
+            width: 100%;
+            z-index: 999;
+        }
+    }
+}
