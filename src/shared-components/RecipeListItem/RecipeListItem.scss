@@ -311,13 +311,13 @@
         }
     }
 
-    // &.enter {
-    //     opacity: 1;
-    //     transform: scale(1) translateY(0);
-    // }
-    // &.enter-active {
-    //     opacity: 0;
-    //     transform: scale(0.9) translateY(40px);
-    //     transition: opacity 300ms ease-out, transform 300ms ease-out;
-    // }
+    &.enter {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    &.enter-active {
+        opacity: 0;
+        transform: scale(0.9) translateY(40px);
+        transition: opacity 300ms ease-out, transform 300ms ease-out;
+    }
 }

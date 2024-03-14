@@ -1,0 +1,42 @@
+.recipe-list {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    list-style-type: none;
+    gap: 40px 20px;
+    &-favorites {
+        list-style-type: none;
+    }
+    &__item {
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        &.enter {
+            opacity: 0.3;
+            transform: translateY(40px);
+        }
+        &.enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition-duration: 400ms;
+            transition-property: opacity, transform;
+            transition-timing-function: ease-out;
+        }
+        &.exit {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        &.exit-active {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 400ms ease-out, transform 400ms ease-out;
+        }
+
+        &_not-show {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+}

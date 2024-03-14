@@ -14,8 +14,9 @@ import UnauthorizedFavoriteList from '../UnauthorizedFavoriteList/UnauthorizedFa
 import renderServerData from '../../../../helpers/renderServerData';
 import RecipeListItem from '../../../../shared-components/RecipeListItem/RecipeListItem';
 import { Recipe } from '../../../../types/type';
+import './FavoriteRecipeList.scss';
 
-const FavoritesRecipes: FC = () => {
+const FavoriteRecipeList: FC = () => {
     const favoriteRecipes = useAppSelector(
         (state) => state.favoriteRecipes.favoriteRecipes
     );
@@ -110,4 +111,4 @@ const FavoritesRecipes: FC = () => {
     );
 };
 
-export default FavoritesRecipes;
+export default FavoriteRecipeList;
