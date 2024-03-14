@@ -1,0 +1,16 @@
+.createdTag {
+    &__input-title {
+        display: block;
+        border: none;
+        background-color: transparent;
+        width: 100%;
+        padding: 5px 2px;
+        outline: none;
+        transition: 0.2s ease-out border-color;
+        border-bottom: 1px solid transparent;
+        font-size: 14px;
+        &:focus {
+            border-color: #030303;
+        }
+    }
+}

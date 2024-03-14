@@ -6,10 +6,11 @@ import {
 import { useAppDispatch } from '../../../../../hooks/hooks';
 import SelectUnitsItem from './SelectUnitsItem/SelectUnitsItem';
 import { IngredientsType } from '../../../../../types/type';
+import './Ingredient.scss';
 
 const Ingredient = ({ ingredient }: { ingredient: IngredientsType }) => {
     const { id, tagText, tagUnit, tagQuantityWithUnit } = ingredient;
-
+    const [inputTagText, setInputTagText] = useState(tagText);
     const [tagQuantity, setTagQuantity] = useState<string>(tagQuantityWithUnit);
     const [tagUnitLocal, setTagUnitLocal] = useState<string>(tagUnit);
     const dispatch = useAppDispatch();
@@ -36,7 +37,23 @@ const Ingredient = ({ ingredient }: { ingredient: IngredientsType }) => {
 
     return (
         <li className="tagsForm__createdTag createdTag">
-            <span>{tagText}</span>
+            <input
+                className="createdTag__input-title"
+                type="text"
+                value={inputTagText}
+                onChange={(e) => setInputTagText(e.target.value)}
+                onBlur={() => {
+                    dispatch(
+                        updateIngredientInfoById({
+                            id,
+                            tagText: inputTagText,
+                            tagUnit: tagUnitLocal,
+                            tagQuantityWithUnit: tagQuantity,
+                        })
+                    );
+                }}
+            />
+            {/* <span>{tagText}</span> */}
             <label className="createdTag__label">
                 <input
                     className="createdTag__input"
