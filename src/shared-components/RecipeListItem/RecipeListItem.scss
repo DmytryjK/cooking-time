@@ -45,6 +45,7 @@
         width: 90%;
     }
     &__confirmation-remove-notes {
+        display: none;
         position: absolute;
         flex-direction: column;
         align-items: center;
@@ -61,26 +62,27 @@
         font-weight: 600;
         font-size: 15px;
         z-index: 10;
-        &-enter {
-            transform: scale(0);
-        }
-        &-enter-done {
-            transform: scale(1);
-            display: inline-flex;
-            transition: 0.2s ease-out transform;
-        }
-        &-exit-active {
-            transform: scale(1);
-            display: inline-flex;
-        }
-        &-exit {
-            transform: scale(0);
-            transition: 0.2s ease-out transform;
-        }
+        // &-enter {
+        //     transform: scale(0);
+        // }
+        // &-enter-done {
+        //     transform: scale(1);
+        //     display: inline-flex;
+        //     transition: 0.2s ease-out transform;
+        // }
+        // &-exit-active {
+        //     transform: scale(1);
+        //     display: inline-flex;
+        // }
+        // &-exit {
+        //     transform: scale(0);
+        //     transition: 0.2s ease-out transform;
+        // }
         
     }
     &__btns-wrapper {
         display: flex;
+        justify-content: center;
         gap: 20px;
         button {
             margin-top: 10px;
@@ -311,13 +313,13 @@
         }
     }
 
-    &.enter {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-    &.enter-active {
-        opacity: 0;
-        transform: scale(0.9) translateY(40px);
-        transition: opacity 300ms ease-out, transform 300ms ease-out;
-    }
+    // &.enter {
+    //     opacity: 1;
+    //     transform: scale(1) translateY(0);
+    // }
+    // &.enter-active {
+    //     opacity: 0;
+    //     transform: scale(0.9) translateY(40px);
+    //     transition: opacity 300ms ease-out, transform 300ms ease-out;
+    // }
 }

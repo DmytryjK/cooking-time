@@ -11,24 +11,22 @@
         padding: 0;
 
         &.enter {
-            opacity: 0.3;
-            transform: translateY(40px);
+            transform: scale(0.9);
+            opacity: 0.5;
         }
-        &.enter-active {
+        &.enter-done {
+            transform: scale(1);
             opacity: 1;
-            transform: translateY(0);
-            transition-duration: 400ms;
-            transition-property: opacity, transform;
-            transition-timing-function: ease-out;
-        }
-        &.exit {
-            opacity: 1;
-            transform: translateY(0);
+            transition: 0.2s ease-out transform, 0.2s ease-out opacity;
         }
         &.exit-active {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 400ms ease-out, transform 400ms ease-out;
+            transform: scale(1);
+            opacity: 1;
+            transition: 0.2s ease-out transform, 0.2s ease-out opacity;
+        }
+        &.exit {
+            transform: scale(0.9);
+            opacity: 0.5;
         }
 
         &_not-show {
@@ -37,3 +35,4 @@
         }
     }
 }
+

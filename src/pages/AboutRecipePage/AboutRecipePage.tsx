@@ -10,7 +10,7 @@ import {
 } from '../../store/reducers/RecipesListSlice';
 import {
     manageFavoritesRecipes,
-    fetchFavoritesRecipe,
+    fetchFavoritesRecipes,
 } from '../../store/reducers/FavoritesRecipesSlice';
 import PopUp from '../AddRecipePage/components/PopUp/PopUp';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
@@ -55,12 +55,12 @@ const AboutRecipePage = () => {
         if (!recepieId.id) return;
         dispatch(fetchRecipe(recepieId.id));
         if (!uid) return;
-        dispatch(fetchFavoritesRecipe(uid));
+        dispatch(fetchFavoritesRecipes(uid));
     }, [uid]);
 
     useEffect(() => {
         if (loadingRecipesToFirebase !== 'succeeded') return;
-        dispatch(fetchFavoritesRecipe(uid));
+        dispatch(fetchFavoritesRecipes(uid));
     }, [loadingRecipesToFirebase]);
 
     const handleCloseAttantionWindow = () => {
@@ -77,7 +77,7 @@ const AboutRecipePage = () => {
         recepieId: string | number | null,
         item: Recipe
     ) => {
-        dispatch(manageFavoritesRecipes({ recepieId, uid }));
+        dispatch(manageFavoritesRecipes({ item, uid }));
         dispatch(
             setFavoriteRecipes({
                 recipeId: recepieId,

@@ -1,5 +1,6 @@
 @use '../../../../styles/variables' as *;
 .favorite-empty {
+    // display: none;
     margin-top: 30px;
     grid-column-start: 1;
     grid-column-end: 5; 

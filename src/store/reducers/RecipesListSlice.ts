@@ -269,7 +269,14 @@ export const recepieListSlice = createSlice({
                     return recipe;
                 }),
             ];
-            state.recipes = [...state.recipes];
+            state.recipes = [
+                ...state.recipes.map((recipe) => {
+                    if (recipe.id === recipeId) {
+                        recipe.favorites = isFavorite;
+                    }
+                    return recipe;
+                }),
+            ];
         },
         resetLoadingForm: (state) => {
             state.loadingForm = 'idle';
