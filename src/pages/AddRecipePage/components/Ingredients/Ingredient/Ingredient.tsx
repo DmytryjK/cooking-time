@@ -17,7 +17,7 @@ const Ingredient = ({ ingredient }: { ingredient: IngredientsType }) => {
 
     const handleCheckInput = () => {
         if (tagQuantity) {
-            const regex = /[^\d.]+|(?<=\d)\.(?!\d)/g;
+            const regex = /[^\d/.,-]+|(?<=\d)(\.|\/|,|-)(?!\d)/g;
             const replaced = tagQuantity.replace(regex, '');
             setTagQuantity(replaced);
         }
