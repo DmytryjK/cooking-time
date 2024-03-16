@@ -8,7 +8,11 @@ const SearchResults = () => {
     const filteredRecipes = useAppSelector(
         (state) => state.recipes.filteredRecipes
     );
-    const isRequestCorrect = filteredRecipes.length;
+    const filteredFavoriteRecipes = useAppSelector(
+        (state) => state.favoriteRecipes.filteredFavoriteRecipes
+    );
+    const isRequestCorrect =
+        filteredRecipes.length || filteredFavoriteRecipes.length;
 
     const renderResults = () => {
         let result;
@@ -38,33 +42,6 @@ const SearchResults = () => {
         return result || '';
     };
 
-    // return (
-    // <>
-    //     {searchValue ? (
-    //         <div className="search-results">
-    //             <h2 className="search-results__title">
-    //                 Результати пошуку:
-    //             </h2>
-    //             <span className="search-results__value-wrapper">
-    //                 "
-    //                 <span className="search-results__value">
-    //                     {searchValue}
-    //                 </span>
-    //                 "
-    //             </span>
-    //             {isRequestCorrect ? (
-    //                 ''
-    //             ) : (
-    //                 <span className="search-results__wrong-request">
-    //                     нажаль ми нічого не знайшли :(
-    //                 </span>
-    //             )}
-    //         </div>
-    //     ) : (
-    //         ''
-    //     )}
-    // </>
-    // );
     return <>{renderResults()}</>;
 };
 

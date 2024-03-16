@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useAppSelector, useAppDispatch } from '../../../hooks/hooks';
 import RecipeListItem from '../../../shared-components/RecipeListItem/RecipeListItem';
 import {
@@ -20,25 +20,18 @@ const RecipeList = () => {
     const loading = useAppSelector((state) => state.recipes.loadingRecipes);
     const error = useAppSelector((state) => state.recipes.error);
     const dispatch = useAppDispatch();
-    const nodeRef = useRef(null);
-    const [animateOnLoading, setAnimateOnLoading] = useState(false);
 
     useEffect(() => {
-        if (loading !== 'succeeded') {
-            setAnimateOnLoading(false);
-            return;
+        if (loading === 'succeeded') {
+            dispatch(setCurrentFilteredRecipes(recipes));
         }
-        setTimeout(() => {
-            setAnimateOnLoading(true);
-        }, 200);
-        dispatch(setCurrentFilteredRecipes(recipes));
-    }, [loading]);
+    }, [loading, JSON.stringify(recipes)]);
 
     const handleAddFavorite = (
         recepieId: string | number | null,
         item: Recipe
     ) => {
-        dispatch(manageFavoritesRecipes({ recepieId, uid }));
+        dispatch(manageFavoritesRecipes({ item, uid }));
         dispatch(
             setFavoriteRecipes({
                 recipeId: recepieId,
@@ -48,39 +41,36 @@ const RecipeList = () => {
     };
 
     const renderItems = () => {
-        return filteredRecipes.map((item) => {
+        return filteredRecipes.map((item, index) => {
             return (
-                <CSSTransition
+                <li
+                    className="recipe-list__item"
                     key={`all-recipes-${item.id}`}
-                    in={animateOnLoading}
-                    nodeRef={nodeRef.current}
-                    timeout={400}
-                    className={`recipe-list__item ${
-                        animateOnLoading ? '' : 'recipe-list__item_not-show'
-                    }`}
                 >
-                    <li className="recipe-list__item" ref={nodeRef.current}>
-                        <RecipeListItem
-                            recipe={item}
-                            addToFavorite={handleAddFavorite}
-                        />
-                    </li>
-                </CSSTransition>
+                    <RecipeListItem
+                        recipe={item}
+                        addToFavorite={handleAddFavorite}
+                        index={index}
+                    />
+                </li>
             );
         });
     };
 
     return (
-        <ul className="recipe-list-main">
-            <TransitionGroup className="recipe-list">
+        <div className="recipe-list-main">
+            <ul className=" recipe-list">
+                <AnimatePresence>
+                    {filteredRecipes.length > 0 && renderItems()}
+                </AnimatePresence>
                 {renderServerData({
                     loading,
                     error,
                     errorText: `${error}`,
-                    content: renderItems,
+                    content: () => '',
                 })}
-            </TransitionGroup>
-        </ul>
+            </ul>
+        </div>
     );
 };
 

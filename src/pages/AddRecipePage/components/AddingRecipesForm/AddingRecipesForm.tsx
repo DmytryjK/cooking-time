@@ -32,6 +32,7 @@ import {
     updateRecipe,
     resetLoadingForm,
     resetRecipes,
+    fetchRecipes,
 } from '../../../../store/reducers/RecipesListSlice';
 import { resetFavoriteRecipes } from '../../../../store/reducers/FavoritesRecipesSlice';
 import {
@@ -117,8 +118,7 @@ const AddingRecipesForm = (props: Props) => {
         if (loadingForm === 'succeeded') {
             setIsSuccessPopUpShow(true);
             dispatch(resetLoadingForm());
-            dispatch(resetRecipes());
-            dispatch(resetFavoriteRecipes());
+            dispatch(fetchRecipes(uid));
         }
     }, [loadingForm]);
 
@@ -304,10 +304,6 @@ const AddingRecipesForm = (props: Props) => {
         [{ align: [] }],
         ['clean'],
     ];
-
-    const test = () => {
-        console.log('sdfasdf');
-    };
 
     return (
         <>

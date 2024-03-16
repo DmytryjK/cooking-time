@@ -24,7 +24,9 @@ const CustomSelect = ({
     initialCheckedValue?: string;
 }) => {
     const [isCategoryActive, setIsCategoryActive] = useState<boolean>(false);
-    const [selectedValue, setSelectedValue] = useState<string>('');
+    const [selectedValue, setSelectedValue] = useState<string>(
+        initialCheckedValue || ''
+    );
 
     useEffect(() => {
         if (value === undefined) return;
@@ -37,11 +39,6 @@ const CustomSelect = ({
         if (!selectedValue) return;
         setValue(selectedValue);
     }, [selectedValue]);
-
-    useEffect(() => {
-        if (!initialCheckedValue) return;
-        setSelectedValue(initialCheckedValue);
-    }, [initialCheckedValue]);
 
     const closeSelect = (e: any) => {
         if (

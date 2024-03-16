@@ -1,114 +1,125 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { FC, memo, useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
+import { setFavoriteRecipes } from '../../../../store/reducers/RecipesListSlice';
 import {
-    setCurrentFilteredRecipes,
-    setCurrentRecipes,
-} from '../../../../store/reducers/RecipesListSlice';
-import {
-    fetchFavoritesRecipe,
+    setCurrentFilteredFavoriteRecipes,
+    fetchFavoritesRecipes,
     manageFavoritesRecipes,
 } from '../../../../store/reducers/FavoritesRecipesSlice';
+
 import EmptyFavoriteList from '../EmptyFavoriteList/EmptyFavoriteList';
 import UnauthorizedFavoriteList from '../UnauthorizedFavoriteList/UnauthorizedFavoriteList';
 import renderServerData from '../../../../helpers/renderServerData';
 import RecipeListItem from '../../../../shared-components/RecipeListItem/RecipeListItem';
-import { Recipe } from '../../../../types/type';
+import type { Recipe } from '../../../../types/type';
 import './FavoriteRecipeList.scss';
 
 const FavoriteRecipeList: FC = () => {
     const favoriteRecipes = useAppSelector(
         (state) => state.favoriteRecipes.favoriteRecipes
     );
-    const loading = useAppSelector(
+    const loadingFavorites = useAppSelector(
         (state) => state.favoriteRecipes.loadingRecipesById
     );
-    const error = useAppSelector((state) => state.favoriteRecipes.error);
-    const filteredRecipes: Recipe[] = useAppSelector(
-        (state) => state.recipes.filteredRecipes
+    const loadingRecipeIdToFirebase = useAppSelector(
+        (state) => state.favoriteRecipes.loadingRecipeIdToFirebase
     );
+    const filteredFavoriteRecipes = useAppSelector(
+        (state) => state.favoriteRecipes.filteredFavoriteRecipes
+    );
+    const error = useAppSelector((state) => state.favoriteRecipes.error);
     const { uid } = useAppSelector((state) => state.authentication.user);
     const [isAnimate, setIsAnimate] = useState<{
         id: string | number | null;
         animate: boolean;
     }>({ id: null, animate: false });
     const [animateOnLoading, setAnimateOnLoading] = useState(false);
-
+    const [isCardAnimateEnd, setIsCardAnimateEnd] = useState(true);
     const dispatch = useAppDispatch();
-    const nodeRef = useRef(null);
+
+    useEffect(() => {
+        if (uid && loadingFavorites === 'idle') {
+            dispatch(fetchFavoritesRecipes(uid)).then((result) => {
+                dispatch(
+                    setCurrentFilteredFavoriteRecipes(
+                        result.payload as Recipe[]
+                    )
+                );
+            });
+        }
+    }, [uid, favoriteRecipes, loadingFavorites]);
 
     useEffect(() => {
         if (uid) {
-            dispatch(fetchFavoritesRecipe(uid));
+            dispatch(setCurrentFilteredFavoriteRecipes(favoriteRecipes));
         }
-    }, [uid]);
-
-    useEffect(() => {
-        if (loading !== 'succeeded') return;
-        dispatch(setCurrentRecipes(favoriteRecipes));
-        dispatch(setCurrentFilteredRecipes(favoriteRecipes));
-    }, [loading, favoriteRecipes]);
-
-    useEffect(() => {
-        if (loading !== 'succeeded') {
-            setAnimateOnLoading(false);
-            return;
-        }
-        setTimeout(() => {
-            setAnimateOnLoading(true);
-        }, 200);
-    }, [loading]);
+    }, [uid, favoriteRecipes, loadingFavorites, loadingRecipeIdToFirebase]);
 
     const registerAttention = () => {
         return <UnauthorizedFavoriteList />;
     };
 
-    const handleAddFavorite = (recepieId: string | number | null) => {
-        dispatch(manageFavoritesRecipes({ recepieId, uid }));
+    const handleAddFavorite = (
+        recepieId: string | number | null,
+        item: Recipe
+    ) => {
+        setAnimateOnLoading(false);
+        dispatch(manageFavoritesRecipes({ item, uid })).then(() => {
+            dispatch(
+                setFavoriteRecipes({
+                    recipeId: recepieId,
+                    isFavorite: !item.favorites,
+                })
+            );
+        });
     };
-
     const renderItems = () => {
-        if (loading === 'succeeded' && favoriteRecipes.length === 0) {
-            return <EmptyFavoriteList />;
-        }
-        return filteredRecipes.map((item) => {
+        return filteredFavoriteRecipes.map((item, index) => {
             return (
-                <CSSTransition
-                    key={`favorites-${item.id}`}
-                    className={`recipe-list__item ${
-                        animateOnLoading ? '' : 'recipe-list__item_not-show'
-                    }`}
-                    in={animateOnLoading}
-                    nodeRef={nodeRef.current}
-                    timeout={400}
+                <li
+                    className="recipe-list__item"
+                    key={`favorite-recipes-${item.id}`}
                 >
-                    <li className="recipe-list__item" ref={nodeRef.current}>
-                        <RecipeListItem
-                            recipe={item}
-                            addToFavorite={handleAddFavorite}
-                            isAnimate={isAnimate}
-                            setIsAnimate={setIsAnimate}
-                        />
-                    </li>
-                </CSSTransition>
+                    <RecipeListItem
+                        recipe={item}
+                        addToFavorite={handleAddFavorite}
+                        isAnimate={isAnimate}
+                        setIsAnimate={setIsAnimate}
+                        index={index}
+                        setIsCardAnimateEnd={setIsCardAnimateEnd}
+                    />
+                </li>
             );
         });
     };
 
     return (
-        <ul className="recipe-list-favorites">
-            <TransitionGroup className="recipe-list">
+        <div className="recipe-list-favorites">
+            <ul className="recipe-list">
+                <AnimatePresence>
+                    {uid &&
+                        favoriteRecipes.length !== 0 &&
+                        loadingFavorites === 'succeeded' &&
+                        renderItems()}
+                    {uid &&
+                        loadingFavorites === 'succeeded' &&
+                        favoriteRecipes.length === 0 &&
+                        isCardAnimateEnd && (
+                            <EmptyFavoriteList key="empty-favorite-item" />
+                        )}
+                </AnimatePresence>
                 {uid
                     ? renderServerData({
-                          loading,
+                          loading: loadingFavorites,
                           error,
                           errorText: 'Щось пішло не так, спробуйте ще раз',
-                          content: renderItems,
+                          content: () => '',
                       })
                     : registerAttention()}
-            </TransitionGroup>
-        </ul>
+            </ul>
+        </div>
     );
 };
 
-export default FavoriteRecipeList;
+export default memo(FavoriteRecipeList);

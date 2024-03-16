@@ -9,6 +9,7 @@ import {
 } from '../../../store/reducers/FiltersSlice';
 import loader from '../../../assets/icons/loader/loader.svg';
 import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
+import { filterFavoriteRecipes } from '../../../store/reducers/FavoritesRecipesSlice';
 import CustomSelect from '../../CustomSelect/CustomSelect';
 import debounce from '../../../helpers/debounce';
 import './SearchForm.scss';
@@ -45,6 +46,9 @@ const SearchForm = () => {
 
     useEffect(() => {
         dispatch(filterRecipes({ searchInput, searchTags, searchCategories }));
+        dispatch(
+            filterFavoriteRecipes({ searchInput, searchTags, searchCategories })
+        );
     }, [searchInput, searchTags, searchCategories]);
 
     useEffect(() => {
@@ -53,7 +57,6 @@ const SearchForm = () => {
 
     useEffect(() => {
         setInputValue('');
-        setSelectedOption('');
         dispatch(searchInputValue(''));
         dispatch(deleteAllTags());
     }, [pathname]);
@@ -67,7 +70,7 @@ const SearchForm = () => {
             }
             return undefined;
         });
-    }, [inputValue]);
+    }, [inputValue, selectedOption]);
 
     const handleSearchClick = (value: string) => {
         dispatch(searchInputValue(value));
