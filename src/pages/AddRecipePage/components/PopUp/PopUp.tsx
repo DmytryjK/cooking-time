@@ -1,16 +1,19 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './PopUp.scss';
 
 const PopUp = ({
     isPopUpShow,
     setIsPopUpShow,
     text,
+    method,
 }: {
     isPopUpShow: boolean;
     setIsPopUpShow: Dispatch<SetStateAction<boolean>>;
     text?: string;
+    method?: 'POST' | 'UPDATE';
 }) => {
+    const navigate = useNavigate();
     const closePopUp = (e: Event) => {
         const target = e.target as HTMLElement;
         if (target.className === 'success-window active') {
@@ -20,7 +23,10 @@ const PopUp = ({
 
     useEffect(() => {
         if (!isPopUpShow) return undefined;
-
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
         const popUp = document.querySelector('.success-window');
         popUp?.addEventListener('click', (e) => closePopUp(e));
 
@@ -40,7 +46,13 @@ const PopUp = ({
                     <NavLink
                         to="/add-recipe"
                         className="success-window__back"
-                        onClick={() => setIsPopUpShow(false)}
+                        onClick={(e) => {
+                            if (method && method === 'UPDATE') {
+                                e.preventDefault();
+                                navigate(0);
+                            }
+                            setIsPopUpShow(false);
+                        }}
                     >
                         Назад
                     </NavLink>

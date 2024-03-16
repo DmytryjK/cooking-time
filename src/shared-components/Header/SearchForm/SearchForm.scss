@@ -11,7 +11,7 @@
         height: 100%;
     }
     &__searchByName {
-        padding: 8px 85px 8px 45px;
+        padding: 10px 85px 10px 45px;
         border-radius: 6px;
         background-color: #EDEDED;
         width: 314px;
@@ -19,18 +19,20 @@
         outline: none;
         font-weight: 400;
         font-size: 14px;
-        color: #303030;
+        color: $text-color;
+        transition: 0.2s ease-out border-color;
         &:hover {
             border-color: $border-input;
         }
         &:focus {
             border-color: $text-color;
             background-color: $light-color;
-            caret-color: $accent-color;
-            color: $accent-color;
+            caret-color: $text-color;
+            color: $text-color;
         }
         &:focus ~ .searchForm__searchBtn {
             .searchForm__searchBtn-icon {
+                transition: 0.2s ease-out fill;
                 fill: $accent-color;
             }
         }
@@ -76,7 +78,7 @@
         &__open-btn {
             min-width: 78px;
             width: 78px;
-            padding: 6px 20px 6px 20px;
+            padding: 8px 20px;
             border: none;
             border-radius: 6px;
             background-color: $accent-color;
