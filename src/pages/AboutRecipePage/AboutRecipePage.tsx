@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { motion } from 'framer-motion';
+import { domAnimation, LazyMotion, m } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import nextId from 'react-id-generator';
@@ -216,45 +216,47 @@ const AboutRecipePage = () => {
     };
 
     return (
-        <motion.section
-            className="about-recipe"
-            initial={{ opacity: 0 }}
-            animate={{
-                opacity: 1,
-                transition: {
-                    duration: 0.7,
-                    delay: 0,
-                },
-            }}
-            exit={{
-                opacity: 0,
-                display: 'none',
-            }}
-        >
-            <div className="container">
-                <PopUp
-                    isPopUpShow={attentionWindowOpen}
-                    setIsPopUpShow={setAttentionWindowOpen}
-                    text="Якщо Ви закриєте редактор, то зміни не буде збережено."
-                />
-                <main className="recipe-page">
-                    {isEditActive && currentRecipeToEdit ? (
-                        <EditRecipeForm
-                            recipe={currentRecipeToEdit}
-                            setIsAttentionOpen={setAttentionWindowOpen}
-                        />
-                    ) : (
-                        renderServerData({
-                            error,
-                            errorText:
-                                'Упс, щось пішло не так :( Спробуйте оновити сторінку!',
-                            loading: loadingRecipe,
-                            content: renderedInfo,
-                        })
-                    )}
-                </main>
-            </div>
-        </motion.section>
+        <LazyMotion features={domAnimation} strict>
+            <m.section
+                className="about-recipe"
+                initial={{ opacity: 0 }}
+                animate={{
+                    opacity: 1,
+                    transition: {
+                        duration: 0.7,
+                        delay: 0,
+                    },
+                }}
+                exit={{
+                    opacity: 0,
+                    display: 'none',
+                }}
+            >
+                <div className="container">
+                    <PopUp
+                        isPopUpShow={attentionWindowOpen}
+                        setIsPopUpShow={setAttentionWindowOpen}
+                        text="Якщо Ви закриєте редактор, то зміни не буде збережено."
+                    />
+                    <main className="recipe-page">
+                        {isEditActive && currentRecipeToEdit ? (
+                            <EditRecipeForm
+                                recipe={currentRecipeToEdit}
+                                setIsAttentionOpen={setAttentionWindowOpen}
+                            />
+                        ) : (
+                            renderServerData({
+                                error,
+                                errorText:
+                                    'Упс, щось пішло не так :( Спробуйте оновити сторінку!',
+                                loading: loadingRecipe,
+                                content: renderedInfo,
+                            })
+                        )}
+                    </main>
+                </div>
+            </m.section>
+        </LazyMotion>
     );
 };
 
