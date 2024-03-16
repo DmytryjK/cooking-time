@@ -1,4 +1,5 @@
 import { FC, SetStateAction } from 'react';
+import { motion } from 'framer-motion';
 import { Recipe } from '../../../../types/type';
 import AddingRecipesForm from '../../../AddRecipePage/components/AddingRecipesForm/AddingRecipesForm';
 import 'react-quill/dist/quill.snow.css';
@@ -36,18 +37,33 @@ const EditRecipeForm: FC<{
                 aria-label="Відминити зміни"
                 onClick={() => setIsAttentionOpen(true)}
             />
-            <AddingRecipesForm
-                id={id}
-                title={title}
-                categoryName={category}
-                timer={time}
-                descr={description}
-                loadedPhotos={loadedPhotos}
-                ingredients={ingredients}
-                isFavorite={favorites}
-                method="UPDATE"
-                text="Рецепт успішно оновлено"
-            />
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{
+                    opacity: 1,
+                    transition: {
+                        duration: 0.5,
+                        delay: 0,
+                    },
+                }}
+                exit={{
+                    opacity: 0,
+                    display: 'none',
+                }}
+            >
+                <AddingRecipesForm
+                    id={id}
+                    title={title}
+                    categoryName={category}
+                    timer={time}
+                    descr={description}
+                    loadedPhotos={loadedPhotos}
+                    ingredients={ingredients}
+                    isFavorite={favorites}
+                    method="UPDATE"
+                    text="Рецепт успішно оновлено"
+                />
+            </motion.div>
         </>
     );
 };

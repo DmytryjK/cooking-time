@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { motion } from 'framer-motion';
-import { ReactNode, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import nextId from 'react-id-generator';
 import parse from 'html-react-parser';
 import LazyLoad from 'react-lazy-load';
@@ -21,7 +21,6 @@ import iconsSprite from '../../assets/icons/about-recipe/sprite.svg';
 import timerIcon from '../../assets/icons/timer-line2.svg';
 import renderServerData from '../../helpers/renderServerData';
 import './AboutRecipePage.scss';
-import Loader from '../../shared-components/Loader/Loader';
 
 const AboutRecipePage = () => {
     const recepieId = useParams();
@@ -44,6 +43,7 @@ const AboutRecipePage = () => {
         useState<Recipe | null>(null);
     const [attentionWindowOpen, setAttentionWindowOpen] =
         useState<boolean>(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (favoriteRecipe.length === 0) {
@@ -127,7 +127,13 @@ const AboutRecipePage = () => {
                             }`}
                             title="в обране"
                             type="button"
-                            onClick={() => handleAddFavorite(id, recipe)}
+                            onClick={() => {
+                                if (uid) {
+                                    handleAddFavorite(id, recipe);
+                                } else {
+                                    navigate('/favorites');
+                                }
+                            }}
                         >
                             <svg width="22" height="22" viewBox="0 0 22 22">
                                 <use href={`${iconsSprite}#heart`} />
