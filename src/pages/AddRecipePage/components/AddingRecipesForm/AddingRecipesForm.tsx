@@ -12,6 +12,7 @@ import {
     uploadBytes,
     deleteObject,
 } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import ImageCompress from 'quill-image-compress';
 import nextId from 'react-id-generator';
@@ -31,16 +32,16 @@ import {
     postRecipe,
     updateRecipe,
     resetLoadingForm,
-    resetRecipes,
     fetchRecipes,
+    resetRecipes,
 } from '../../../../store/reducers/RecipesListSlice';
-import { resetFavoriteRecipes } from '../../../../store/reducers/FavoritesRecipesSlice';
 import {
     clearAllTags,
     getCategories,
 } from '../../../../store/reducers/CreateRecipeFormSlice';
 import './AddingRecipesForm.scss';
 import 'react-quill/dist/quill.snow.css';
+import { resetFavoriteRecipes } from '../../../../store/reducers/FavoritesRecipesSlice';
 
 type Props = {
     id: string | number | null;
@@ -106,6 +107,8 @@ const AddingRecipesForm = (props: Props) => {
     const { categories } = useAppSelector((state) => state.createRecipeForm);
     const { uid } = useAppSelector((state) => state.authentication.user);
 
+    const navigate = useNavigate();
+
     const [isSuccessPopUpShow, setIsSuccessPopUpShow] =
         useState<boolean>(false);
     const dispatch = useAppDispatch();
@@ -116,11 +119,23 @@ const AddingRecipesForm = (props: Props) => {
 
     useEffect(() => {
         if (loadingForm === 'succeeded') {
-            setIsSuccessPopUpShow(true);
             dispatch(resetLoadingForm());
-            dispatch(fetchRecipes(uid));
+            setIsSuccessPopUpShow(true);
+            dispatch(resetRecipes());
+            dispatch(resetFavoriteRecipes());
         }
     }, [loadingForm]);
+
+    useEffect(() => {
+        if (isSuccessPopUpShow && method === 'UPDATE') {
+            setTimeout(() => {
+                if (isSuccessPopUpShow) {
+                    navigate(0);
+                    setIsSuccessPopUpShow(false);
+                }
+            }, 1000);
+        }
+    }, [isSuccessPopUpShow]);
 
     useEffect(() => {
         if (loadingForm === 'succeeded') {
@@ -205,10 +220,6 @@ const AddingRecipesForm = (props: Props) => {
             alert('Додайте інгредієнти');
             return;
         }
-        // if (tags.some((tag) => !tag.tagQuantityWithUnit)) {
-        //     alert('Введіть кількість інгредієнтів');
-        //     return;
-        // }
         if (!timerValue.hours) {
             alert('Вкажіть час приготування страви');
             return;
@@ -461,6 +472,7 @@ const AddingRecipesForm = (props: Props) => {
                 isPopUpShow={isSuccessPopUpShow}
                 setIsPopUpShow={setIsSuccessPopUpShow}
                 text={text}
+                method={method}
             />
         </>
     );
