@@ -26,7 +26,7 @@ const MainPage = () => {
                 dispatch(fetchFavoritesRecipes(uid));
             }
         }
-    }, []);
+    }, [loadingRecipes]);
 
     return (
         <section className="main">

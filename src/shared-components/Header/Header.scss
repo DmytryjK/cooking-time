@@ -96,25 +96,41 @@
 @media screen and (max-width: 940px) {
     .header {
         &__nav {
+            position: absolute;
+            padding-top: 100px;
+            padding-bottom: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 100dvh;
+            z-index: 10;
+            transform: translateX(100%);
+            transition: 0.6s ease-in-out transform;
+            background-color: $light-color;
             &-list {
-                position: absolute;
                 flex-direction: column;
-                padding-top: 100px;
-                top: 0;
-                right: 0;
-                left: 0;
-                height: 100dvh;
-                background-color: $light-color;
-                z-index: 10;
-                transform: translateX(100%);
-                transition: 0.6s ease-in-out transform;
+                justify-content: center;
+            }
+            &-item {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+            &-link {
+                width: auto;
+                font-size: 18px;
+                padding: 10px;
+                width: 100%;
             }
             &.mobile-active {
-                .header__nav-list {
-                    transform: translateX(0);
-                }
+                transform: translateX(0);
             }
         }
+        
     }
 }
 

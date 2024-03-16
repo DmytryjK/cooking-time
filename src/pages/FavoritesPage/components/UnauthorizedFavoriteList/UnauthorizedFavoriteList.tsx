@@ -1,9 +1,24 @@
 import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import './UnauthorizedFavoriteList.scss';
 
 const UnauthorizedFavoriteList = () => {
     return (
-        <div className="favorite-unauthorized">
+        <motion.div
+            className="favorite-unauthorized"
+            initial={{ opacity: 0 }}
+            animate={{
+                opacity: 1,
+                transition: {
+                    duration: 0.5,
+                    delay: 0,
+                },
+            }}
+            exit={{
+                opacity: 0,
+                display: 'none',
+            }}
+        >
             <h2 className="favorite-unauthorized__title">Мої обрані</h2>
             <p className="favorite-unauthorized__text">
                 Щоб мати змогу додати рецепти в обрані або переглянути свій
@@ -24,7 +39,7 @@ const UnauthorizedFavoriteList = () => {
                     Увійдіть
                 </NavLink>
             </div>
-        </div>
+        </motion.div>
     );
 };
 
