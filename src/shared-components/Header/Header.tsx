@@ -5,6 +5,8 @@ import SearchForm from './SearchForm/SearchForm';
 import { auth } from '../../firebase/firebase';
 import { createUser } from '../../store/reducers/AuthenticationSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
+import { resetFavoriteRecipes } from '../../store/reducers/FavoritesRecipesSlice';
+import { resetRecipes } from '../../store/reducers/RecipesListSlice';
 import logo from '../../assets/icons/logo.svg';
 import BurgerBtn from './BurgerBtn/BurgerBtn';
 import './Header.scss';
@@ -46,6 +48,8 @@ const Header = () => {
                 localStorage.clear();
                 setUserAuthToLocalStorage(null);
                 dispatch(createUser({ uid: '', email: '' }));
+                dispatch(resetFavoriteRecipes());
+                dispatch(resetRecipes());
             })
             .catch((error) => {
                 console.log('error when u try sign out');
@@ -91,7 +95,7 @@ const Header = () => {
                                         Головна
                                     </NavLink>
                                 </li>
-                                <li>
+                                <li className="header__nav-item">
                                     <NavLink
                                         to="/favorites"
                                         className={({ isActive }) =>
@@ -104,7 +108,7 @@ const Header = () => {
                                         Обране
                                     </NavLink>
                                 </li>
-                                <li>
+                                <li className="header__nav-item">
                                     <NavLink
                                         to="/add-recipe"
                                         className={({ isActive }) =>

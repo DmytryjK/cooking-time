@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
+import { motion } from 'framer-motion';
 import { ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import nextId from 'react-id-generator';
@@ -20,6 +21,7 @@ import iconsSprite from '../../assets/icons/about-recipe/sprite.svg';
 import timerIcon from '../../assets/icons/timer-line2.svg';
 import renderServerData from '../../helpers/renderServerData';
 import './AboutRecipePage.scss';
+import Loader from '../../shared-components/Loader/Loader';
 
 const AboutRecipePage = () => {
     const recepieId = useParams();
@@ -208,7 +210,21 @@ const AboutRecipePage = () => {
     };
 
     return (
-        <section className="about-recipe">
+        <motion.section
+            className="about-recipe"
+            initial={{ opacity: 0 }}
+            animate={{
+                opacity: 1,
+                transition: {
+                    duration: 0.7,
+                    delay: 0,
+                },
+            }}
+            exit={{
+                opacity: 0,
+                display: 'none',
+            }}
+        >
             <div className="container">
                 <PopUp
                     isPopUpShow={attentionWindowOpen}
@@ -232,7 +248,7 @@ const AboutRecipePage = () => {
                     )}
                 </main>
             </div>
-        </section>
+        </motion.section>
     );
 };
 

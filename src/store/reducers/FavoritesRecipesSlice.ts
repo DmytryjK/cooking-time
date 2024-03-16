@@ -191,6 +191,8 @@ export const favoriteRecipesSlice = createSlice({
         },
         resetFavoriteRecipes: (state) => {
             state.favoriteRecipes = [];
+            state.filteredFavoriteRecipes = [];
+            state.loadingRecipesById = 'idle';
         },
         filterFavoriteRecipes: (
             state,
@@ -292,6 +294,18 @@ export const favoriteRecipesSlice = createSlice({
         ) => {
             state.filteredFavoriteRecipes = action.payload;
         },
+        localRemoveFavoriteRecipe: (
+            state,
+            action: PayloadAction<string | number>
+        ) => {
+            state.favoriteRecipes = state.favoriteRecipes.filter(
+                (recipe) => recipe.id !== action.payload
+            );
+            state.filteredFavoriteRecipes =
+                state.filteredFavoriteRecipes.filter(
+                    (recipe) => recipe.id !== action.payload
+                );
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchFavoritesRecipes.pending, (state) => {
@@ -360,5 +374,6 @@ export const {
     resetFavoriteRecipes,
     filterFavoriteRecipes,
     setCurrentFilteredFavoriteRecipes,
+    localRemoveFavoriteRecipe,
 } = favoriteRecipesSlice.actions;
 export default favoriteRecipesSlice.reducer;

@@ -13,6 +13,7 @@ import {
     deleteRecipe,
     localRemoveRecipe,
 } from '../../store/reducers/RecipesListSlice';
+import { localRemoveFavoriteRecipe } from '../../store/reducers/FavoritesRecipesSlice';
 import loader from '../../assets/icons/loader/loader.svg';
 import { Recipe } from '../../types/type';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
@@ -61,7 +62,10 @@ const RecipeListItem = ({
 
     const handledeleteRecipe = () => {
         if (!id) return;
-        dispatch(deleteRecipe(id)).then(() => dispatch(localRemoveRecipe(id)));
+        dispatch(deleteRecipe(id)).then(() => {
+            dispatch(localRemoveRecipe(id));
+            dispatch(localRemoveFavoriteRecipe(id));
+        });
     };
 
     const variants = {

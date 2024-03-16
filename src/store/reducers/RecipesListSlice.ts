@@ -373,6 +373,7 @@ export const recepieListSlice = createSlice({
             state.recipes = [];
             state.filteredRecipes = [];
             state.recipe = null;
+            state.loadingRecipes = 'idle';
         },
         localRemoveRecipe: (state, action: PayloadAction<string | number>) => {
             state.recipes = state.recipes.filter(
