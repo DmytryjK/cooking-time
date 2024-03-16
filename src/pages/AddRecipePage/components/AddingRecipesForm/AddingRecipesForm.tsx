@@ -205,10 +205,10 @@ const AddingRecipesForm = (props: Props) => {
             alert('Додайте інгредієнти');
             return;
         }
-        if (tags.some((tag) => !tag.tagQuantityWithUnit)) {
-            alert('Введіть кількість інгредієнтів');
-            return;
-        }
+        // if (tags.some((tag) => !tag.tagQuantityWithUnit)) {
+        //     alert('Введіть кількість інгредієнтів');
+        //     return;
+        // }
         if (!timerValue.hours) {
             alert('Вкажіть час приготування страви');
             return;
@@ -219,6 +219,7 @@ const AddingRecipesForm = (props: Props) => {
         }
         if (!description) {
             alert('Опишіть процес приготування страви');
+            return;
         }
 
         try {
