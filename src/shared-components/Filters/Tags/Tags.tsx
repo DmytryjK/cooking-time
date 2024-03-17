@@ -3,6 +3,10 @@ import {
     deleteSearchTag,
     deleteAllTags,
 } from '../../../store/reducers/FiltersSlice';
+import {
+    removeSearchedTagFilled,
+    resetSearchedTagFilled,
+} from '../../../store/reducers/RecipesListSlice';
 import { TagsType } from '../../../types/type';
 import './Tags.scss';
 
@@ -11,7 +15,7 @@ const Tags = () => {
     const dispatch = useAppDispatch();
 
     const createNewTag = (tags: TagsType[]) => {
-        const renderResult = tags.map((tag) => {
+        const renderResult = tags.map((tag, index) => {
             const { id, tagText } = tag;
             return (
                 <li className="tagsForm__item" key={id}>
@@ -19,7 +23,10 @@ const Tags = () => {
                     <button
                         className="tagsForm__item-close"
                         type="button"
-                        onClick={() => dispatch(deleteSearchTag(id))}
+                        onClick={() => {
+                            dispatch(deleteSearchTag(id));
+                            dispatch(removeSearchedTagFilled(tagText));
+                        }}
                     >
                         <svg
                             width="10"
@@ -71,7 +78,10 @@ const Tags = () => {
             <button
                 className="tagsForm__clear-btn"
                 type="button"
-                onClick={() => dispatch(deleteAllTags())}
+                onClick={() => {
+                    dispatch(deleteAllTags());
+                    dispatch(resetSearchedTagFilled());
+                }}
             >
                 Видалити все
             </button>

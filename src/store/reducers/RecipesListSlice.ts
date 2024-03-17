@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+    createSlice,
+    PayloadAction,
+    createAsyncThunk,
+    current,
+} from '@reduxjs/toolkit';
 import {
     getDatabase,
     ref,
@@ -17,9 +22,15 @@ type PayloadActionFilter = {
     searchCategories: string[];
 };
 
+type SearchedConstruction = {
+    recipeIngredient: string;
+    userSearchTag: string;
+};
+
 type InitialStateRecipes = {
     recipes: Recipe[];
     filteredRecipes: Recipe[];
+    searchedTagFilled: SearchedConstruction[];
     recipe: Recipe | null;
     loadingRecipe: Loading;
     loadingRecipes: Loading;
@@ -38,6 +49,7 @@ type IsFavoritePayload = {
 const initialState: InitialStateRecipes = {
     recipes: [],
     filteredRecipes: [],
+    searchedTagFilled: [],
     recipe: null,
     loadingRecipe: 'idle',
     loadingRecipes: 'idle',
@@ -76,7 +88,11 @@ function levenshteinDistance(a: string, b: string) {
 }
 
 const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
-    return searchTags.every((tag) => {
+    let searchedConstruction: SearchedConstruction = {
+        recipeIngredient: '',
+        userSearchTag: '',
+    };
+    const result = searchTags.every((tag) => {
         return recipe.ingredients?.some((ingredient) => {
             const tagLower = tag.tagText.toLowerCase().trim();
             const ingredientLower = ingredient.tagText.toLowerCase().trim();
@@ -84,21 +100,36 @@ const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
             const tagParts =
                 tagLower.length > 1 ? tagLower.split(/[' '-]/g) : [tagLower];
             let result = false;
-            ingredientParts.some((part, index) => {
+            ingredientParts.some((part) => {
                 return tagParts.some((tagPart) => {
+                    if (tagPart[0] !== part[0] || tagPart[1] !== part[1])
+                        return false;
                     const distance = levenshteinDistance(part, tagPart);
                     result = distance <= part.length / 2.2;
-                    if (part.includes(tagParts[index])) {
-                        const str = part.replace(tagParts[index], '');
-                        result = tagParts[index].length > str.length;
+                    searchedConstruction = {
+                        recipeIngredient: part,
+                        userSearchTag: tag.tagText,
+                    };
+                    if (part.includes(tagPart)) {
+                        const str = part.replace(tagPart, '');
+                        result = tagPart.length > str.length;
+                        searchedConstruction = {
+                            recipeIngredient: part,
+                            userSearchTag: tag.tagText,
+                        };
                     }
                     if (result) return true;
+                    searchedConstruction = {
+                        recipeIngredient: '',
+                        userSearchTag: '',
+                    };
                     return false;
                 });
             });
             return result;
         });
     });
+    return { isCorrect: result, searchedConstruction };
 };
 
 export const fetchRecipes = createAsyncThunk(
@@ -286,6 +317,7 @@ export const recepieListSlice = createSlice({
                 action.payload;
 
             state.filteredRecipes = JSON.parse(JSON.stringify(state.recipes));
+            const searchedWord: SearchedConstruction[] = [];
             if (!searchInput) {
                 state.searchedNameOfDishes = '';
             }
@@ -311,7 +343,17 @@ export const recepieListSlice = createSlice({
                                 .indexOf(searchInput.toLowerCase()) > -1
                     )
                     .filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     })
                     .filter(
                         (recipe) =>
@@ -326,7 +368,17 @@ export const recepieListSlice = createSlice({
                                 .indexOf(searchInput.toLowerCase()) > -1
                     )
                     .filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     });
             } else if (searchInput && searchCategories.length > 0) {
                 state.filteredRecipes = state.filteredRecipes
@@ -343,7 +395,17 @@ export const recepieListSlice = createSlice({
             } else if (searchTags.length > 0 && searchCategories.length > 0) {
                 state.filteredRecipes = state.filteredRecipes
                     .filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     })
                     .filter(
                         (recipe) =>
@@ -359,7 +421,17 @@ export const recepieListSlice = createSlice({
             } else if (searchTags.length > 0) {
                 state.filteredRecipes = state.filteredRecipes.filter(
                     (recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     }
                 );
             } else {
@@ -367,6 +439,29 @@ export const recepieListSlice = createSlice({
                     (recipe) =>
                         searchCategories.includes(recipe.category) === true
                 );
+            }
+
+            if (searchedWord.length > 0 && searchTags.length > 0) {
+                const uniqSearchedTags: SearchedConstruction[] = [];
+                searchedWord.forEach((word, index) => {
+                    const { userSearchTag, recipeIngredient } = word;
+                    if (index === 0) {
+                        uniqSearchedTags.push(word);
+                    } else if (
+                        !uniqSearchedTags.some(
+                            (uniqTag) =>
+                                uniqTag.recipeIngredient === recipeIngredient &&
+                                uniqTag.userSearchTag === userSearchTag
+                        )
+                    ) {
+                        uniqSearchedTags.push(word);
+                    }
+                });
+
+                state.searchedTagFilled = [
+                    ...state.searchedTagFilled,
+                    ...uniqSearchedTags,
+                ];
             }
         },
         resetRecipes: (state) => {
@@ -382,6 +477,15 @@ export const recepieListSlice = createSlice({
             state.filteredRecipes = state.filteredRecipes.filter(
                 (recipe) => recipe.id !== action.payload
             );
+        },
+        removeSearchedTagFilled: (state, action: PayloadAction<string>) => {
+            const tagText = action.payload;
+            state.searchedTagFilled = state.searchedTagFilled.filter(
+                (item) => item.userSearchTag !== tagText
+            );
+        },
+        resetSearchedTagFilled: (state) => {
+            state.searchedTagFilled = [];
         },
     },
     extraReducers: (builder) => {
@@ -484,6 +588,8 @@ export const {
     resetLoadingForm,
     resetRecipes,
     localRemoveRecipe,
+    removeSearchedTagFilled,
+    resetSearchedTagFilled,
 } = recepieListSlice.actions;
 
 export default recepieListSlice.reducer;

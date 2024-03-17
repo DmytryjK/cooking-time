@@ -8,7 +8,7 @@ import {
     memo,
 } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { easeOut, LazyMotion, m, domAnimation } from 'framer-motion';
+import { easeOut, LazyMotion, m, domMax } from 'framer-motion';
 import {
     deleteRecipe,
     localRemoveRecipe,
@@ -17,6 +17,7 @@ import { localRemoveFavoriteRecipe } from '../../store/reducers/FavoritesRecipes
 import loader from '../../assets/icons/loader/loader.svg';
 import { Recipe } from '../../types/type';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import type { IngredientsType } from '../../types/type';
 import './RecipeListItem.scss';
 
 type HandleAddToFavorite = (
@@ -44,6 +45,7 @@ const RecipeListItem = ({
     const { ingredients, id, title, time, imgDto, favorites, category } =
         recipe;
     const [isRemoveActive, setIsRemoveActive] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     const previewImg = imgDto.find((img) => img.id === 'previewImg');
     const timerClass = time
@@ -54,6 +56,9 @@ const RecipeListItem = ({
     );
     const removeRecipeLoading = useAppSelector(
         (state) => state.recipes.removeRecipeLoading
+    );
+    const searchedTagFilled = useAppSelector(
+        (state) => state.recipes.searchedTagFilled
     );
     const navigate = useNavigate();
     const noderef = useRef(null);
@@ -105,16 +110,79 @@ const RecipeListItem = ({
         return () => window.removeEventListener('click', handleCloseNote);
     }, [isRemoveActive]);
 
-    const renderedTags = ingredients?.map((item) => {
-        return (
-            <li key={`item-tagtext-${item.id}`} className="product-tags__item">
-                {item.tagText}
-            </li>
-        );
-    });
+    const renderedTags = () => {
+        if (!ingredients) return '';
+        let result: JSX.Element | JSX.Element[] = <span />;
+        result = ingredients.map((item) => {
+            return (
+                <li
+                    key={`item-tagtext-${item.id}`}
+                    className="product-tags__item"
+                >
+                    {item.tagText}
+                </li>
+            );
+        });
+        if (searchedTagFilled.length > 0) {
+            const indexesOfIngredients = ingredients
+                .map((ingredient, index) => {
+                    let result = null;
+                    if (
+                        searchedTagFilled.some((searchTag) => {
+                            if (
+                                ingredient.tagText
+                                    .toLowerCase()
+                                    .includes(
+                                        searchTag.recipeIngredient.toLowerCase()
+                                    )
+                            ) {
+                                return true;
+                            }
+                            return false;
+                        })
+                    ) {
+                        result = index;
+                    }
+                    return result;
+                })
+                .filter((item) => item !== null);
+            let copiedIngredients: IngredientsType[] = JSON.parse(
+                JSON.stringify(ingredients)
+            );
+            indexesOfIngredients.forEach((itemIndex) => {
+                copiedIngredients = copiedIngredients.filter(
+                    (copyIngredient) => {
+                        if (
+                            copyIngredient.tagText !==
+                            ingredients[itemIndex as number].tagText
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                copiedIngredients.unshift(ingredients[itemIndex as number]);
+            });
+            result = copiedIngredients.map((item, index) => {
+                return (
+                    <li
+                        key={`item-tagtext-${item.id}`}
+                        className={`product-tags__item ${
+                            index < indexesOfIngredients.length
+                                ? 'product-tags__item_searched'
+                                : ''
+                        }`}
+                    >
+                        {item.tagText}
+                    </li>
+                );
+            });
+        }
+        return result;
+    };
 
     return (
-        <LazyMotion features={domAnimation} strict>
+        <LazyMotion features={domMax} strict>
             <m.div
                 className="recipe-card"
                 ref={noderef}
@@ -220,7 +288,7 @@ const RecipeListItem = ({
                         </button>
                     </div>
                 </m.div>
-                <NavLink
+                {/* <NavLink
                     className="recipe-card__link"
                     to={`/about-recepie/${id}`}
                 >
@@ -251,14 +319,55 @@ const RecipeListItem = ({
                                 </span>
                             )}
                             <ul className="recipe-card__product-tags product-tags">
-                                {renderedTags || null}
+                                {renderedTags() || null}
                             </ul>
                         </div>
                     </div>
                     <div className="recipe-card__current-category">
                         {category}
                     </div>
-                </NavLink>
+                </NavLink> */}
+                <div className="recipe-card__wrapper">
+                    <NavLink
+                        className="recipe-card__img-wrapper"
+                        to={`/about-recepie/${id}`}
+                    >
+                        <LazyLoad width={290} height={290}>
+                            <img
+                                className="recipe-card__image"
+                                width={290}
+                                height={290}
+                                src={previewImg?.src || ''}
+                                alt={title}
+                            />
+                        </LazyLoad>
+                    </NavLink>
+                    <div className="recipe-card__content-text">
+                        <h2 className="recipe-card__title" title={title}>
+                            <NavLink to={`/about-recepie/${id}`}>
+                                {title.length > 42
+                                    ? `${title.substring(0, 42)}...`
+                                    : title}
+                            </NavLink>
+                        </h2>
+                        <div className="recipe-card__inner-wrapper">
+                            {time.hours === '' && time.minutes === '' ? (
+                                ''
+                            ) : (
+                                <span className={timerClass}>
+                                    {time.hours ? `${time.hours} год.` : ''}{' '}
+                                    {time.minutes ? `${time.minutes} хв.` : ''}
+                                </span>
+                            )}
+                            <ul className="recipe-card__product-tags product-tags">
+                                {renderedTags() || null}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="recipe-card__current-category">
+                        {category}
+                    </div>
+                </div>
                 <button
                     className={
                         favorites
