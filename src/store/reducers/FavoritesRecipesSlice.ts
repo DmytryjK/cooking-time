@@ -8,9 +8,15 @@ type PayloadActionFilter = {
     searchCategories: string[];
 };
 
+type SearchedConstruction = {
+    recipeIngredient: string;
+    userSearchTag: string;
+};
+
 type TypeFavoriteRecipes = {
     favoriteRecipes: Recipe[];
     filteredFavoriteRecipes: Recipe[];
+    searchedTagFilledFavorites: SearchedConstruction[];
     loadingRecipesById: Loading;
     loadingRecipeIdToFirebase: Loading;
     error: null | unknown;
@@ -21,6 +27,7 @@ type TypeFavoriteRecipes = {
 const initialState: TypeFavoriteRecipes = {
     favoriteRecipes: [],
     filteredFavoriteRecipes: [],
+    searchedTagFilledFavorites: [],
     loadingRecipesById: 'idle',
     loadingRecipeIdToFirebase: 'idle',
     error: null,
@@ -56,7 +63,11 @@ function levenshteinDistance(a: string, b: string) {
 }
 
 const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
-    return searchTags.every((tag) => {
+    let searchedConstruction: SearchedConstruction = {
+        recipeIngredient: '',
+        userSearchTag: '',
+    };
+    const result = searchTags.every((tag) => {
         return recipe.ingredients?.some((ingredient) => {
             const tagLower = tag.tagText.toLowerCase().trim();
             const ingredientLower = ingredient.tagText.toLowerCase().trim();
@@ -64,21 +75,36 @@ const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
             const tagParts =
                 tagLower.length > 1 ? tagLower.split(/[' '-]/g) : [tagLower];
             let result = false;
-            ingredientParts.some((part, index) => {
+            ingredientParts.some((part) => {
                 return tagParts.some((tagPart) => {
+                    if (tagPart[0] !== part[0] || tagPart[1] !== part[1])
+                        return false;
                     const distance = levenshteinDistance(part, tagPart);
                     result = distance <= part.length / 2.2;
-                    if (part.includes(tagParts[index])) {
-                        const str = part.replace(tagParts[index], '');
-                        result = tagParts[index].length > str.length;
+                    searchedConstruction = {
+                        recipeIngredient: part,
+                        userSearchTag: tag.tagText,
+                    };
+                    if (part.includes(tagPart)) {
+                        const str = part.replace(tagPart, '');
+                        result = tagPart.length > str.length;
+                        searchedConstruction = {
+                            recipeIngredient: part,
+                            userSearchTag: tag.tagText,
+                        };
                     }
                     if (result) return true;
+                    searchedConstruction = {
+                        recipeIngredient: '',
+                        userSearchTag: '',
+                    };
                     return false;
                 });
             });
             return result;
         });
     });
+    return { isCorrect: result, searchedConstruction };
 };
 
 export const fetchFavoritesRecipes = createAsyncThunk(
@@ -200,10 +226,10 @@ export const favoriteRecipesSlice = createSlice({
         ) => {
             const { searchInput, searchTags, searchCategories } =
                 action.payload;
-
             state.filteredFavoriteRecipes = JSON.parse(
                 JSON.stringify(state.favoriteRecipes)
             );
+            const searchedWord: SearchedConstruction[] = [];
             if (!searchInput) {
                 state.searchedNameOfDishes = '';
             }
@@ -229,7 +255,17 @@ export const favoriteRecipesSlice = createSlice({
                                 .indexOf(searchInput.toLowerCase()) > -1
                     )
                     .filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     })
                     .filter(
                         (recipe) =>
@@ -244,7 +280,17 @@ export const favoriteRecipesSlice = createSlice({
                                 .indexOf(searchInput.toLowerCase()) > -1
                     )
                     .filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     });
             } else if (searchInput && searchCategories.length > 0) {
                 state.filteredFavoriteRecipes = state.filteredFavoriteRecipes
@@ -261,7 +307,17 @@ export const favoriteRecipesSlice = createSlice({
             } else if (searchTags.length > 0 && searchCategories.length > 0) {
                 state.filteredFavoriteRecipes = state.filteredFavoriteRecipes
                     .filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     })
                     .filter(
                         (recipe) =>
@@ -278,7 +334,17 @@ export const favoriteRecipesSlice = createSlice({
             } else if (searchTags.length > 0) {
                 state.filteredFavoriteRecipes =
                     state.filteredFavoriteRecipes.filter((recipe) => {
-                        return filterByIngredients(recipe, searchTags);
+                        const { isCorrect, searchedConstruction } =
+                            filterByIngredients(recipe, searchTags);
+                        if (
+                            isCorrect &&
+                            searchedConstruction.recipeIngredient !== ''
+                        ) {
+                            searchedWord.push({
+                                ...searchedConstruction,
+                            });
+                        }
+                        return isCorrect;
                     });
             } else {
                 state.filteredFavoriteRecipes =
@@ -286,6 +352,28 @@ export const favoriteRecipesSlice = createSlice({
                         (recipe) =>
                             searchCategories.includes(recipe.category) === true
                     );
+            }
+            if (searchedWord.length > 0 && searchTags.length > 0) {
+                const uniqSearchedTags: SearchedConstruction[] = [];
+                searchedWord.forEach((word, index) => {
+                    const { userSearchTag, recipeIngredient } = word;
+                    if (index === 0) {
+                        uniqSearchedTags.push(word);
+                    } else if (
+                        !uniqSearchedTags.some(
+                            (uniqTag) =>
+                                uniqTag.recipeIngredient === recipeIngredient &&
+                                uniqTag.userSearchTag === userSearchTag
+                        )
+                    ) {
+                        uniqSearchedTags.push(word);
+                    }
+                });
+
+                state.searchedTagFilledFavorites = [
+                    ...state.searchedTagFilledFavorites,
+                    ...uniqSearchedTags,
+                ];
             }
         },
         setCurrentFilteredFavoriteRecipes: (
@@ -305,6 +393,18 @@ export const favoriteRecipesSlice = createSlice({
                 state.filteredFavoriteRecipes.filter(
                     (recipe) => recipe.id !== action.payload
                 );
+        },
+        removeSearchedTagFilledFavorites: (
+            state,
+            action: PayloadAction<number>
+        ) => {
+            state.searchedTagFilledFavorites =
+                state.searchedTagFilledFavorites.filter(
+                    (item, index) => index !== action.payload
+                );
+        },
+        resetSearchedTagFilledFavorites: (state) => {
+            state.searchedTagFilledFavorites = [];
         },
     },
     extraReducers: (builder) => {

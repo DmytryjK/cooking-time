@@ -183,20 +183,25 @@ const AboutRecipePage = () => {
                                 </h3>
                                 <ul className="recipe-page__ingredients-list">
                                     {ingredients?.map((ingredient) => {
+                                        const {
+                                            tagText,
+                                            tagQuantityWithUnit,
+                                            tagUnit,
+                                        } = ingredient;
                                         return (
                                             <li
                                                 key={nextId('ingredient-')}
                                                 className="recipe-page__ingredients-item"
                                             >
                                                 <span className="ingredients-item__character">
-                                                    {ingredient.tagText}
+                                                    {tagText}
                                                 </span>
-                                                <span className="ingredients-item__quantity">
-                                                    {
-                                                        ingredient.tagQuantityWithUnit
-                                                    }{' '}
-                                                    {ingredient.tagUnit}
-                                                </span>
+                                                {tagQuantityWithUnit && (
+                                                    <span className="ingredients-item__quantity">
+                                                        {tagQuantityWithUnit}{' '}
+                                                        {tagUnit}
+                                                    </span>
+                                                )}
                                             </li>
                                         );
                                     })}
