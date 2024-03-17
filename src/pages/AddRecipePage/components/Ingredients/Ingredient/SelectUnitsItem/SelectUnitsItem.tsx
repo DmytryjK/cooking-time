@@ -4,6 +4,8 @@ import {
     SetStateAction,
     Dispatch,
     useContext,
+    useRef,
+    KeyboardEvent,
 } from 'react';
 import nextId from 'react-id-generator';
 import { SelectUnitContext } from '../../Ingredients';
@@ -31,9 +33,12 @@ const SelectUnitsItem = ({
     ];
     const [isUnitsOpen, setIsUnitsOpen] = useState<boolean>(false);
     const [currentUnit, setCurrentUnit] = useState<string>(tagUnit || units[0]);
+    const [searchUnitValue, setSearchUnitValue] = useState('');
+    const [filteredUnits, setFilteredUnits] = useState(units);
 
     const { selectedUnits, setSelectedUnits } = useContext(SelectUnitContext);
-
+    const selectRef = useRef<HTMLButtonElement>(null);
+    const fieldsetRef = useRef<HTMLFieldSetElement>(null);
     useEffect(() => {
         setUnit(currentUnit);
     }, [currentUnit]);
@@ -57,14 +62,52 @@ const SelectUnitsItem = ({
                 });
             }
         }
+        if (selectRef.current && window.visualViewport && fieldsetRef.current) {
+            const bottomDistance =
+                window.visualViewport.height -
+                selectRef.current.getBoundingClientRect().bottom;
+            const fieldsetHeight =
+                fieldsetRef.current.getBoundingClientRect().height;
+            fieldsetRef.current.style.setProperty('--unitSelectHeight', 'auto');
+            if (bottomDistance > 0 && fieldsetHeight > bottomDistance) {
+                fieldsetRef.current.style.setProperty(
+                    '--unitSelectHeight',
+                    `${Math.floor(bottomDistance) - 20}px`
+                );
+            }
+        }
         return () => document.removeEventListener('click', closeSelect);
     }, [isUnitsOpen]);
+
+    useEffect(() => {
+        if (isUnitsOpen && searchUnitValue) {
+            setSearchUnitValue('');
+        }
+    }, [isUnitsOpen, currentUnit]);
 
     useEffect(() => {
         if (tagId !== selectedUnits.id) {
             setIsUnitsOpen(false);
         }
     }, [selectedUnits, tagId]);
+
+    useEffect(() => {
+        if (searchUnitValue) {
+            setFilteredUnits(
+                units.filter((unit) => unit.startsWith(searchUnitValue))
+            );
+        } else {
+            setFilteredUnits(units);
+            setCurrentUnit(tagUnit || units[0]);
+        }
+    }, [searchUnitValue]);
+
+    const keydownInput = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && filteredUnits.length === 1) {
+            setCurrentUnit(filteredUnits[0]);
+            setIsUnitsOpen(false);
+        }
+    };
 
     return (
         <div
@@ -74,12 +117,22 @@ const SelectUnitsItem = ({
             <button
                 className="sort-unit__open-btn"
                 type="button"
+                ref={selectRef}
                 onClick={() => setIsUnitsOpen(!isUnitsOpen)}
             >
                 <span className="btn__text">{currentUnit}</span>{' '}
+                <input
+                    className={`sort-unit__search-input ${
+                        isUnitsOpen ? 'active' : ''
+                    }`}
+                    type="text"
+                    value={searchUnitValue}
+                    onChange={(e) => setSearchUnitValue(e.target.value)}
+                    onKeyDown={keydownInput}
+                />
             </button>
-            <fieldset className="sort-unit__custom-fields">
-                {units.map((unit, index) => {
+            <fieldset className="sort-unit__custom-fields" ref={fieldsetRef}>
+                {filteredUnits.map((unit, index) => {
                     return (
                         <div className="sort-unit__field" key={nextId('units')}>
                             <input
