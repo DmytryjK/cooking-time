@@ -1,5 +1,5 @@
 import { m, LazyMotion, domAnimation } from 'framer-motion';
-import AddingRecipesForm from './components/AddingRecipesForm/AddingRecipesForm';
+import AddingRecipesForm from '../../shared-components/AddingRecipesForm/AddingRecipesForm';
 import './AddRecipePage.scss';
 
 const AddRecipePage = () => {

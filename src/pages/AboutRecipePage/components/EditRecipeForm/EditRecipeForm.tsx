@@ -1,7 +1,7 @@
 import { FC, SetStateAction } from 'react';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { Recipe } from '../../../../types/type';
-import AddingRecipesForm from '../../../AddRecipePage/components/AddingRecipesForm/AddingRecipesForm';
+import AddingRecipesForm from '../../../../shared-components/AddingRecipesForm/AddingRecipesForm';
 import 'react-quill/dist/quill.snow.css';
 import './EditRecipeForm.scss';
 

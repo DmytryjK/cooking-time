@@ -1,9 +1,4 @@
-import {
-    createSlice,
-    PayloadAction,
-    createAsyncThunk,
-    current,
-} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import {
     getDatabase,
     ref,
@@ -13,18 +8,17 @@ import {
     update,
     remove,
 } from 'firebase/database';
-
+import {
+    filterByIngredients,
+    uniqSearchedTags,
+} from '../../helpers/filterRecipes';
 import type { Recipes, Recipe, TagsType, Loading } from '../../types/type';
+import type { SearchedConstruction } from '../../helpers/filterRecipes/filterByIngredients';
 
 type PayloadActionFilter = {
     searchInput: string;
     searchTags: TagsType[];
     searchCategories: string[];
-};
-
-type SearchedConstruction = {
-    recipeIngredient: string;
-    userSearchTag: string;
 };
 
 type InitialStateRecipes = {
@@ -58,78 +52,6 @@ const initialState: InitialStateRecipes = {
     error: null,
     removeRecipeError: null,
     searchedNameOfDishes: '',
-};
-
-function levenshteinDistance(a: string, b: string) {
-    const distanceMatrix = Array(b.length + 1)
-        .fill(null)
-        .map(() => Array(a.length + 1).fill(null));
-
-    for (let i = 0; i <= a.length; i += 1) {
-        distanceMatrix[0][i] = i;
-    }
-
-    for (let j = 0; j <= b.length; j += 1) {
-        distanceMatrix[j][0] = j;
-    }
-
-    for (let j = 1; j <= b.length; j += 1) {
-        for (let i = 1; i <= a.length; i += 1) {
-            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
-            distanceMatrix[j][i] = Math.min(
-                distanceMatrix[j][i - 1] + 1,
-                distanceMatrix[j - 1][i] + 1,
-                distanceMatrix[j - 1][i - 1] + indicator
-            );
-        }
-    }
-
-    return distanceMatrix[b.length][a.length];
-}
-
-const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
-    let searchedConstruction: SearchedConstruction = {
-        recipeIngredient: '',
-        userSearchTag: '',
-    };
-    const result = searchTags.every((tag) => {
-        return recipe.ingredients?.some((ingredient) => {
-            const tagLower = tag.tagText.toLowerCase().trim();
-            const ingredientLower = ingredient.tagText.toLowerCase().trim();
-            const ingredientParts = ingredientLower.split(/[' '-]/g);
-            const tagParts =
-                tagLower.length > 1 ? tagLower.split(/[' '-]/g) : [tagLower];
-            let result = false;
-            ingredientParts.some((part) => {
-                return tagParts.some((tagPart) => {
-                    if (tagPart[0] !== part[0] || tagPart[1] !== part[1])
-                        return false;
-                    const distance = levenshteinDistance(part, tagPart);
-                    result = distance <= part.length / 2.2;
-                    searchedConstruction = {
-                        recipeIngredient: part,
-                        userSearchTag: tag.tagText,
-                    };
-                    if (part.includes(tagPart)) {
-                        const str = part.replace(tagPart, '');
-                        result = tagPart.length > str.length;
-                        searchedConstruction = {
-                            recipeIngredient: part,
-                            userSearchTag: tag.tagText,
-                        };
-                    }
-                    if (result) return true;
-                    searchedConstruction = {
-                        recipeIngredient: '',
-                        userSearchTag: '',
-                    };
-                    return false;
-                });
-            });
-            return result;
-        });
-    });
-    return { isCorrect: result, searchedConstruction };
 };
 
 export const fetchRecipes = createAsyncThunk(
@@ -442,25 +364,9 @@ export const recepieListSlice = createSlice({
             }
 
             if (searchedWord.length > 0 && searchTags.length > 0) {
-                const uniqSearchedTags: SearchedConstruction[] = [];
-                searchedWord.forEach((word, index) => {
-                    const { userSearchTag, recipeIngredient } = word;
-                    if (index === 0) {
-                        uniqSearchedTags.push(word);
-                    } else if (
-                        !uniqSearchedTags.some(
-                            (uniqTag) =>
-                                uniqTag.recipeIngredient === recipeIngredient &&
-                                uniqTag.userSearchTag === userSearchTag
-                        )
-                    ) {
-                        uniqSearchedTags.push(word);
-                    }
-                });
-
                 state.searchedTagFilled = [
                     ...state.searchedTagFilled,
-                    ...uniqSearchedTags,
+                    ...uniqSearchedTags(searchedWord),
                 ];
             }
         },
