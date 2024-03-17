@@ -212,6 +212,10 @@ const AddingRecipesForm = (props: Props) => {
             alert('Введіть назву страви');
             return;
         }
+        if (!categoryValue) {
+            alert('Виберіть категорію страви');
+            return;
+        }
         if (tags.length === 0) {
             alert('Додайте інгредієнти');
             return;
