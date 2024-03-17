@@ -1,10 +1,15 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
 import { activeCategories } from '../../../store/reducers/FiltersSlice';
+import debounce from '../../../helpers/debounce';
 import './SortByCategories.scss';
 
-const SortByCategories = () => {
+const SortByCategories = ({
+    currentPage,
+}: {
+    currentPage: 'MAIN' | 'FAVORITES';
+}) => {
     const [isSelectActive, setIsSelectActive] = useState<boolean>(false);
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
     const { searchInput, searchTags, searchCategories } = useAppSelector(
@@ -12,16 +17,35 @@ const SortByCategories = () => {
     );
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const recipes = useAppSelector((state) => state.recipes.recipes);
+    const favoriteRecipes = useAppSelector(
+        (state) => state.favoriteRecipes.favoriteRecipes
+    );
     const [listOfCategories, setListOfCategories] = useState<string[]>([]);
     const dispatch = useAppDispatch();
 
+    const debounceFilter = useCallback(
+        debounce((searchInput, searchTags, searchCategories) => {
+            dispatch(
+                filterRecipes({ searchInput, searchTags, searchCategories })
+            );
+        }, 400),
+        []
+    );
+
     useEffect(() => {
-        if (recipes.length > 0) {
+        if (currentPage === 'MAIN' && recipes.length > 0) {
             setListOfCategories(
                 Array.from(new Set(recipes.map((recipe) => recipe.category)))
             );
         }
-    }, [recipes]);
+        if (currentPage === 'FAVORITES' && favoriteRecipes.length > 0) {
+            setListOfCategories(
+                Array.from(
+                    new Set(favoriteRecipes.map((recipe) => recipe.category))
+                )
+            );
+        }
+    }, [recipes, favoriteRecipes]);
 
     const closeSelect = (e: any) => {
         if (
@@ -41,8 +65,14 @@ const SortByCategories = () => {
     }, [isSelectActive]);
 
     useEffect(() => {
-        dispatch(filterRecipes({ searchInput, searchTags, searchCategories }));
-    }, [searchCategories]);
+        if (isFilterActive) {
+            debounceFilter(searchInput, searchTags, searchCategories);
+        }
+    }, [searchCategories, isFilterActive]);
+
+    useEffect(() => {
+        dispatch(activeCategories(selectedCategories));
+    }, [selectedCategories]);
 
     const toggleCategories = (e: ChangeEvent<HTMLInputElement>) => {
         const { target } = e;
@@ -75,8 +105,7 @@ const SortByCategories = () => {
                         return (
                             <div
                                 className="sort__field"
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={`${category}-${index}`}
+                                key={`category-sort-${category}`}
                             >
                                 <input
                                     className="sort__input"
@@ -87,6 +116,9 @@ const SortByCategories = () => {
                                         (selectedName) =>
                                             selectedName === category
                                     )}
+                                    onClick={() => {
+                                        setIsFilterActive(true);
+                                    }}
                                     onChange={toggleCategories}
                                 />
                                 <label
@@ -99,15 +131,20 @@ const SortByCategories = () => {
                             </div>
                         );
                     })}
-                    <button
-                        className="sort__accept-btn"
-                        type="button"
-                        onClick={() => {
-                            dispatch(activeCategories(selectedCategories));
-                        }}
-                    >
-                        Показати
-                    </button>
+                    {selectedCategories.length > 0 ? (
+                        <button
+                            className="sort__accept-btn"
+                            type="button"
+                            onClick={() => {
+                                setIsFilterActive(true);
+                                setSelectedCategories([]);
+                            }}
+                        >
+                            Очистити фільтри
+                        </button>
+                    ) : (
+                        ''
+                    )}
                 </fieldset>
             </div>
         </div>

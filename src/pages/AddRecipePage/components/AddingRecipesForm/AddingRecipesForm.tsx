@@ -220,7 +220,7 @@ const AddingRecipesForm = (props: Props) => {
             alert('Додайте інгредієнти');
             return;
         }
-        if (!timerValue.hours) {
+        if (!timerValue.hours && !timerValue.minutes) {
             alert('Вкажіть час приготування страви');
             return;
         }

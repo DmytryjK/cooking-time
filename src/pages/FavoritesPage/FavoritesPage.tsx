@@ -12,7 +12,7 @@ const FavoritesPage = () => {
         <section className="favorites">
             <div className="container">
                 {uid && favoriteRecipes.length > 0 && (
-                    <Filters title="Мої обрані" />
+                    <Filters title="Мої обрані" currentPage="FAVORITES" />
                 )}
                 <FavoriteRecipeList />
             </div>
