@@ -42,6 +42,9 @@ const Ingredients = ({
         id: '',
         isOpen: false,
     });
+    const [duplicatedValues, setDuplicatedValues] = useState<(string | null)[]>(
+        []
+    );
     const dispatch = useAppDispatch();
     const ingredients = useAppSelector((state) => state.createRecipeForm.tags);
     const contextValue = useMemo(
@@ -56,6 +59,32 @@ const Ingredients = ({
             dispatch(clearAllTags());
         }
     }, [localingredients]);
+
+    useEffect(() => {
+        if (ingredients.length > 1) {
+            setDuplicatedValues([
+                ...new Set(
+                    ingredients
+                        .map((item, index) => {
+                            if (
+                                ingredients.some(
+                                    (ingredient, ingIndex) =>
+                                        ingredient.tagText.toLowerCase() ===
+                                            item.tagText.toLowerCase() &&
+                                        ingIndex !== index
+                                )
+                            ) {
+                                return item.tagText.toLowerCase();
+                            }
+                            return null;
+                        })
+                        .filter((item) => item !== null)
+                ),
+            ]);
+        } else {
+            setDuplicatedValues([]);
+        }
+    }, [ingredients]);
 
     const changeTagsStatesOnEvent = () => {
         if (tagName.length === 0) return;
@@ -118,6 +147,26 @@ const Ingredients = ({
                         );
                     })}
                 </ul>
+            )}
+            {duplicatedValues.length > 0 ? (
+                <div className="duplicated-block">
+                    <p>Ви записали декілька однакових інгредієнтів:</p>
+                    <ul className="duplicated-list">
+                        {' '}
+                        {duplicatedValues.map((item, index) => {
+                            return (
+                                <li
+                                    className="duplicated-list__item"
+                                    key={nextId(item)}
+                                >
+                                    {item}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            ) : (
+                ''
             )}
         </fieldset>
     );

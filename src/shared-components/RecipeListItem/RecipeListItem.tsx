@@ -355,8 +355,8 @@ const RecipeListItem = ({
                                 ''
                             ) : (
                                 <span className={timerClass}>
-                                    {time.hours ? `${time.hours} год.` : ''}{' '}
-                                    {time.minutes ? `${time.minutes} хв.` : ''}
+                                    {time.hours ? `${time.hours} год` : ''}{' '}
+                                    {time.minutes ? `${time.minutes} хв` : ''}
                                 </span>
                             )}
                             <ul className="recipe-card__product-tags product-tags">
