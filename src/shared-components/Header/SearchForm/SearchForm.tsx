@@ -36,19 +36,32 @@ const SearchForm = () => {
     ];
     const selectFields = searchTypes.map((field) => field.title);
 
+    const debounceSearch = useCallback(
+        debounce((searchInput, searchTags, searchCategories) => {
+            dispatch(
+                filterRecipes({ searchInput, searchTags, searchCategories })
+            );
+            dispatch(
+                filterFavoriteRecipes({
+                    searchInput,
+                    searchTags,
+                    searchCategories,
+                })
+            );
+        }, 400),
+        []
+    );
+
     const debouncedSearchName = useCallback(
         debounce((inputValue) => {
             dispatch(searchInputValue(inputValue));
             setIsSearchLoading('succeeded');
-        }, 500),
+        }, 400),
         []
     );
 
     useEffect(() => {
-        dispatch(filterRecipes({ searchInput, searchTags, searchCategories }));
-        dispatch(
-            filterFavoriteRecipes({ searchInput, searchTags, searchCategories })
-        );
+        debounceSearch(searchInput, searchTags, searchCategories);
     }, [searchInput, searchTags, searchCategories]);
 
     useEffect(() => {

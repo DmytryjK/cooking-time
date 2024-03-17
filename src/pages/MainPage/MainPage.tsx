@@ -31,7 +31,7 @@ const MainPage = () => {
     return (
         <section className="main">
             <div className="container">
-                <Filters title="Всі рецепти" />
+                <Filters title="Всі рецепти" currentPage="MAIN" />
                 <RecipeList />
             </div>
         </section>
