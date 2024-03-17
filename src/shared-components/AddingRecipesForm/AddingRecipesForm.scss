@@ -1,4 +1,4 @@
-@use '../../../../styles/variables' as *;
+@use '../../styles/variables' as *;
 .form {
     margin-top: 50px;
     margin-bottom: auto;
@@ -157,7 +157,7 @@
                 top: 50%;
                 right: 50%;
                 transform: translateX(50%) translateY(-50%);
-                background: url('../../../../assets/icons/plus.svg') center center/cover no-repeat;
+                background: url('../../assets/icons/plus.svg') center center/cover no-repeat;
                 width: 18px;
                 height: 18px;
                 

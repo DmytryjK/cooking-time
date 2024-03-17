@@ -17,31 +17,27 @@ import ReactQuill from 'react-quill';
 import ImageCompress from 'quill-image-compress';
 import nextId from 'react-id-generator';
 import Compressor from 'compressorjs';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
-import { storage } from '../../../../firebase/firebase';
-import Ingredients from '../Ingredients/Ingredients';
-import UploadPhotos from '../UploadPhotos/UploadPhotos';
-import CustomSelect from '../../../../shared-components/CustomSelect/CustomSelect';
-import PopUp from '../PopUp/PopUp';
-import {
-    UploadFileType,
-    IngredientsType,
-    Loading,
-} from '../../../../types/type';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { storage } from '../../firebase/firebase';
+import Ingredients from '../../pages/AddRecipePage/components/Ingredients/Ingredients';
+import UploadPhotos from '../../pages/AddRecipePage/components/UploadPhotos/UploadPhotos';
+import CustomSelect from '../CustomSelect/CustomSelect';
+import PopUp from '../../pages/AddRecipePage/components/PopUp/PopUp';
+import { UploadFileType, IngredientsType, Loading } from '../../types/type';
 import {
     postRecipe,
     updateRecipe,
     resetLoadingForm,
     fetchRecipes,
     resetRecipes,
-} from '../../../../store/reducers/RecipesListSlice';
+} from '../../store/reducers/RecipesListSlice';
 import {
     clearAllTags,
     getCategories,
-} from '../../../../store/reducers/CreateRecipeFormSlice';
+} from '../../store/reducers/CreateRecipeFormSlice';
 import './AddingRecipesForm.scss';
 import 'react-quill/dist/quill.snow.css';
-import { resetFavoriteRecipes } from '../../../../store/reducers/FavoritesRecipesSlice';
+import { resetFavoriteRecipes } from '../../store/reducers/FavoritesRecipesSlice';
 
 type Props = {
     id: string | number | null;
