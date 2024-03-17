@@ -170,9 +170,9 @@ const AboutRecipePage = () => {
                                         alt="час"
                                     />
                                     <span className="recipe-page__time-text">
-                                        {time.hours ? `${time.hours} год.` : ''}{' '}
+                                        {time.hours ? `${time.hours} год` : ''}{' '}
                                         {time.minutes
-                                            ? `${time.minutes} хв.`
+                                            ? `${time.minutes} хв`
                                             : ''}
                                     </span>
                                 </div>
