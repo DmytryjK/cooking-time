@@ -129,10 +129,6 @@
             color: rgb(143, 143, 143);
             font-size: 20px;
             font-weight: 600;
-            // text-decoration-line: underline;
-            // text-underline-offset: 3px;
-            // text-decoration-thickness: 0.5px;
-            // text-decoration-skip-ink: none;
         }
         &__ingredients {
             margin-top: 50px;
@@ -141,7 +137,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                gap: 100px;
+                gap: 70px;
                 list-style-type: none;
                 color: $bgcolor;
                 font-size: 16px;
@@ -162,16 +158,19 @@
         }
         .ingredients-item {
             &__character, &__quantity {
-                white-space: nowrap;
                 position: relative;
                 display: block;
                 z-index: 1;
                 background-color: $light-color;
             }
             &__character {
+                display: inline-flex;
                 padding-right: 10px;
+                max-width: 250px;
+                width: auto;
             }
             &__quantity {
+                white-space: nowrap;
                 padding-left: 12px;
             }
         }
