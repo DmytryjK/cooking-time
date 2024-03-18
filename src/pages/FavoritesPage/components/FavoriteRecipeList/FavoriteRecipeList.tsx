@@ -97,11 +97,10 @@ const FavoriteRecipeList: FC = () => {
     return (
         <div className="recipe-list-favorites">
             <ul className="recipe-list">
-                <AnimatePresence>
-                    {uid &&
-                        favoriteRecipes.length !== 0 &&
-                        loadingFavorites === 'succeeded' &&
-                        renderItems()}
+                <AnimatePresence
+                    onExitComplete={() => setIsCardAnimateEnd(true)}
+                >
+                    {uid && loadingFavorites === 'succeeded' && renderItems()}
                     {uid &&
                         loadingFavorites === 'succeeded' &&
                         favoriteRecipes.length === 0 &&

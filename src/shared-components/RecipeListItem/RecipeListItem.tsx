@@ -151,9 +151,6 @@ const RecipeListItem = ({
                 onAnimationStart={() =>
                     setIsCardAnimateEnd && setIsCardAnimateEnd(false)
                 }
-                onTransitionEnd={() =>
-                    setIsCardAnimateEnd && setIsCardAnimateEnd(true)
-                }
             >
                 <RemoveRecipeByAdmin id={id} />
                 <div className="recipe-card__wrapper">
