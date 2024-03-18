@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { domAnimation, LazyMotion, m } from 'framer-motion';
+import { domMax, LazyMotion, m } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import nextId from 'react-id-generator';
@@ -221,7 +221,7 @@ const AboutRecipePage = () => {
     };
 
     return (
-        <LazyMotion features={domAnimation} strict>
+        <LazyMotion features={domMax} strict>
             <m.section
                 className="about-recipe"
                 initial={{ opacity: 0 }}

@@ -19,8 +19,8 @@ import nextId from 'react-id-generator';
 import Compressor from 'compressorjs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { storage } from '../../firebase/firebase';
-import Ingredients from '../../pages/AddRecipePage/components/Ingredients/Ingredients';
-import UploadPhotos from '../../pages/AddRecipePage/components/UploadPhotos/UploadPhotos';
+import Ingredients from './components/Ingredients/Ingredients';
+import UploadPhotos from './components/UploadPhotos/UploadPhotos';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import PopUp from '../../pages/AddRecipePage/components/PopUp/PopUp';
 import { UploadFileType, IngredientsType, Loading } from '../../types/type';
@@ -28,7 +28,6 @@ import {
     postRecipe,
     updateRecipe,
     resetLoadingForm,
-    fetchRecipes,
     resetRecipes,
 } from '../../store/reducers/RecipesListSlice';
 import {
