@@ -1,9 +1,24 @@
 @use '../../../../../styles/variables' as *;
 .createdTag {
-    padding: 5px;
+    padding: 5px 5px 5px 0;
     background-color: transparent;
     border-radius: 8px;
     transition: 0.2s ease-out background-color;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    color: $text-color;
+    &:not(:first-child) {
+        margin-top: 8px;
+    }
+    &__left-wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        column-gap: 10px;
+        row-gap: 5px;
+    }
     &__input-title {
         display: block;
         border: none;
@@ -37,5 +52,95 @@
     &.dragged {
         position: relative;
         background-color: $light-color;
+    }
+    &__label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 100%;
+    }
+    &__input {
+        text-align: center;
+        height: 100%;
+        max-width: 100px;
+        padding: 8px 24px;
+        border-radius: 8px;
+        border: 1px solid $border-input;
+        font-size: 16px;
+        font-weight: 500;
+        background: $light-color;
+        color: $text-color;
+        outline: none;
+        -moz-appearance: textfield;
+        &::placeholder {
+            color: $border-input;
+        }
+        &:focus {
+            border-color: $accent-color;
+            &::placeholder {
+                color: transparent;
+            }
+        }
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+    &__delete-ingredient {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        height: 20px;
+        margin-left: 4px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        svg path {
+            transition: 0.2s ease-out fill;
+        }
+        &:hover {
+            svg path {
+                fill: $accent-color;
+            }
+        }
+    }
+    .sort {
+        &__open-btn {
+            padding: 8px 26px 8px 12px;
+            max-width: 100px;
+            width: 100%;
+            min-width: 68px;
+            height: 42px;
+            &::after {
+                right: -10px
+            }
+        }
+        &__label {
+            padding: 5px 8px;
+            border: 1px solid transparent;
+            transition: 0.2s ease-out border-color;
+            &:hover {
+                border-color: rgba($border-input, 0.7);
+            }
+        }
+        &__input-custom {
+            display: none;
+        }
+    }
+}
+@media screen and (max-width: 550px) {
+    .createdTag {
+        gap: 10px;
+        &:not(:first-child) {
+            margin-top: 20px;
+        }
+        &__left-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: auto;
+        }
     }
 }
