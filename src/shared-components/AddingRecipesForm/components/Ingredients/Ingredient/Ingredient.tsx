@@ -29,7 +29,6 @@ const Ingredient = ({
     const [tagQuantity, setTagQuantity] = useState<string>(tagQuantityWithUnit);
     const [tagUnitLocal, setTagUnitLocal] = useState<string>(tagUnit);
     const dispatch = useAppDispatch();
-
     const controls = useDragControls();
 
     const handleCheckInput = () => {

@@ -27,6 +27,7 @@
         border: none;
         color: $bgcolor;
         cursor: grab;
+        touch-action: none;
         transition: 0.2s ease-out background-color, 0.2s ease-out color;
         &:hover {
             background-color: $light-color;
