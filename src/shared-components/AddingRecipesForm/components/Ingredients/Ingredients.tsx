@@ -5,7 +5,9 @@ import {
     Dispatch,
     SetStateAction,
     useMemo,
+    useCallback,
 } from 'react';
+import { Reorder, LazyMotion, domAnimation } from 'framer-motion';
 import nextId from 'react-id-generator';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
 import {
@@ -15,6 +17,7 @@ import {
 } from '../../../../store/reducers/CreateRecipeFormSlice';
 import { IngredientsType } from '../../../../types/type';
 import Ingredient from './Ingredient/Ingredient';
+import debounce from '../../../../helpers/debounce';
 import './Ingredients.scss';
 
 type SelectUnitsType = {
@@ -51,6 +54,7 @@ const Ingredients = ({
         () => ({ selectedUnits, setSelectedUnits }),
         [selectedUnits, setSelectedUnits]
     );
+    const [isIngredientDragEnd, setIsIngredientDragEnd] = useState(true);
 
     useEffect(() => {
         if (localingredients) {
@@ -85,6 +89,14 @@ const Ingredients = ({
             setDuplicatedValues([]);
         }
     }, [ingredients]);
+
+    const handleReorder = useCallback(
+        debounce(
+            (ingredients) => dispatch(setAllIngredients(ingredients)),
+            150
+        ),
+        []
+    );
 
     const changeTagsStatesOnEvent = () => {
         if (tagName.length === 0) return;
@@ -134,19 +146,37 @@ const Ingredients = ({
             {ingredients.length === 0 ? (
                 ''
             ) : (
-                <ul className="tagsForm__tagList tagsForm__tagList_ingredients">
-                    {ingredients.map((ingredient) => {
-                        const id = `${ingredient.id}`;
-                        return (
-                            <SelectUnitContext.Provider
-                                key={id}
-                                value={contextValue}
-                            >
-                                <Ingredient key={id} ingredient={ingredient} />
-                            </SelectUnitContext.Provider>
-                        );
-                    })}
-                </ul>
+                // <ul className="tagsForm__tagList tagsForm__tagList_ingredients">
+                <LazyMotion features={domAnimation}>
+                    <Reorder.Group
+                        className="tagsForm__tagList tagsForm__tagList_ingredients"
+                        axis="y"
+                        values={ingredients}
+                        onReorder={handleReorder}
+                    >
+                        {ingredients.map((ingredient) => {
+                            const id = `${ingredient.id}`;
+                            return (
+                                <SelectUnitContext.Provider
+                                    key={id}
+                                    value={contextValue}
+                                >
+                                    <Ingredient
+                                        key={id}
+                                        ingredient={ingredient}
+                                        setIsIngredientDragEnd={
+                                            setIsIngredientDragEnd
+                                        }
+                                        isIngredientDragEnd={
+                                            isIngredientDragEnd
+                                        }
+                                    />
+                                </SelectUnitContext.Provider>
+                            );
+                        })}
+                    </Reorder.Group>
+                </LazyMotion>
+                // </ul>
             )}
             {duplicatedValues.length > 0 ? (
                 <div className="duplicated-block">

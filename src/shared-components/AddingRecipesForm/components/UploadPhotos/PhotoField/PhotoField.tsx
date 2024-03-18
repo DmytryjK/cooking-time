@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { UploadFileType } from '../../../../../types/type';
-import { LoadedPhotoContext } from '../../../../../shared-components/AddingRecipesForm/AddingRecipesForm';
+import { LoadedPhotoContext } from '../../../AddingRecipesForm';
 import './PhotoField.scss';
 
 const PhotoField = ({
