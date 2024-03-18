@@ -6,6 +6,7 @@ import {
     SetStateAction,
     useMemo,
     useCallback,
+    memo,
 } from 'react';
 import { Reorder, LazyMotion, domAnimation } from 'framer-motion';
 import nextId from 'react-id-generator';
@@ -55,6 +56,19 @@ const Ingredients = ({
         [selectedUnits, setSelectedUnits]
     );
     const [isIngredientDragEnd, setIsIngredientDragEnd] = useState(true);
+    const [dragIngredients, setDragIngredients] = useState<
+        IngredientsType[] | undefined
+    >(localingredients);
+
+    useEffect(() => {
+        if (isIngredientDragEnd && dragIngredients) {
+            dispatch(setAllIngredients(dragIngredients));
+        }
+    }, [isIngredientDragEnd]);
+
+    useEffect(() => {
+        setDragIngredients(ingredients);
+    }, [ingredients]);
 
     useEffect(() => {
         if (localingredients) {
@@ -91,10 +105,9 @@ const Ingredients = ({
     }, [ingredients]);
 
     const handleReorder = useCallback(
-        debounce(
-            (ingredients) => dispatch(setAllIngredients(ingredients)),
-            150
-        ),
+        debounce((dragIngredients) => {
+            setDragIngredients(dragIngredients);
+        }, 75),
         []
     );
 
@@ -151,10 +164,13 @@ const Ingredients = ({
                     <Reorder.Group
                         className="tagsForm__tagList tagsForm__tagList_ingredients"
                         axis="y"
-                        values={ingredients}
+                        values={dragIngredients || []}
                         onReorder={handleReorder}
                     >
-                        {ingredients.map((ingredient) => {
+                        {(isIngredientDragEnd
+                            ? ingredients
+                            : dragIngredients || ingredients
+                        ).map((ingredient) => {
                             const id = `${ingredient.id}`;
                             return (
                                 <SelectUnitContext.Provider
@@ -202,4 +218,4 @@ const Ingredients = ({
     );
 };
 
-export default Ingredients;
+export default memo(Ingredients);

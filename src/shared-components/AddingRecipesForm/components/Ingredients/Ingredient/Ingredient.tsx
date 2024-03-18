@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction, memo } from 'react';
 import {
     Reorder,
     LazyMotion,
@@ -143,4 +143,4 @@ const Ingredient = ({
     );
 };
 
-export default Ingredient;
+export default memo(Ingredient);
