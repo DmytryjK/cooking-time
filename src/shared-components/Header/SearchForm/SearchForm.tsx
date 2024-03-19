@@ -86,7 +86,21 @@ const SearchForm = () => {
     }, [inputValue, selectedOption]);
 
     const handleSearchClick = (value: string) => {
-        dispatch(searchInputValue(value));
+        searchTypes.forEach((type) => {
+            if (type.title === selectedOption) {
+                if (type.id === 2) {
+                    dispatch(searchInputValue(value));
+                } else {
+                    dispatch(
+                        addSearchTag({
+                            id: nextId('createdTag'),
+                            tagText: value,
+                        })
+                    );
+                    setInputValue('');
+                }
+            }
+        });
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +108,7 @@ const SearchForm = () => {
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.code === 'Enter') {
+        if (event.code === 'Enter' || event.key === 'Enter') {
             searchTypes.some((type) => {
                 if (type.title === selectedOption) {
                     if (type.id === 1) {
