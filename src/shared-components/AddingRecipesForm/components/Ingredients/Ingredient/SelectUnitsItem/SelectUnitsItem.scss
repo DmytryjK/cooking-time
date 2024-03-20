@@ -66,10 +66,10 @@
             border: none;
             cursor: pointer;
         }
-    
+
         &__open-btn {
             position: relative;
-            padding: 10px 36px 10px 12px;
+            padding: 10px 14px;
             min-width: 83px;
             text-align: left;
             border-radius: 6px;
@@ -83,7 +83,7 @@
             }
             input {
                 position: absolute;
-                padding: 10px 36px 10px 12px;
+                padding: 10px 14px;
                 border-radius: 6px;
                 outline: none;
                 border: none;
@@ -91,8 +91,8 @@
                 right: 0;
                 bottom: 0;
                 left: 0;
-                width: 100%;
                 opacity: 0;
+                width: 100%;
                 &.active {
                     opacity: 1;
                 }
@@ -102,7 +102,7 @@
                 display: block;
                 position: absolute;
                 top: 50%;
-                right: 0;
+                right: -6px;
                 transform: translateX(-50%) translateY(-50%) rotate(-180deg);
                 width: 24px;
                 height: 24px;
@@ -188,6 +188,20 @@
             transition: 0.2s ease-out background-color;
             &:hover {
                 background-color: $second-accent-color;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .sort {
+        margin-left: auto;
+        display: inline-block;
+        &-unit {
+            &__open-btn {
+                input {
+                    display: none;
+                }
             }
         }
     }

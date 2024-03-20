@@ -174,27 +174,6 @@ const SelectUnitsItem = ({
                             setCurrentUnit={setCurrentUnit}
                             isUnitFocused={isUnitFocused === unit}
                         />
-                        // <div className="sort-unit__field" key={nextId('units')}>
-                        //     <input
-                        //         className="sort-unit__input"
-                        //         name={tagId.toString()}
-                        //         checked={unit === currentUnit}
-                        //         type="radio"
-                        //         id={`units-${tagId}${index}`}
-                        //         value={unit}
-                        //         onClick={() => setIsUnitsOpen(false)}
-                        //         onChange={(e) => {
-                        //             setCurrentUnit(e.target.value);
-                        //             setIsUnitsOpen(false);
-                        //         }}
-                        //     />
-                        //     <label
-                        //         className="sort-unit__label"
-                        //         htmlFor={`units-${tagId}${index}`}
-                        //     >
-                        //         {unit}
-                        //     </label>
-                        // </div>
                     );
                 })}
             </fieldset>
