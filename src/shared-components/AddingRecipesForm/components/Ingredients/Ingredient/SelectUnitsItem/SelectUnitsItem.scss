@@ -160,6 +160,9 @@
             &:hover {
                 border-color: $border-input;
             }
+            &.focused {
+                border-color: $border-input;
+            }
         }
         &__input {
             appearance: none;

@@ -123,6 +123,7 @@
         border-radius: 4px;
         cursor: pointer;
         user-select: none;
+        background-color: transparent;
         transition: 0.2s ease-out background-color;
         &:hover ~ .sort__input-custom {
             border-color: $text-color;
@@ -131,6 +132,16 @@
     &__input {
         appearance: none;
         position: absolute;
+        top: 50%;
+        left: 12px;
+        width: 20px;
+        height: 20px;
+        transform: translateY(-50%);
+        z-index: 1;
+        cursor: pointer;
+        &:hover ~ .sort__input-custom {
+            border-color: $text-color;
+        }
         &:checked ~ .sort__label {
             background-color: #FAEDEB;
         }

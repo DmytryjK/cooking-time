@@ -3,14 +3,21 @@
     padding: 5px 5px 5px 0;
     background-color: transparent;
     border-radius: 8px;
-    transition: 0.2s ease-out background-color;
     display: inline-flex;
     align-items: center;
     width: 100%;
     height: auto;
     color: $text-color;
+    transition: 0.3s ease-out background-color;
     &:not(:first-child) {
         margin-top: 8px;
+    }
+    &:hover {
+        background-color: $light-color;
+        .createdTag__move-ingredient {
+            opacity: 1;
+            visibility: visible;
+        }
     }
     &__left-wrapper {
         display: flex;
@@ -26,11 +33,11 @@
         width: 100%;
         padding: 5px 2px;
         outline: none;
-        transition: 0.2s ease-out border-color;
         border-bottom: 1px solid transparent;
         font-size: 14px;
+        transition: 0.3s ease-out border-color;
         &:focus {
-            border-color: #030303;
+            border-color: $ingredients;
         }
     }
     &__move-ingredient {
@@ -43,7 +50,9 @@
         color: $bgcolor;
         cursor: grab;
         touch-action: none;
-        transition: 0.2s ease-out background-color, 0.2s ease-out color;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.2s ease-out background-color, 0.2s ease-out color, 0.2s ease-out visibility, 0.2s ease-out opacity;
         &:hover {
             background-color: $light-color;
             color: $accent-color;
@@ -51,6 +60,17 @@
     }
     &.dragged {
         position: relative;
+        background-color: $light-color;
+        box-shadow: 0px 0px 10px rgb(207, 207, 207);
+        &:hover {
+            background-color: $light-color;
+        }
+        .createdTag__move-ingredient {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+    &.moved {
         background-color: $light-color;
     }
     &__label {
@@ -127,6 +147,18 @@
         }
         &__input-custom {
             display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .createdTag {
+        &:hover {
+            background-color: transparent;
+        }
+        &__move-ingredient {
+            visibility: visible;
+            opacity: 1;
         }
     }
 }

@@ -76,6 +76,16 @@
     &__input {
         appearance: none;
         position: absolute;
+        top: 50%;
+        left: 12px;
+        width: 20px;
+        height: 20px;
+        transform: translateY(-50%);
+        z-index: 1;
+        cursor: pointer;
+        &:hover ~ .custom-select__input-custom {
+            border-color: $text-color;
+        }
         &:checked ~ .custom-select__label {
             background-color: #FAEDEB;
         }

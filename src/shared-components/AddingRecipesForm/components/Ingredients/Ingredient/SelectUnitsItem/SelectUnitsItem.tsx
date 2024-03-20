@@ -9,6 +9,7 @@ import {
 } from 'react';
 import nextId from 'react-id-generator';
 import { SelectUnitContext } from '../../Ingredients';
+import Unit from './Unit/Unit';
 import './SelectUnitsItem.scss';
 
 const SelectUnitsItem = ({
@@ -23,11 +24,11 @@ const SelectUnitsItem = ({
     const units = [
         'гр',
         'кг',
+        'л',
+        'мл.',
         'шт.',
         'ч.л.',
         'ст.л.',
-        'л',
-        'мл.',
         'зубч.',
         'стак.',
     ];
@@ -35,13 +36,11 @@ const SelectUnitsItem = ({
     const [currentUnit, setCurrentUnit] = useState<string>(tagUnit || units[0]);
     const [searchUnitValue, setSearchUnitValue] = useState('');
     const [filteredUnits, setFilteredUnits] = useState(units);
+    const [isUnitFocused, setIsUnitFocused] = useState<string>('');
 
     const { selectedUnits, setSelectedUnits } = useContext(SelectUnitContext);
     const selectRef = useRef<HTMLButtonElement>(null);
     const fieldsetRef = useRef<HTMLFieldSetElement>(null);
-    useEffect(() => {
-        setUnit(currentUnit);
-    }, [currentUnit]);
 
     const closeSelect = (e: any) => {
         if (
@@ -51,6 +50,10 @@ const SelectUnitsItem = ({
             setIsUnitsOpen(false);
         }
     };
+
+    useEffect(() => {
+        setUnit(currentUnit);
+    }, [currentUnit]);
 
     useEffect(() => {
         if (isUnitsOpen) {
@@ -93,19 +96,47 @@ const SelectUnitsItem = ({
 
     useEffect(() => {
         if (searchUnitValue) {
-            setFilteredUnits(
-                units.filter((unit) => unit.startsWith(searchUnitValue))
+            const filteredUnits = units.filter((unit) =>
+                unit.startsWith(searchUnitValue)
             );
+            setFilteredUnits(filteredUnits);
+            setIsUnitFocused(filteredUnits[0]);
         } else {
             setFilteredUnits(units);
             setCurrentUnit(tagUnit || units[0]);
+            setIsUnitFocused('');
         }
     }, [searchUnitValue]);
 
     const keydownInput = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && filteredUnits.length === 1) {
-            setCurrentUnit(filteredUnits[0]);
+        if (
+            (e.key === 'Enter' || e.code === 'Enter') &&
+            filteredUnits.length > 0
+        ) {
+            setCurrentUnit(isUnitFocused || filteredUnits[0]);
             setIsUnitsOpen(false);
+        }
+
+        if (
+            (e.key === 'ArrowDown' || e.code === 'ArrowDown') &&
+            filteredUnits.length > 0
+        ) {
+            setIsUnitFocused((prev) => {
+                if (!filteredUnits[filteredUnits.indexOf(prev) + 1])
+                    return prev;
+                return filteredUnits[filteredUnits.indexOf(prev) + 1];
+            });
+        }
+
+        if (
+            (e.key === 'ArrowUp' || e.code === 'ArrowUp') &&
+            filteredUnits.length > 0
+        ) {
+            setIsUnitFocused((prev) => {
+                if (!filteredUnits[filteredUnits.indexOf(prev) - 1])
+                    return prev;
+                return filteredUnits[filteredUnits.indexOf(prev) - 1];
+            });
         }
     };
 
@@ -132,29 +163,38 @@ const SelectUnitsItem = ({
                 />
             </button>
             <fieldset className="sort-unit__custom-fields" ref={fieldsetRef}>
-                {filteredUnits.map((unit, index) => {
+                {filteredUnits.map((unit) => {
                     return (
-                        <div className="sort-unit__field" key={nextId('units')}>
-                            <input
-                                className="sort-unit__input"
-                                name={tagId.toString()}
-                                checked={unit === currentUnit}
-                                type="radio"
-                                id={`units-${tagId}${index}`}
-                                value={unit}
-                                onClick={() => setIsUnitsOpen(false)}
-                                onChange={(e) => {
-                                    setCurrentUnit(e.target.value);
-                                    setIsUnitsOpen(false);
-                                }}
-                            />
-                            <label
-                                className="sort-unit__label"
-                                htmlFor={`units-${tagId}${index}`}
-                            >
-                                {unit}
-                            </label>
-                        </div>
+                        <Unit
+                            key={nextId('units')}
+                            unit={unit}
+                            tagId={tagId}
+                            isChecked={unit === (tagUnit || units[0])}
+                            setIsUnitsOpen={setIsUnitsOpen}
+                            setCurrentUnit={setCurrentUnit}
+                            isUnitFocused={isUnitFocused === unit}
+                        />
+                        // <div className="sort-unit__field" key={nextId('units')}>
+                        //     <input
+                        //         className="sort-unit__input"
+                        //         name={tagId.toString()}
+                        //         checked={unit === currentUnit}
+                        //         type="radio"
+                        //         id={`units-${tagId}${index}`}
+                        //         value={unit}
+                        //         onClick={() => setIsUnitsOpen(false)}
+                        //         onChange={(e) => {
+                        //             setCurrentUnit(e.target.value);
+                        //             setIsUnitsOpen(false);
+                        //         }}
+                        //     />
+                        //     <label
+                        //         className="sort-unit__label"
+                        //         htmlFor={`units-${tagId}${index}`}
+                        //     >
+                        //         {unit}
+                        //     </label>
+                        // </div>
                     );
                 })}
             </fieldset>
