@@ -29,7 +29,7 @@ const EditRecipeForm: FC<{
     });
 
     return (
-        <>
+        <div className="edit-recipe">
             <button
                 className="edit-recipe__back-btn"
                 title="Відминити зміни"
@@ -52,6 +52,7 @@ const EditRecipeForm: FC<{
                         display: 'none',
                     }}
                 >
+                    <h1 className="edit-recipe__title">Редагування рецепту</h1>
                     <AddingRecipesForm
                         id={id}
                         title={title}
@@ -66,7 +67,7 @@ const EditRecipeForm: FC<{
                     />
                 </m.div>
             </LazyMotion>
-        </>
+        </div>
     );
 };
 

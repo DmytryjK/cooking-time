@@ -1,46 +1,40 @@
-# Getting Started with Create React App
+# Cooking Time App
+[Demo Link](https://cooking-times.vercel.app/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
+The Cooking Time project aims to provide a platform for users to discover, share, and collaborate on recipes. Users can browse a collection of recipes contributed by the community, as well as add, edit, and update their own recipes. The platform offers authorization features to ensure user privacy and security.
 
-## Available Scripts
+## Features
+- **Recipe Management**: Users can add, edit, and update recipes.
+- **Authorization**: Secure user authentication and authorization system.
+- **Search Functionality**: Users can search for recipes by name or ingredients.
+- **Ingredient-Based Search**: Find recipes based on available ingredients.
+- **User Profiles**: Personalized profiles for users to manage their recipes and preferences. If a user adds recipes to the site, only the user or admin can make changes. Guests can't edit recipes.
+- **Responsive Design**: The platform is designed to be accessible on various devices and screen sizes.
 
-In the project directory, you can run:
+## Technologies Used
+- **Frontend**: HTML, CSS, React, TypeScript, Redux, Framer Motion, LazyLoad, Image Compressor
+- **Backend**: Firebase
+- **Authentication**: 
+    1) Email + Password Authentication
+    2) Google Authentication
+- **Version Control**: Git for code management, hosted on GitHub
 
-### `npm start`
+## Getting Started
+To get started with the Cooking Time project, follow these steps:
+1. Clone the repository: `git clone https://github.com/DmytryjK/recepies-react.git`
+2. Install dependencies: `npm install`
+3. Set up the database connection and configuration
+4. Start the server: `npm start`
+5. Access the application in your web browser: `http://localhost:3000`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Future Enhancements
+- **Advanced Search Filters**: Allow users to filter recipes by name or ingredients. Implementing the Levenshtein Algorithm for searching current ingredients works effectively.
+- **Integration with External APIs**: All data is integrated with Firebase.
+- **Recipe Form**: The recipe form for adding new recipes or editing existing ones offers convenient functionality.
+- **Responsive UI**: The site is fully responsive. All features are well-implemented for the mobile version.
+- **Photo Compression and Resizing**: When users upload photos for recipes, the application optimizes and resizes them. Different settings are applied for preview and main photos, which greatly improves site performance.
+- **Animations**: Animations are implemented using Framer Motion.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
+This project is licensed under the [MIT License](LICENSE).

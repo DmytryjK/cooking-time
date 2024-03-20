@@ -1,3 +1,4 @@
+@use '../../../../styles/variables' as *;
 .edit-recipe {
     &__back-btn {
         position: absolute;
@@ -11,5 +12,11 @@
         &:hover {
             background: url('../../../../assets/icons/cancel-edit_active.svg') center center/cover no-repeat;
         }
+    }
+    &__title {
+        color: $bgcolor;
+        font-size: 25px;
+        font-weight: 600;
+        text-align: center;
     }
 }
