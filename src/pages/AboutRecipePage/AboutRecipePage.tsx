@@ -23,13 +23,13 @@ import renderServerData from '../../helpers/renderServerData';
 import './AboutRecipePage.scss';
 
 const AboutRecipePage = () => {
-    const recepieId = useParams();
+    const recipeId = useParams();
     const { recipe, loadingRecipe, error } = useAppSelector(
         (state) => state.recipes
     );
     const favoriteRecipe = useAppSelector(
         (state) => state.favoriteRecipes.favoriteRecipes
-    ).filter((recipe) => recipe.id === recepieId.id);
+    );
     const loadingRecipesToFirebase = useAppSelector(
         (state) => state.favoriteRecipes.loadingRecipeIdToFirebase
     );
@@ -38,7 +38,6 @@ const AboutRecipePage = () => {
     );
     const dispatch = useAppDispatch();
     const [isEditActive, setIsEditActive] = useState<boolean>(false);
-    const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const [currentRecipeToEdit, setCurrentRecipeToEdit] =
         useState<Recipe | null>(null);
     const [attentionWindowOpen, setAttentionWindowOpen] =
@@ -46,16 +45,8 @@ const AboutRecipePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (favoriteRecipe.length === 0) {
-            setIsFavorite(false);
-        } else {
-            setIsFavorite(true);
-        }
-    }, [favoriteRecipe]);
-
-    useEffect(() => {
-        if (!recepieId.id) return;
-        dispatch(fetchRecipe(recepieId.id));
+        if (!recipeId.id) return;
+        dispatch(fetchRecipe(recipeId.id));
         if (!uid) return;
         dispatch(fetchFavoritesRecipes(uid));
     }, [uid]);
@@ -76,16 +67,18 @@ const AboutRecipePage = () => {
     };
 
     const handleAddFavorite = (
-        recepieId: string | number | null,
-        item: Recipe
+        recipeId: string | number | null,
+        item: Recipe,
+        isFavorite: boolean
     ) => {
-        dispatch(manageFavoritesRecipes({ item, uid }));
-        dispatch(
-            setFavoriteRecipes({
-                recipeId: recepieId,
-                isFavorite: !item.favorites,
-            })
-        );
+        dispatch(manageFavoritesRecipes({ item, uid })).then(() => {
+            dispatch(
+                setFavoriteRecipes({
+                    recipeId,
+                    isFavorite: !isFavorite,
+                })
+            );
+        });
     };
 
     const renderedInfo = () => {
@@ -100,6 +93,7 @@ const AboutRecipePage = () => {
             time,
             authorId,
         } = recipe;
+        const isFavorite = favoriteRecipe.some((recipe) => recipe.id === id);
         const mainImg = imgDto.find((img) => img.id === 'main');
 
         const parsedDescr = parse(description || '');
@@ -129,7 +123,7 @@ const AboutRecipePage = () => {
                             type="button"
                             onClick={() => {
                                 if (uid) {
-                                    handleAddFavorite(id, recipe);
+                                    handleAddFavorite(id, recipe, isFavorite);
                                 } else {
                                     navigate('/favorites');
                                 }
