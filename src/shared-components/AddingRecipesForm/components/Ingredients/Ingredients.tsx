@@ -55,7 +55,13 @@ const Ingredients = ({
         () => ({ selectedUnits, setSelectedUnits }),
         [selectedUnits, setSelectedUnits]
     );
-    const [isIngredientDragEnd, setIsIngredientDragEnd] = useState(true);
+    const [isIngredientDragEnd, setIsIngredientDragEnd] = useState<{
+        isDragEnd: boolean;
+        id: string | number;
+    }>({
+        isDragEnd: true,
+        id: '',
+    });
     const [dragIngredients, setDragIngredients] = useState<
         IngredientsType[] | undefined
     >(localingredients);
@@ -167,7 +173,7 @@ const Ingredients = ({
                         values={dragIngredients || []}
                         onReorder={handleReorder}
                     >
-                        {(isIngredientDragEnd
+                        {(isIngredientDragEnd.isDragEnd
                             ? ingredients
                             : dragIngredients || ingredients
                         ).map((ingredient) => {

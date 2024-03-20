@@ -21,8 +21,10 @@ const Ingredient = ({
     isIngredientDragEnd,
 }: {
     ingredient: IngredientsType;
-    setIsIngredientDragEnd?: Dispatch<SetStateAction<boolean>>;
-    isIngredientDragEnd?: boolean;
+    setIsIngredientDragEnd?: Dispatch<
+        SetStateAction<{ isDragEnd: boolean; id: string | number }>
+    >;
+    isIngredientDragEnd?: { isDragEnd: boolean; id: string | number };
 }) => {
     const { id, tagText, tagUnit, tagQuantityWithUnit } = ingredient;
     const [inputTagText, setInputTagText] = useState(tagText);
@@ -30,6 +32,15 @@ const Ingredient = ({
     const [tagUnitLocal, setTagUnitLocal] = useState<string>(tagUnit);
     const dispatch = useAppDispatch();
     const controls = useDragControls();
+
+    const isCurrentItemDragged =
+        isIngredientDragEnd &&
+        !isIngredientDragEnd.isDragEnd &&
+        isIngredientDragEnd.id === id;
+    const movedItems =
+        isIngredientDragEnd &&
+        !isIngredientDragEnd.isDragEnd &&
+        isIngredientDragEnd.id !== id;
 
     const handleCheckInput = () => {
         if (tagQuantity) {
@@ -60,24 +71,30 @@ const Ingredient = ({
                 transition={{ duration: 0.3, times: easeOut }}
                 onDragStart={() => {
                     if (setIsIngredientDragEnd) {
-                        setIsIngredientDragEnd(false);
+                        setIsIngredientDragEnd({
+                            isDragEnd: false,
+                            id,
+                        });
                     }
                 }}
                 onDragEnd={() => {
                     if (setIsIngredientDragEnd) {
-                        setIsIngredientDragEnd(true);
+                        setIsIngredientDragEnd({
+                            isDragEnd: true,
+                            id,
+                        });
                     }
                 }}
                 className={`tagsForm__createdTag createdTag ${
-                    !isIngredientDragEnd ? 'dragged' : ''
-                }`}
+                    isCurrentItemDragged ? 'dragged' : ''
+                } ${movedItems ? 'moved' : ''}`}
             >
                 <button
                     className="createdTag__move-ingredient"
                     type="button"
                     onPointerDown={(e) => controls.start(e)}
                 >
-                    ⋮
+                    ⋮⋮
                 </button>
                 <div className="createdTag__left-wrapper">
                     <input
