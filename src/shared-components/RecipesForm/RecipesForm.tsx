@@ -12,7 +12,6 @@ import {
     uploadBytes,
     deleteObject,
 } from 'firebase/storage';
-import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import ImageCompress from 'quill-image-compress';
 import nextId from 'react-id-generator';
@@ -22,7 +21,7 @@ import { storage } from '../../firebase/firebase';
 import Ingredients from './components/Ingredients/Ingredients';
 import UploadPhotos from './components/UploadPhotos/UploadPhotos';
 import CustomSelect from '../CustomSelect/CustomSelect';
-import PopUp from '../../pages/AddRecipePage/components/PopUp/PopUp';
+import { resetFavoriteRecipes } from '../../store/reducers/FavoritesRecipesSlice';
 import { UploadFileType, IngredientsType, Loading } from '../../types/type';
 import {
     postRecipe,
@@ -34,9 +33,8 @@ import {
     clearAllTags,
     getCategories,
 } from '../../store/reducers/CreateRecipeFormSlice';
-import './AddingRecipesForm.scss';
+import './RecipesForm.scss';
 import 'react-quill/dist/quill.snow.css';
-import { resetFavoriteRecipes } from '../../store/reducers/FavoritesRecipesSlice';
 
 type Props = {
     id: string | number | null;
@@ -48,7 +46,6 @@ type Props = {
     loadedPhotos?: LoadedPhotoType[];
     ingredients?: IngredientsType[] | undefined;
     method: 'POST' | 'UPDATE';
-    text?: string;
 };
 
 type LoadedPhotoType = {
@@ -71,7 +68,7 @@ export const LoadedPhotoContext = createContext<LoadedPhotoContextType>({
 
 ReactQuill.Quill.register('modules/imageCompress', ImageCompress);
 
-const AddingRecipesForm = (props: Props) => {
+const RecipesForm = (props: Props) => {
     const {
         id,
         title,
@@ -82,10 +79,9 @@ const AddingRecipesForm = (props: Props) => {
         ingredients,
         isFavorite,
         method,
-        text,
     } = props;
 
-    const { error, loadingForm } = useAppSelector((state) => state.recipes);
+    const { loadingForm } = useAppSelector((state) => state.recipes);
     const [nameValue, setNameValue] = useState(title || '');
     const [categoryValue, setCategoryValue] = useState(categoryName || '');
     const [timerValue, setTimerValue] = useState(
@@ -102,10 +98,6 @@ const AddingRecipesForm = (props: Props) => {
     const { categories } = useAppSelector((state) => state.createRecipeForm);
     const { uid } = useAppSelector((state) => state.authentication.user);
 
-    const navigate = useNavigate();
-
-    const [isSuccessPopUpShow, setIsSuccessPopUpShow] =
-        useState<boolean>(false);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -115,22 +107,10 @@ const AddingRecipesForm = (props: Props) => {
     useEffect(() => {
         if (loadingForm === 'succeeded') {
             dispatch(resetLoadingForm());
-            setIsSuccessPopUpShow(true);
             dispatch(resetRecipes());
             dispatch(resetFavoriteRecipes());
         }
     }, [loadingForm]);
-
-    useEffect(() => {
-        if (isSuccessPopUpShow && method === 'UPDATE') {
-            setTimeout(() => {
-                if (isSuccessPopUpShow) {
-                    navigate(0);
-                    setIsSuccessPopUpShow(false);
-                }
-            }, 1000);
-        }
-    }, [isSuccessPopUpShow]);
 
     useEffect(() => {
         if (loadingForm === 'succeeded') {
@@ -317,164 +297,153 @@ const AddingRecipesForm = (props: Props) => {
     ];
 
     return (
-        <>
-            <form
-                className="form add-recepie__form"
-                onKeyDown={(e) => e.code === 'Enter' && e.preventDefault()}
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmitForm(method);
-                }}
-            >
-                <div className="form__fields-wrapper">
+        <form
+            className="form add-recepie__form"
+            onKeyDown={(e) => e.code === 'Enter' && e.preventDefault()}
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmitForm(method);
+            }}
+        >
+            <div className="form__fields-wrapper">
+                <label className="form__name-label form__label">
+                    <span>Назва страви</span>
+                    <input
+                        className="form__name-recepie form__input"
+                        type="text"
+                        name="Назва страви"
+                        value={nameValue}
+                        onChange={(e) => setNameValue(e.target.value)}
+                    />
+                </label>
+                <div className="form__field-category">
                     <label className="form__name-label form__label">
-                        <span>Назва страви</span>
-                        <input
-                            className="form__name-recepie form__input"
-                            type="text"
-                            name="Назва страви"
-                            required
-                            value={nameValue}
-                            onChange={(e) => setNameValue(e.target.value)}
-                        />
+                        <span>Категорія</span>
                     </label>
-                    <div className="form__field-category">
-                        <label className="form__name-label form__label">
-                            <span>Категорія</span>
-                        </label>
-                        <CustomSelect
-                            value={categoryValue}
-                            initialCheckedValue={categoryValue}
-                            setValue={setCategoryValue}
-                            fieldValues={categories}
-                            selectTitle="Виберіть категорію"
-                        />
-                    </div>
-                </div>
-                <div className="form__fields-wrapper">
-                    <Ingredients localingredients={ingredients} />
-                    <fieldset className="form__timer-fiedls timer">
-                        <legend className="form__label">
-                            Час приготування
-                        </legend>
-                        <div className="timer__wrapper">
-                            <label className="timer__label-hours">
-                                <input
-                                    className="timer__input-hours form__input"
-                                    type="number"
-                                    name="години"
-                                    value={timerValue.hours}
-                                    placeholder="00"
-                                    onChange={(e) => {
-                                        let { value } = e.target;
-                                        if (+value < 0) {
-                                            value = '0';
-                                        }
-                                        setTimerValue((prev) => {
-                                            return {
-                                                minutes: prev?.minutes || '',
-                                                hours: value,
-                                            };
-                                        });
-                                    }}
-                                />
-                                <span>годин</span>
-                            </label>
-                            <label className="timer__label-minutes">
-                                <input
-                                    className="timer__input-minutes form__input"
-                                    type="number"
-                                    name="хвилини"
-                                    value={timerValue.minutes}
-                                    placeholder="00"
-                                    onChange={(e) => {
-                                        let { value } = e.target;
-                                        if (+value > 59) {
-                                            value = '59';
-                                        } else if (+value < 0) {
-                                            value = '0';
-                                        }
-                                        setTimerValue((prev) => {
-                                            return {
-                                                hours: prev?.hours || '',
-                                                minutes: value,
-                                            };
-                                        });
-                                    }}
-                                />
-                                <span>хвилин</span>
-                            </label>
-                        </div>
-                    </fieldset>
-                </div>
-                <div className="form__fields-wrapper">
-                    <LoadedPhotoContext.Provider
-                        value={useMemo(() => {
-                            return {
-                                loadedPhotosInfo,
-                                setLoadedPhotosInfo,
-                            };
-                        }, [loadedPhotosInfo, setLoadedPhotosInfo])}
-                    >
-                        <UploadPhotos />
-                    </LoadedPhotoContext.Provider>
-                </div>
-                <div className="form__fields-wrapper form-descr">
-                    <span className="form-descr__title form__label">
-                        Процес приготування
-                    </span>
-                    <ReactQuill
-                        className="form-descr__editor"
-                        placeholder="Опишіть процес приготування..."
-                        theme="snow"
-                        modules={{
-                            toolbar: {
-                                container: options,
-                            },
-                            imageCompress: {
-                                quality: 0.6,
-                                maxWidth: 400,
-                                maxHeight: 300,
-                                imageType: 'image/jpeg',
-                                debug: true,
-                                suppressErrorLogging: false,
-                                insertIntoEditor: undefined,
-                            },
-                        }}
-                        value={description}
-                        onChange={setDescription}
+                    <CustomSelect
+                        value={categoryValue}
+                        initialCheckedValue={categoryValue}
+                        setValue={setCategoryValue}
+                        fieldValues={categories}
+                        selectTitle="Оберіть категорію"
                     />
                 </div>
-                <button
-                    className={`form__submit addRecipe-btn ${
-                        loadingForm === 'pending' ||
-                        uploadPhotoLoading === 'pending'
-                            ? 'loading'
-                            : ''
-                    }`}
-                    type="submit"
+            </div>
+            <div className="form__fields-wrapper">
+                <Ingredients localingredients={ingredients} />
+                <fieldset className="form__timer-fiedls timer">
+                    <legend className="form__label">Час приготування</legend>
+                    <div className="timer__wrapper">
+                        <label className="timer__label-hours">
+                            <input
+                                className="timer__input-hours form__input"
+                                type="number"
+                                name="години"
+                                value={timerValue.hours}
+                                placeholder="00"
+                                onChange={(e) => {
+                                    let { value } = e.target;
+                                    if (+value < 0) {
+                                        value = '0';
+                                    }
+                                    setTimerValue((prev) => {
+                                        return {
+                                            minutes: prev?.minutes || '',
+                                            hours: value,
+                                        };
+                                    });
+                                }}
+                            />
+                            <span>годин</span>
+                        </label>
+                        <label className="timer__label-minutes">
+                            <input
+                                className="timer__input-minutes form__input"
+                                type="number"
+                                name="хвилини"
+                                value={timerValue.minutes}
+                                placeholder="00"
+                                onChange={(e) => {
+                                    let { value } = e.target;
+                                    if (+value > 59) {
+                                        value = '59';
+                                    } else if (+value < 0) {
+                                        value = '0';
+                                    }
+                                    setTimerValue((prev) => {
+                                        return {
+                                            hours: prev?.hours || '',
+                                            minutes: value,
+                                        };
+                                    });
+                                }}
+                            />
+                            <span>хвилин</span>
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+            <div className="form__fields-wrapper">
+                <LoadedPhotoContext.Provider
+                    value={useMemo(() => {
+                        return {
+                            loadedPhotosInfo,
+                            setLoadedPhotosInfo,
+                        };
+                    }, [loadedPhotosInfo, setLoadedPhotosInfo])}
                 >
-                    {method === 'POST' ? 'Додати рецепт' : 'Оновити рецепт'}
-                    {loadingForm === 'pending' ||
-                    uploadPhotoLoading === 'pending' ? (
-                        <span className="addRecipe-btn__loading-dots">
-                            <span className="addRecipe-btn__loading-dot" />
-                            <span className="addRecipe-btn__loading-dot" />
-                            <span className="addRecipe-btn__loading-dot" />
-                        </span>
-                    ) : (
-                        ''
-                    )}
-                </button>
-            </form>
-            <PopUp
-                isPopUpShow={isSuccessPopUpShow}
-                setIsPopUpShow={setIsSuccessPopUpShow}
-                text={text}
-                method={method}
-            />
-        </>
+                    <UploadPhotos />
+                </LoadedPhotoContext.Provider>
+            </div>
+            <div className="form__fields-wrapper form-descr">
+                <span className="form-descr__title form__label">
+                    Процес приготування
+                </span>
+                <ReactQuill
+                    className="form-descr__editor"
+                    placeholder="Опишіть процес приготування..."
+                    theme="snow"
+                    modules={{
+                        toolbar: {
+                            container: options,
+                        },
+                        imageCompress: {
+                            quality: 0.6,
+                            maxWidth: 400,
+                            maxHeight: 300,
+                            imageType: 'image/jpeg',
+                            debug: true,
+                            suppressErrorLogging: false,
+                            insertIntoEditor: undefined,
+                        },
+                    }}
+                    value={description}
+                    onChange={setDescription}
+                />
+            </div>
+            <button
+                className={`form__submit addRecipe-btn ${
+                    loadingForm === 'pending' ||
+                    uploadPhotoLoading === 'pending'
+                        ? 'loading'
+                        : ''
+                }`}
+                type="submit"
+            >
+                {method === 'POST' ? 'Додати рецепт' : 'Оновити рецепт'}
+                {loadingForm === 'pending' ||
+                uploadPhotoLoading === 'pending' ? (
+                    <span className="addRecipe-btn__loading-dots">
+                        <span className="addRecipe-btn__loading-dot" />
+                        <span className="addRecipe-btn__loading-dot" />
+                        <span className="addRecipe-btn__loading-dot" />
+                    </span>
+                ) : (
+                    ''
+                )}
+            </button>
+        </form>
     );
 };
 
-export default AddingRecipesForm;
+export default RecipesForm;

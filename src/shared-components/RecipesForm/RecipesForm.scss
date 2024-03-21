@@ -164,6 +164,23 @@
         }
         .ql-editor {
             max-height: 350px;
+            &::-webkit-scrollbar {
+                width: 9px;
+                outline: none;
+                border: none;
+            }
+            &::-webkit-scrollbar-track {
+                background-color: $light-color;
+                outline: none;
+                border: none;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: $border-input;
+                outline: none;
+                border-radius: 5px;
+                border: 2px solid $light-color;
+                cursor: pointer;
+            }
         }
         .quill.form-descr__editor, .ql-toolbar.ql-snow {
             border-color: $border-input;

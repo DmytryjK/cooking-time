@@ -1,25 +1,43 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useCallback,
+} from 'react';
+import { NavLink } from 'react-router-dom';
 import './PopUp.scss';
 
 const PopUp = ({
     isPopUpShow,
     setIsPopUpShow,
     text,
+    subtext,
     method,
+    additionalBtnText,
+    additionalBtnAction,
+    setIsEditActive,
 }: {
     isPopUpShow: boolean;
     setIsPopUpShow: Dispatch<SetStateAction<boolean>>;
     text?: string;
+    subtext?: string;
     method?: 'POST' | 'UPDATE';
+    additionalBtnText?: string;
+    additionalBtnAction?: () => void;
+    setIsEditActive?: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const navigate = useNavigate();
-    const closePopUp = (e: Event) => {
+    const popUp = useRef<HTMLDivElement>(null);
+
+    const closePopUp = useCallback((e: Event) => {
         const target = e.target as HTMLElement;
         if (target.className === 'success-window active') {
             setIsPopUpShow(false);
+            if (method === 'UPDATE' && setIsEditActive) {
+                setIsEditActive(false);
+            }
         }
-    };
+    }, []);
 
     useEffect(() => {
         if (!isPopUpShow) return undefined;
@@ -27,40 +45,43 @@ const PopUp = ({
             top: 0,
             behavior: 'smooth',
         });
-        const popUp = document.querySelector('.success-window');
-        popUp?.addEventListener('click', (e) => closePopUp(e));
 
-        return () => popUp?.removeEventListener('click', closePopUp);
+        popUp.current?.addEventListener('click', closePopUp);
+        return () => popUp.current?.removeEventListener('click', closePopUp);
     }, [isPopUpShow]);
 
     return (
-        <div className={`success-window ${isPopUpShow ? 'active' : ''}`}>
+        <div
+            className={`success-window ${isPopUpShow ? 'active' : ''}`}
+            ref={popUp}
+        >
             <div className="success-window__block">
-                <h2 className="success-window__title">
-                    {text || 'Ваш рецепт успішно доданий на сайт'}
-                </h2>
+                <h2 className="success-window__title">{text || ''}</h2>
+                <h3 className="success-window__subtitle">{subtext || ''}</h3>
                 <div className="success-window__links">
-                    <NavLink to="/" className="success-window__back-main">
-                        Повернутись на головну
-                    </NavLink>
-                    <NavLink
-                        to="/add-recipe"
-                        className="success-window__back"
-                        onClick={(e) => {
-                            if (method && method === 'UPDATE') {
-                                e.preventDefault();
-                                navigate(0);
-                            }
-                            setIsPopUpShow(false);
-                        }}
-                    >
-                        Назад
-                    </NavLink>
+                    {additionalBtnText ? (
+                        <button
+                            className="success-window__back-main"
+                            type="button"
+                            onClick={additionalBtnAction}
+                        >
+                            {additionalBtnText}
+                        </button>
+                    ) : (
+                        <NavLink to="/" className="success-window__back-main">
+                            Перейти на головну
+                        </NavLink>
+                    )}
                 </div>
                 <button
                     className="success-window__close"
                     type="button"
-                    onClick={() => setIsPopUpShow(false)}
+                    onClick={() => {
+                        setIsPopUpShow(false);
+                        if (method === 'UPDATE' && setIsEditActive) {
+                            setIsEditActive(false);
+                        }
+                    }}
                 >
                     <svg
                         className="success-window__close-icon"
