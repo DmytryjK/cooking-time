@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { domMax, LazyMotion, m } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import nextId from 'react-id-generator';
 import parse from 'html-react-parser';
@@ -13,7 +13,7 @@ import {
     manageFavoritesRecipes,
     fetchFavoritesRecipes,
 } from '../../store/reducers/FavoritesRecipesSlice';
-import PopUp from '../AddRecipePage/components/PopUp/PopUp';
+import PopUp from '../../shared-components/PopUp/PopUp';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import EditRecipeForm from './components/EditRecipeForm/EditRecipeForm';
 import { Recipe } from '../../types/type';
@@ -45,21 +45,17 @@ const AboutRecipePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (recipe) return;
         if (!recipeId.id) return;
         dispatch(fetchRecipe(recipeId.id));
         if (!uid) return;
         dispatch(fetchFavoritesRecipes(uid));
-    }, [uid]);
+    }, [uid, recipe]);
 
     useEffect(() => {
         if (loadingRecipesToFirebase !== 'succeeded') return;
         dispatch(fetchFavoritesRecipes(uid));
     }, [loadingRecipesToFirebase]);
-
-    const handleCloseAttantionWindow = () => {
-        setAttentionWindowOpen(false);
-        setIsEditActive(true);
-    };
 
     const handleEditRecipe = (fetchedRecepieInfo: Recipe) => {
         setIsEditActive(true);
@@ -81,6 +77,11 @@ const AboutRecipePage = () => {
         });
     };
 
+    const handleBtnPopUpAction = useCallback(() => {
+        setAttentionWindowOpen(false);
+        setIsEditActive(false);
+    }, []);
+
     const renderedInfo = () => {
         if (!recipe) return '';
         const {
@@ -95,7 +96,6 @@ const AboutRecipePage = () => {
         } = recipe;
         const isFavorite = favoriteRecipe.some((recipe) => recipe.id === id);
         const mainImg = imgDto.find((img) => img.id === 'main');
-
         const parsedDescr = parse(description || '');
         return (
             <>
@@ -235,13 +235,18 @@ const AboutRecipePage = () => {
                     <PopUp
                         isPopUpShow={attentionWindowOpen}
                         setIsPopUpShow={setAttentionWindowOpen}
-                        text="Якщо Ви закриєте редактор, то зміни не буде збережено."
+                        text="Ви впевнені, що хочете повернутись назад?"
+                        subtext="Якщо Ви закриєте редактор, то зміни не буде збережено."
+                        additionalBtnText="Скасувати редагування"
+                        additionalBtnAction={handleBtnPopUpAction}
+                        setIsEditActive={setIsEditActive}
                     />
                     <main className="recipe-page">
                         {isEditActive && currentRecipeToEdit ? (
                             <EditRecipeForm
                                 recipe={currentRecipeToEdit}
                                 setIsAttentionOpen={setAttentionWindowOpen}
+                                setIsEditActive={setIsEditActive}
                             />
                         ) : (
                             renderServerData({

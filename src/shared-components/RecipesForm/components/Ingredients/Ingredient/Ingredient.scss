@@ -18,6 +18,12 @@
             opacity: 1;
             visibility: visible;
         }
+        .createdTag__delete-ingredient {
+            opacity: 1;
+            visibility: visible;
+            user-select: auto;
+            pointer-events: all;
+        }
     }
     &__left-wrapper {
         display: flex;
@@ -69,6 +75,12 @@
             opacity: 1;
             visibility: visible;
         }
+        .createdTag__delete-ingredient {
+            opacity: 1;
+            visibility: visible;
+            user-select: auto;
+            pointer-events: all;
+        }
     }
     &.moved {
         background-color: $light-color;
@@ -115,8 +127,13 @@
         height: 20px;
         margin-left: 4px;
         background-color: transparent;
+        visibility: hidden;
+        user-select: none;
+        opacity: 0;
+        pointer-events: none;
         border: none;
         cursor: pointer;
+        transition: 0.2s ease-out visibility, 0.2s ease-out user-select, 0.2s ease-out opacity, 0.2s ease-out pointer-events;
         svg path {
             transition: 0.2s ease-out fill;
         }
@@ -159,6 +176,12 @@
         &__move-ingredient {
             visibility: visible;
             opacity: 1;
+        }
+        &__delete-ingredient {
+            opacity: 1;
+            visibility: visible;
+            user-select: auto;
+            pointer-events: all;
         }
     }
 }
