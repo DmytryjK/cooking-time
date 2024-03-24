@@ -165,8 +165,10 @@ export const favoriteRecipesSlice = createSlice({
                 !searchInput &&
                 searchTags.length === 0 &&
                 searchCategories.length === 0
-            )
+            ) {
+                state.searchedTagFilledFavorites = [];
                 return;
+            }
             if (searchInput) {
                 state.searchedNameOfDishes = searchInput;
             }
