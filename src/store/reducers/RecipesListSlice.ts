@@ -247,8 +247,10 @@ export const recepieListSlice = createSlice({
                 !searchInput &&
                 searchTags.length === 0 &&
                 searchCategories.length === 0
-            )
+            ) {
+                state.searchedTagFilled = [];
                 return;
+            }
             if (searchInput) {
                 state.searchedNameOfDishes = searchInput;
             }
