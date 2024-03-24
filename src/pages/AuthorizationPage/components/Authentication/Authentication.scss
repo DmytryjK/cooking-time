@@ -1,23 +1,25 @@
 @use '../../../../styles/variables' as *;
 .authentication{
     &__wrapper {
+        position: relative;
         width: 400px;
+        height: 100%;
         margin: auto 0;
         overflow: hidden;
     }
     &__block {
         position: absolute;
         top: 50%;
-        transform: translateY(-50%) scale(0.8);
+        transform: translateY(-50%) scale(0.93);
         visibility: hidden;
         opacity: 0;
-        transition: 0.4s ease-out transform, 0.4s ease-out visibility, 0.3s ease-out opacity;
+        transition: 0.3s ease-out transform, 0.3s ease-out visibility, 0.2s ease-out opacity;
         &.active {
             visibility: visible;
             transform: translateY(-50%) scale(1);
             opacity: 1;
-            transition: 0.4s ease-out transform, 0.4s ease-out visibility, 0.3s ease-out opacity;
-            transition-delay: 0.3s;
+            transition: 0.3s ease-out transform, 0.3s ease-out visibility, 0.2s ease-out opacity;
+            transition-delay: 0.2s;
         }
         &-title {
             font-weight: 700;
@@ -47,7 +49,6 @@
             cursor: pointer;
             transition: 0.2s ease-out background-color, 0.2s ease-out color;
             &:hover {
-                // background-color:rgb(241, 241, 241);
                 background-color: $text-color;
                 color: $light-color;
             }
@@ -73,6 +74,9 @@
                 background: url('../../../../assets/icons/login/facebook.svg') center center no-repeat;
             }
         }
+        &.response {
+            width: 100%;
+        }
     }
     &__change-form {
         margin-top: 20px;
@@ -86,16 +90,17 @@
             margin-left: 5px;
             background-color: transparent;
             border: none;
-            border-bottom: 0.5px solid black;
             height: 17px;
-            font-family: 16px;
-            font-weight: 600;
-            color: $bgcolor;
+            color: $text-color;
+            text-decoration: underline;
+            text-decoration-skip-ink: none;
+            text-underline-offset: 3px;
+            text-decoration-color: $text-color;
+            transition: 0.2s ease-out color, 0.2s ease-out text-decoration;
             cursor: pointer;
-            transition: 0.2s ease-out color, 0.2s ease-out border-color;
             &:hover {
-                color: $second-accent-color;
-                border-color: $second-accent-color;
+                color: $accent-color;
+                text-decoration-color: $accent-color;
             }
         }
     }
@@ -172,6 +177,20 @@
                 cursor: pointer;
             }
         }
+        &__forgot-password {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 15px;
+            text-decoration-skip-ink: none;
+            text-underline-offset: 3px;
+            text-decoration-color: $text-color;
+            color: $text-color;
+            transition: 0.2s ease-out color, 0.2s ease-out text-decoration;
+            &:hover {
+                color: $accent-color;
+                text-decoration-color: $accent-color;
+            }
+        }
         .remeber-me__wrapper {
             margin-top: 20px;
         }
@@ -221,21 +240,11 @@
         }
         &__submit {
             margin-top: 20px;
-            width: 100%;
             height: 52px;
-            padding: 15px 20px;
-            height: 52px;
-            background: #D24A34;
-            border: none;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 16px;
-            line-height: 22px;
-            color: #FDFDFD;
-            cursor: pointer;
-            transition: 0.2s ease-out background-color;
-            &:hover {
-                background-color: $second-accent-color;
+            &_forgot {
+                margin-top: 20px;
+                height: 52px;
+                margin-top: 40px;
             }
         }
     }

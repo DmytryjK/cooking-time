@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './pages/Layout/Layout';
+import { Page404 } from './pages';
 import { store } from './store/store';
 import './styles/index.scss';
 import { router, routerNoLoyout } from './router';
@@ -34,6 +35,9 @@ root.render(
                         />
                     );
                 })}
+                <Route path="*" element={<Layout />}>
+                    <Route path="*" element={<Page404 />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     </Provider>

@@ -1,0 +1,104 @@
+@use '../../styles/variables' as *;
+.not-found {
+    .flex-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100dvh - 520px);
+        color: $accent-color;
+      
+        .text-center {
+          text-align: center;
+          h1,
+          h3 {
+            margin: 10px;
+            cursor: default;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            .fade-in {
+                animation: fadeIn 2s ease infinite;
+            }
+          }
+      
+          h1 {
+            font-size: 12em;
+            transition: font-size 200ms ease-in-out;
+            border-bottom: 1px dashed white;
+            span#digit1 { animation-delay: 200ms; }
+            span#digit2 { animation-delay: 300ms; }
+            span#digit3 { animation-delay: 400ms; }
+          }
+          .button-wrapper {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+          }
+          a {
+            border: none;
+            background: $accent-color;
+            outline: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: $light-color;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background-color 200ms ease-out, color 200ms ease-out;
+            margin: 20px 0;
+            &:hover {
+              background-color: $second-accent-color;
+              cursor: pointer;
+            }
+          }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0.1;
+    };
+    100% {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .not-found {
+        .flex-container {
+            min-height: calc(100dvh - 400px);
+            .text-center  {
+                h1 {
+                    font-size: 9em;
+                }
+                h3 {
+                    font-size: 1em;
+                }
+                a {
+                    font-size: 14px;
+                }
+            }
+            
+        } 
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .not-found {
+        .flex-container {
+            .text-center  {
+                h1 {
+                    font-size: 6em;
+                }
+                h3 {
+                    font-size: 0.8em;
+                }
+                a {
+                    font-size: 12px;
+                }
+            }
+            
+        } 
+    }
+}

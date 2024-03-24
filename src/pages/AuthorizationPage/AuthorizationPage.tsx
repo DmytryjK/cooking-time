@@ -8,10 +8,12 @@ import './AuthorizationPage.scss';
 type AuthorizationPageProps = {
     register?: boolean;
     login?: boolean;
+    forgotPassword?: boolean;
+    authResponse?: boolean;
 };
 
 const AuthorizationPage = (props: AuthorizationPageProps) => {
-    const { register, login } = props;
+    const { register, login, forgotPassword, authResponse } = props;
     const navigate = useNavigate();
     return (
         <LazyMotion strict features={domAnimation}>
@@ -46,7 +48,12 @@ const AuthorizationPage = (props: AuthorizationPageProps) => {
                             Назад
                         </NavLink>
                     </nav>
-                    <Authentication register={register} login={login} />
+                    <Authentication
+                        register={register}
+                        login={login}
+                        forgotPassword={forgotPassword}
+                        authResponse={authResponse}
+                    />
                 </div>
             </m.section>
         </LazyMotion>

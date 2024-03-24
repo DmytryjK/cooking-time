@@ -55,6 +55,7 @@ export interface UserType {
     user: {
         uid: string;
         email: string;
+        emailVerified: null | boolean;
         isAdmin: boolean;
     };
 }
@@ -62,6 +63,7 @@ export interface UserType {
 export interface User {
     uid: string;
     email: string;
+    emailVerified: null | boolean;
 }
 
 export type Loading = 'idle' | 'pending' | 'succeeded' | 'failed';
