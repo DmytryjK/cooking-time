@@ -5,6 +5,7 @@ const initialState: UserType = {
     user: {
         uid: '',
         email: '',
+        emailVerified: null,
         isAdmin: false,
     },
 };

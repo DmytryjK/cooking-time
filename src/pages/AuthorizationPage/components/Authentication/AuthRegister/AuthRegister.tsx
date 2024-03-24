@@ -1,19 +1,26 @@
 import { NavLink } from 'react-router-dom';
+import { useRef } from 'react';
+import ActionsMessage from '../../ActionsMessage/ActionsMessage';
+import type { TextActions } from '../Authentication';
+import LoadingDataBtn from '../../../../../shared-components/LoadingDataBtn/LoadingDataBtn';
 import './AuthRegister.scss';
 
 type Props = {
-    isOpen: boolean;
+    isOpen?: boolean;
     handleCreateUser: (e: React.FormEvent<HTMLFormElement>) => void;
     handleMailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handlePassChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleHidePass: (e: React.MouseEvent<HTMLButtonElement>) => void;
     inputMail: string;
     inputPass: string;
-    loginByEmailPassInput: React.RefObject<HTMLInputElement>;
+    signUpByEmailPassInput: React.RefObject<HTMLInputElement>;
     authWithGoogle: any;
+    textActions: TextActions;
+    isLoading: boolean;
 };
 
 const AuthRegister = (props: Props) => {
+    const registerForm = useRef<HTMLFormElement>(null);
     const {
         isOpen,
         handleCreateUser,
@@ -22,9 +29,12 @@ const AuthRegister = (props: Props) => {
         handleHidePass,
         inputMail,
         inputPass,
-        loginByEmailPassInput,
+        signUpByEmailPassInput,
         authWithGoogle,
+        textActions,
+        isLoading,
     } = props;
+
     return (
         <div
             className={`authentication__block register ${
@@ -36,6 +46,7 @@ const AuthRegister = (props: Props) => {
                 <form
                     className="authorization__window-form form-email"
                     onSubmit={handleCreateUser}
+                    ref={registerForm}
                 >
                     <div className="form-email__label-wrapper">
                         <label className="form-email__label">
@@ -67,7 +78,7 @@ const AuthRegister = (props: Props) => {
                                     placeholder="&#10625; &#10625; &#10625; &#10625; &#10625; &#10625; &#10625;"
                                     onChange={handlePassChange}
                                     value={inputPass}
-                                    ref={loginByEmailPassInput}
+                                    ref={signUpByEmailPassInput}
                                 />
                                 <button
                                     className="input-password__hide-btn"
@@ -79,7 +90,7 @@ const AuthRegister = (props: Props) => {
                             </div>
                         </label>
                     </div>
-                    <div className="form-email__label-wrapper remeber-me__wrapper">
+                    {/* <div className="form-email__label-wrapper remeber-me__wrapper">
                         <label className="form-email__label remeber-me__label">
                             <input
                                 className="form-email__checkbox"
@@ -90,10 +101,18 @@ const AuthRegister = (props: Props) => {
                             <span className="remeber-me__checkbox-checked" />
                             <span>Запам'ятати мене</span>
                         </label>
-                    </div>
-                    <button className="form-email__submit" type="submit">
-                        Зареєструватись
-                    </button>
+                    </div> */}
+                    {textActions.text[0] && (
+                        <ActionsMessage textActions={textActions} />
+                    )}
+                    <LoadingDataBtn
+                        isLoading={isLoading}
+                        textBtn="Зареєструватись"
+                        additionalClass="form-email__submit"
+                        handleSubmit={() =>
+                            registerForm.current?.requestSubmit()
+                        }
+                    />
                 </form>
             </div>
             <div className="authentication__change-form">

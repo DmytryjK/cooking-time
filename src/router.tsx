@@ -10,6 +10,7 @@ export const router = [
     {
         path: '/',
         element: <MainPage />,
+        errorElement: <AddRecipePage />,
     },
     {
         path: '/add-recipe',
@@ -33,5 +34,13 @@ export const routerNoLoyout = [
     {
         path: '/auth-login',
         element: <AuthorizationPage login />,
+    },
+    {
+        path: '/auth-forgot-pass',
+        element: <AuthorizationPage forgotPassword />,
+    },
+    {
+        path: '/auth-response',
+        element: <AuthorizationPage authResponse />,
     },
 ];

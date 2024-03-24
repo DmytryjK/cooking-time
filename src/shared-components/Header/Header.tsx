@@ -12,7 +12,9 @@ import BurgerBtn from './BurgerBtn/BurgerBtn';
 import './Header.scss';
 
 const Header = () => {
-    const { uid } = useAppSelector((state) => state.authentication.user);
+    const { uid, email, emailVerified } = useAppSelector(
+        (state) => state.authentication.user
+    );
     const [userAuthToLocalStorage, setUserAuthToLocalStorage] = useState<
         string | null
     >(null);
@@ -47,7 +49,9 @@ const Header = () => {
                 console.log('logout success');
                 localStorage.clear();
                 setUserAuthToLocalStorage(null);
-                dispatch(createUser({ uid: '', email: '' }));
+                dispatch(
+                    createUser({ uid: '', email: '', emailVerified: null })
+                );
                 dispatch(resetFavoriteRecipes());
                 dispatch(resetRecipes());
             })
@@ -126,6 +130,14 @@ const Header = () => {
                     </div>
                     <div className="header__right">
                         {isShouldRenderSearch ? <SearchForm /> : null}
+                        {email && (
+                            <span className="header__right-username">
+                                Вітаємо,
+                                <strong>
+                                    {email.substring(0, email.indexOf('@'))}
+                                </strong>
+                            </span>
+                        )}
                         {userAuthToLocalStorage ? (
                             <button
                                 onClick={handleLogout}
@@ -135,11 +147,7 @@ const Header = () => {
                                 Вийти
                             </button>
                         ) : (
-                            <NavLink
-                                className="login__link"
-                                to="/auth-login"
-                                reloadDocument
-                            >
+                            <NavLink className="login__link" to="/auth-login">
                                 {' '}
                                 Увійти | Зареєструватись
                             </NavLink>

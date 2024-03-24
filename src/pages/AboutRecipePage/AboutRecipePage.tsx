@@ -45,12 +45,11 @@ const AboutRecipePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (recipe) return;
-        if (!recipeId.id) return;
+        if (!recipeId.id || recipe?.id === recipeId.id) return;
         dispatch(fetchRecipe(recipeId.id));
         if (!uid) return;
         dispatch(fetchFavoritesRecipes(uid));
-    }, [uid, recipe]);
+    }, [uid, recipeId, recipe]);
 
     useEffect(() => {
         if (loadingRecipesToFirebase !== 'succeeded') return;

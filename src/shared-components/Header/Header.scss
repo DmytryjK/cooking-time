@@ -57,6 +57,15 @@
         justify-self: flex-end;
         gap: 20px;
         align-items: center;
+        &-username {
+            display: inline-flex;
+            flex-direction: column;
+            font-size: 14px;
+            color: $text-color;
+            font-weight: 500;
+            max-width: 120px;
+            overflow: hidden;
+        }
     }
 
     .logout__btn, .login__link {

@@ -113,7 +113,7 @@ const RecipesForm = (props: Props) => {
     }, [loadingForm]);
 
     useEffect(() => {
-        if (loadingForm === 'succeeded') {
+        if (loadingForm === 'succeeded' && method === 'POST') {
             setNameValue('');
             setCategoryValue('');
             dispatch(clearAllTags());

@@ -1,8 +1,12 @@
 import { NavLink } from 'react-router-dom';
+import { useRef } from 'react';
+import ActionsMessage from '../../ActionsMessage/ActionsMessage';
+import type { TextActions } from '../Authentication';
+import LoadingDataBtn from '../../../../../shared-components/LoadingDataBtn/LoadingDataBtn';
 import './AuthLogin.scss';
 
 type Props = {
-    isOpen: boolean;
+    isOpen?: boolean;
     handleLogin: (e: React.FormEvent<HTMLFormElement>) => void;
     handleMailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handlePassChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -11,8 +15,11 @@ type Props = {
     inputPass: string;
     loginByEmailPassInput: React.RefObject<HTMLInputElement>;
     authWithGoogle: any;
+    textActions: TextActions;
+    isLoading: boolean;
 };
 const AuthLogin = (props: Props) => {
+    const loginForm = useRef<HTMLFormElement>(null);
     const {
         isOpen,
         handleLogin,
@@ -23,7 +30,10 @@ const AuthLogin = (props: Props) => {
         inputPass,
         loginByEmailPassInput,
         authWithGoogle,
+        textActions,
+        isLoading,
     } = props;
+
     return (
         <div
             className={`authentication__block login ${isOpen ? 'active' : ''}`}
@@ -33,6 +43,7 @@ const AuthLogin = (props: Props) => {
                 <form
                     className="authorization__window-form form-email"
                     onSubmit={handleLogin}
+                    ref={loginForm}
                 >
                     <div className="form-email__label-wrapper">
                         <label className="form-email__label">
@@ -76,7 +87,7 @@ const AuthLogin = (props: Props) => {
                             </div>
                         </label>
                     </div>
-                    <div className="form-email__label-wrapper remeber-me__wrapper">
+                    {/* <div className="form-email__label-wrapper remeber-me__wrapper">
                         <label className="form-email__label remeber-me__label">
                             <input
                                 className="form-email__checkbox"
@@ -87,10 +98,22 @@ const AuthLogin = (props: Props) => {
                             <span className="remeber-me__checkbox-checked" />
                             <span>Запам'ятати мене</span>
                         </label>
-                    </div>
-                    <button className="form-email__submit" type="submit">
-                        Увійти
-                    </button>
+                    </div> */}
+                    {textActions.text[0] && (
+                        <ActionsMessage textActions={textActions} />
+                    )}
+                    <NavLink
+                        className="form-email__forgot-password"
+                        to="/auth-forgot-pass"
+                    >
+                        Забули пароль?
+                    </NavLink>
+                    <LoadingDataBtn
+                        textBtn="Увійти"
+                        isLoading={isLoading}
+                        additionalClass="form-email__submit"
+                        handleSubmit={() => loginForm.current?.requestSubmit()}
+                    />
                 </form>
             </div>
             <div className="authentication__change-form">
