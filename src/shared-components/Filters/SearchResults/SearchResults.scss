@@ -1,7 +1,6 @@
 @use '../../../styles/variables' as *;
 .search-results {
     margin-top: 20px;
-    // display: flex;
     width: 100%;
     &__title {
         color: $bgcolor;
@@ -10,7 +9,18 @@
         text-wrap: nowrap;
         display: inline-block;
     }
+    &__value-clear {
+        margin-top: 6px;
+        margin-left: 8px;
+        text-decoration: underline;
+        background-color: transparent;
+        text-decoration-skip-ink: none;
+        white-space: nowrap;
+        border: none;
+        cursor: pointer;
+    }
     &__value-wrapper {
+        display: inline;
         margin-left: 5px;
     }
     &__value {
