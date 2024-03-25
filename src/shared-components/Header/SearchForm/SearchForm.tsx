@@ -6,6 +6,7 @@ import {
     addSearchTag,
     searchInputValue,
     deleteAllTags,
+    setResetFiltersByName,
 } from '../../../store/reducers/FiltersSlice';
 import loader from '../../../assets/icons/loader/loader.svg';
 import { filterRecipes } from '../../../store/reducers/RecipesListSlice';
@@ -20,9 +21,8 @@ const SearchForm = () => {
     const { pathname } = useLocation();
     const [inputValue, setInputValue] = useState<string>('');
     const [isSearchLoading, setIsSearchLoading] = useState<Loading>('idle');
-    const { searchInput, searchTags, searchCategories } = useAppSelector(
-        (state) => state.filters
-    );
+    const { searchInput, searchTags, searchCategories, isResetSearchFileters } =
+        useAppSelector((state) => state.filters);
     const [selectedOption, setSelectedOption] = useState('');
     const searchTypes = [
         {
@@ -67,6 +67,14 @@ const SearchForm = () => {
     useEffect(() => {
         setInputValue('');
     }, [selectedOption]);
+
+    useEffect(() => {
+        if (isResetSearchFileters) {
+            setInputValue('');
+            dispatch(searchInputValue(''));
+            dispatch(setResetFiltersByName(false));
+        }
+    }, [isResetSearchFileters]);
 
     useEffect(() => {
         setInputValue('');

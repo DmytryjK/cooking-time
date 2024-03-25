@@ -1,4 +1,5 @@
-import { useAppSelector } from '../../../hooks/hooks';
+import { useAppSelector, useAppDispatch } from '../../../hooks/hooks';
+import { setResetFiltersByName } from '../../../store/reducers/FiltersSlice';
 import './SearchResults.scss';
 
 const SearchResults = () => {
@@ -14,6 +15,9 @@ const SearchResults = () => {
     );
     const isRequestCorrect =
         filteredRecipes.length > 0 || filteredFavoriteRecipes.length > 0;
+
+    const dispatch = useAppDispatch();
+
     const renderResults = () => {
         let result;
         if (searchValue || tags.length > 0) {
@@ -23,13 +27,23 @@ const SearchResults = () => {
                         Результати пошуку:
                     </h2>
                     {searchValue ? (
-                        <span className="search-results__value-wrapper">
+                        <div className="search-results__value-wrapper">
                             "
                             <span className="search-results__value">
                                 {searchValue}
                             </span>
                             "
-                        </span>
+                            <button
+                                className="search-results__value-clear"
+                                type="button"
+                                aria-label="очистити пошук"
+                                onClick={() => {
+                                    dispatch(setResetFiltersByName(true));
+                                }}
+                            >
+                                Очистити пошук
+                            </button>
+                        </div>
                     ) : (
                         ''
                     )}

@@ -3,6 +3,7 @@ import { getDatabase, ref, child, get, update } from 'firebase/database';
 import {
     filterByIngredients,
     uniqSearchedTags,
+    filterByName,
 } from '../../helpers/filterRecipes';
 import { TagsType, Recipe, Loading } from '../../types/type';
 import type { SearchedConstruction } from '../../helpers/filterRecipes/filterByIngredients';
@@ -178,12 +179,13 @@ export const favoriteRecipesSlice = createSlice({
                 searchCategories.length > 0
             ) {
                 state.filteredFavoriteRecipes = state.filteredFavoriteRecipes
-                    .filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    )
+                    .filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    })
                     .filter((recipe) => {
                         const { isCorrect, searchedConstruction } =
                             filterByIngredients(recipe, searchTags);
@@ -203,12 +205,13 @@ export const favoriteRecipesSlice = createSlice({
                     );
             } else if (searchInput && searchTags.length > 0) {
                 state.filteredFavoriteRecipes = state.filteredFavoriteRecipes
-                    .filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    )
+                    .filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    })
                     .filter((recipe) => {
                         const { isCorrect, searchedConstruction } =
                             filterByIngredients(recipe, searchTags);
@@ -224,12 +227,13 @@ export const favoriteRecipesSlice = createSlice({
                     });
             } else if (searchInput && searchCategories.length > 0) {
                 state.filteredFavoriteRecipes = state.filteredFavoriteRecipes
-                    .filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    )
+                    .filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    })
                     .filter(
                         (recipe) =>
                             searchCategories.includes(recipe.category) === true
@@ -255,12 +259,13 @@ export const favoriteRecipesSlice = createSlice({
                     );
             } else if (searchInput) {
                 state.filteredFavoriteRecipes =
-                    state.filteredFavoriteRecipes.filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    );
+                    state.filteredFavoriteRecipes.filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    });
             } else if (searchTags.length > 0) {
                 state.filteredFavoriteRecipes =
                     state.filteredFavoriteRecipes.filter((recipe) => {

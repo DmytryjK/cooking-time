@@ -10,6 +10,7 @@ import {
 } from 'firebase/database';
 import {
     filterByIngredients,
+    filterByName,
     uniqSearchedTags,
 } from '../../helpers/filterRecipes';
 import type { Recipes, Recipe, TagsType, Loading } from '../../types/type';
@@ -260,12 +261,13 @@ export const recepieListSlice = createSlice({
                 searchCategories.length > 0
             ) {
                 state.filteredRecipes = state.filteredRecipes
-                    .filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    )
+                    .filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    })
                     .filter((recipe) => {
                         const { isCorrect, searchedConstruction } =
                             filterByIngredients(recipe, searchTags);
@@ -285,12 +287,13 @@ export const recepieListSlice = createSlice({
                     );
             } else if (searchInput && searchTags.length > 0) {
                 state.filteredRecipes = state.filteredRecipes
-                    .filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    )
+                    .filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    })
                     .filter((recipe) => {
                         const { isCorrect, searchedConstruction } =
                             filterByIngredients(recipe, searchTags);
@@ -306,12 +309,13 @@ export const recepieListSlice = createSlice({
                     });
             } else if (searchInput && searchCategories.length > 0) {
                 state.filteredRecipes = state.filteredRecipes
-                    .filter(
-                        (recipe) =>
-                            recipe.title
-                                .toLowerCase()
-                                .indexOf(searchInput.toLowerCase()) > -1
-                    )
+                    .filter((recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    })
                     .filter(
                         (recipe) =>
                             searchCategories.includes(recipe.category) === true
@@ -337,10 +341,13 @@ export const recepieListSlice = createSlice({
                     );
             } else if (searchInput) {
                 state.filteredRecipes = state.filteredRecipes.filter(
-                    (recipe) =>
-                        recipe.title
-                            .toLowerCase()
-                            .indexOf(searchInput.toLowerCase()) > -1
+                    (recipe) => {
+                        const { isCorrectValue } = filterByName(
+                            recipe,
+                            searchInput
+                        );
+                        return isCorrectValue;
+                    }
                 );
             } else if (searchTags.length > 0) {
                 state.filteredRecipes = state.filteredRecipes.filter(

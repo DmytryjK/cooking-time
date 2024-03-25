@@ -5,6 +5,7 @@ type TypeFilterRecipes = {
     searchInput: string;
     searchTags: TagsType[];
     searchCategories: string[];
+    isResetSearchFileters: boolean;
     // searchedNameOfDishes: string;
 };
 
@@ -13,6 +14,7 @@ const initialState: TypeFilterRecipes = {
     // searchedNameOfDishes: '',
     searchTags: [],
     searchCategories: [],
+    isResetSearchFileters: false,
 };
 
 export const filtersSlice = createSlice({
@@ -35,6 +37,9 @@ export const filtersSlice = createSlice({
         deleteAllTags: (state) => {
             state.searchTags = [];
         },
+        setResetFiltersByName: (state, action: PayloadAction<boolean>) => {
+            state.isResetSearchFileters = action.payload;
+        },
     },
 });
 
@@ -44,6 +49,7 @@ export const {
     deleteAllTags,
     activeCategories,
     searchInputValue,
+    setResetFiltersByName,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

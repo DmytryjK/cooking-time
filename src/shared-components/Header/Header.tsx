@@ -46,7 +46,6 @@ const Header = () => {
     const handleLogout = () => {
         signOut(auth)
             .then(() => {
-                console.log('logout success');
                 localStorage.clear();
                 setUserAuthToLocalStorage(null);
                 dispatch(

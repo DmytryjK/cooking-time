@@ -149,7 +149,6 @@ const RecipesForm = (props: Props) => {
                                 resolve(result);
                             },
                             error(err) {
-                                console.log(err.message);
                                 reject(err.message);
                             },
                         });
