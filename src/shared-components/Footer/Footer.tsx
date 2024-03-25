@@ -25,12 +25,16 @@ const Footer = () => {
                         <a
                             className="footer__link-dev"
                             href="https://t.me/DmytryjK"
+                            target="_blank"
+                            rel="noreferrer"
                         >
                             Розробка
                         </a>
                         <a
                             className="footer__link-design"
                             href="https://t.me/temchenkoinna"
+                            target="_blank"
+                            rel="noreferrer"
                         >
                             Дизайн
                         </a>
