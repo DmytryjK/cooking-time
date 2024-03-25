@@ -121,6 +121,7 @@
             &-list {
                 flex-direction: column;
                 justify-content: center;
+                gap: 10px;
             }
             &-item {
                 display: inline-flex;
@@ -129,8 +130,9 @@
                 width: 100%;
             }
             &-link {
+                text-align: center;
                 width: auto;
-                font-size: 18px;
+                font-size: 20px;
                 padding: 10px;
                 width: 100%;
             }
