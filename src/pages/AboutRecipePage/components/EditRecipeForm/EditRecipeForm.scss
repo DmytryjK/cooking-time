@@ -37,3 +37,16 @@
         font-weight: 500;
     }
 }
+
+@media screen and (max-width: 767px) {
+    .edit-recipe {
+        position: relative;
+        padding-top: 40px;
+        &__back-btn {
+            top: 0;
+        }
+        &__descr {
+            margin-top: 20px;
+        }
+    }
+}
