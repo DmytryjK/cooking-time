@@ -1,5 +1,6 @@
 import LazyLoad from 'react-lazy-load';
 import { useRef, Dispatch, SetStateAction, memo } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { easeOut, LazyMotion, m, domMax } from 'framer-motion';
 import RemoveRecipeByAdmin from './RemoveRecipeByAdmin/RemoveRecipeByAdmin';
@@ -32,7 +33,6 @@ const RecipeListItem = ({
 }) => {
     const { ingredients, id, title, time, imgDto, favorites, category } =
         recipe;
-
     const previewImg = imgDto.find((img) => img.id === 'previewImg');
     const timerClass = time
         ? 'recipe-card__timer active'
@@ -45,6 +45,7 @@ const RecipeListItem = ({
     );
     const navigate = useNavigate();
     const noderef = useRef(null);
+    const [emblaRef] = useEmblaCarousel({ dragFree: true, duration: 1 });
 
     const renderedTags = () => {
         if (!ingredients) return '';
@@ -53,7 +54,7 @@ const RecipeListItem = ({
             return (
                 <li
                     key={`item-tagtext-${item.id}`}
-                    className="product-tags__item"
+                    className="product-tags__item embla__slide"
                 >
                     {item.tagText}
                 </li>
@@ -103,7 +104,7 @@ const RecipeListItem = ({
                 return (
                     <li
                         key={`item-tagtext-${item.id}`}
-                        className={`product-tags__item ${
+                        className={`product-tags__item embla__slide ${
                             index < indexesOfIngredients.length
                                 ? 'product-tags__item_searched'
                                 : ''
@@ -185,9 +186,14 @@ const RecipeListItem = ({
                                     {time.minutes ? `${time.minutes} хв` : ''}
                                 </span>
                             )}
-                            <ul className="recipe-card__product-tags product-tags">
-                                {renderedTags() || null}
-                            </ul>
+                            <div
+                                className="recipe-card__product-tags-slider embla"
+                                ref={emblaRef}
+                            >
+                                <ul className="recipe-card__product-tags product-tags embla__container">
+                                    {renderedTags() || null}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div className="recipe-card__current-category">
