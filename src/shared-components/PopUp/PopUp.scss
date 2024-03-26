@@ -97,11 +97,12 @@
     }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 550px) {
     .success-window {
-        padding: 10px 20px;
+        padding: 10px 15px;
         &__block {
-            padding: 60px 40px;
+            padding: 60px 30px;
+            max-width: 400px;
         }
         &__title, &__subtitle {
             font-size: 20px;
