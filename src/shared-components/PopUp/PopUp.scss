@@ -96,3 +96,21 @@
         }
     }
 }
+
+@media screen and (max-width: 767px) {
+    .success-window {
+        padding: 10px 20px;
+        &__block {
+            padding: 60px 40px;
+        }
+        &__title, &__subtitle {
+            font-size: 20px;
+        }
+        &__subtitle {
+            font-size: 16px;
+        }
+        &__back, &__back-main {
+            font-size: 14px;
+        }
+    }
+}
