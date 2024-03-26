@@ -8,6 +8,7 @@ import {
     update,
     remove,
 } from 'firebase/database';
+import { getStorage, deleteObject, ref as storageRef } from 'firebase/storage';
 import {
     filterByIngredients,
     filterByName,
@@ -166,31 +167,72 @@ export const deleteRecipe = createAsyncThunk(
             const db = getDatabase();
             const itemRef = ref(db, `/dishes/${id}`);
             const favoritesRef = ref(db, `favorites`);
-            remove(itemRef).catch((error: unknown) => {
-                alert('Щось пішло не так, спробуйте ще раз');
-            });
-            get(favoritesRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    snapshot.forEach((childSnapshot) => {
-                        const userData = childSnapshot.val(); // Данные пользователя
-                        const userId = childSnapshot.key; // ID пользователя
-                        if (
-                            userData &&
-                            userData.some((data: string) => data === id) &&
-                            userId
-                        ) {
-                            const userDishesRef = ref(
-                                db,
-                                `/favorites/${userId}/${userData.indexOf(id)}`
-                            );
-                            remove(userDishesRef).catch((error) => {
-                                alert('Щось пішло не так, спробуйте ще раз');
-                            });
+
+            const promise = new Promise((resolve, reject) => {
+                get(itemRef)
+                    .then((snapshot) => {
+                        const storage = getStorage();
+                        if (snapshot.val().imgDto.length > 0) {
+                            snapshot
+                                .val()
+                                .imgDto.forEach(
+                                    (item: { id: string; src: string }) => {
+                                        const storageReference = storageRef(
+                                            storage,
+                                            item.src
+                                        );
+                                        deleteObject(storageReference).catch(
+                                            (e) => {
+                                                alert(
+                                                    'Щось пішло не так, спробуйте ще раз'
+                                                );
+                                            }
+                                        );
+                                    }
+                                );
                         }
+                    })
+                    .finally(() => {
+                        remove(itemRef).catch((error: unknown) => {
+                            alert('Щось пішло не так, спробуйте ще раз');
+                        });
+                    })
+                    .finally(() => {
+                        get(favoritesRef).then((snapshot) => {
+                            if (snapshot.exists()) {
+                                snapshot.forEach((childSnapshot) => {
+                                    const userData = childSnapshot.val(); // Данные пользователя
+                                    const userId = childSnapshot.key; // ID пользователя
+                                    if (
+                                        userData &&
+                                        userData.some(
+                                            (data: string) => data === id
+                                        ) &&
+                                        userId
+                                    ) {
+                                        const userDishesRef = ref(
+                                            db,
+                                            `/favorites/${userId}/${userData.indexOf(
+                                                id
+                                            )}`
+                                        );
+                                        remove(userDishesRef).catch((error) => {
+                                            alert(
+                                                'Щось пішло не так, спробуйте ще раз'
+                                            );
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    })
+                    .finally(() => {
+                        resolve(true);
                     });
-                }
             });
-            return true;
+            return await Promise.resolve(promise).then(() => {
+                return true;
+            });
         } catch (error: unknown) {
             return rejectWithValue(error);
         }
