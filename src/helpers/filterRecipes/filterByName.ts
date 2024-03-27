@@ -9,8 +9,8 @@ export type SearchedConstruction = {
 const filterByName = (recipe: Recipe, searchValue: string) => {
     let result = false;
     const { title } = recipe;
-    const splittedTitle = title.toLowerCase().split(/[' '-]/g);
-    const splittedSearchValue = searchValue.toLowerCase().split(/[' '-]/g);
+    const splittedTitle = title.toLowerCase().split(/[ -]/g);
+    const splittedSearchValue = searchValue.toLowerCase().split(/[ -]/g);
 
     if (title.toLowerCase().indexOf(searchValue.toLowerCase()) > -1) {
         return { isCorrectValue: true };

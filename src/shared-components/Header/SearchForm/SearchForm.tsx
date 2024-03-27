@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import nextId from 'react-id-generator';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
@@ -24,6 +24,8 @@ const SearchForm = () => {
     const { searchInput, searchTags, searchCategories, isResetSearchFileters } =
         useAppSelector((state) => state.filters);
     const [selectedOption, setSelectedOption] = useState('');
+    const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
+    const searchRef = useRef<HTMLInputElement>(null);
     const searchTypes = [
         {
             id: 1,
@@ -91,6 +93,9 @@ const SearchForm = () => {
             }
             return undefined;
         });
+        if (inputValue) {
+            setIsSelectOpen(false);
+        }
     }, [inputValue, selectedOption]);
 
     const handleSearchClick = (value: string) => {
@@ -143,11 +148,13 @@ const SearchForm = () => {
             <div className="searchForm__input-wrapper">
                 <input
                     className="searchForm__searchByName"
+                    ref={searchRef}
                     type="text"
                     value={inputValue}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    placeholder={`Пошук ${selectedOption.toLowerCase()}...`}
+                    onClick={() => setIsSelectOpen(!isSelectOpen)}
+                    placeholder={`Пошук ${selectedOption.toLowerCase()}`}
                 />
                 {inputValue && (
                     <button
@@ -231,6 +238,10 @@ const SearchForm = () => {
                     selectTitle="Тип"
                     isShowCurrentOption={false}
                     initialCheckedValue="По стравам"
+                    isOpen={isSelectOpen}
+                    setIsOpen={setIsSelectOpen}
+                    searchRef={searchRef}
+                    isButtonVisible={false}
                 />
             </div>
         </div>

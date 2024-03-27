@@ -68,7 +68,7 @@
     &__open-btn {
         position: relative;
         padding: 10px 36px 10px 12px;
-        min-width: 180px;
+        min-width: 200px;
         text-align: left;
         font-size: 14px;
         border-radius: 6px;
@@ -178,6 +178,14 @@
         transition: 0.2s ease-out background-color;
         &:hover {
             background-color: $second-accent-color;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .sort {
+        &__open-btn {
+            min-width: 180px;
         }
     }
 }
