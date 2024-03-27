@@ -15,9 +15,9 @@ const filterByIngredients = (recipe: Recipe, searchTags: TagsType[]) => {
         return recipe.ingredients?.some((ingredient) => {
             const tagLower = tag.tagText.toLowerCase().trim();
             const ingredientLower = ingredient.tagText.toLowerCase().trim();
-            const ingredientParts = ingredientLower.split(/[' '-]/g);
+            const ingredientParts = ingredientLower.split(/[ -]/g);
             const tagParts =
-                tagLower.length > 1 ? tagLower.split(/[' '-]/g) : [tagLower];
+                tagLower.length > 1 ? tagLower.split(/[ -]/g) : [tagLower];
             let result = false;
             ingredientParts.some((part) => {
                 return tagParts.some((tagPart) => {

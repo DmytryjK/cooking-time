@@ -4,6 +4,7 @@ import {
     ChangeEvent,
     Dispatch,
     SetStateAction,
+    RefObject,
 } from 'react';
 import nextId from 'react-id-generator';
 import './CustomSelect.scss';
@@ -15,6 +16,10 @@ const CustomSelect = ({
     selectTitle,
     isShowCurrentOption,
     initialCheckedValue,
+    isOpen,
+    setIsOpen,
+    searchRef,
+    isButtonVisible,
 }: {
     value?: string;
     setValue: Dispatch<SetStateAction<string>>;
@@ -22,11 +27,21 @@ const CustomSelect = ({
     selectTitle: string;
     isShowCurrentOption?: boolean;
     initialCheckedValue?: string;
+    isOpen?: boolean;
+    setIsOpen?: Dispatch<SetStateAction<boolean>>;
+    searchRef?: RefObject<HTMLInputElement>;
+    isButtonVisible?: boolean;
 }) => {
     const [isCategoryActive, setIsCategoryActive] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState<string>(
         initialCheckedValue || ''
     );
+
+    useEffect(() => {
+        if (isOpen !== undefined) {
+            setIsCategoryActive(isOpen);
+        }
+    }, [isOpen]);
 
     useEffect(() => {
         if (value === undefined) return;
@@ -43,9 +58,13 @@ const CustomSelect = ({
     const closeSelect = (e: any) => {
         if (
             !e.target.closest('.custom-select__fields') &&
-            !e.target.closest('.custom-select')
+            !e.target.closest('.custom-select') &&
+            !e.target.closest('.searchForm__searchByName')
         ) {
             setIsCategoryActive(false);
+            if (setIsOpen) {
+                setIsOpen(false);
+            }
         }
     };
 
@@ -60,21 +79,31 @@ const CustomSelect = ({
     const toggleCategories = (e: ChangeEvent<HTMLInputElement>) => {
         const { target } = e;
         setSelectedValue(target.value);
+        setIsCategoryActive(false);
+        if (setIsOpen) setIsOpen(false);
+        searchRef?.current?.focus();
     };
 
     return (
         <div className={`custom-select ${isCategoryActive ? 'active' : ''}`}>
-            <button
-                className="custom-select__open-btn"
-                type="button"
-                onClick={() => setIsCategoryActive(!isCategoryActive)}
-            >
-                <span className="btn__text">
-                    {isShowCurrentOption
-                        ? selectedValue || selectTitle
-                        : selectTitle}
-                </span>{' '}
-            </button>
+            {(isButtonVisible || isButtonVisible === undefined) && (
+                <button
+                    className="custom-select__open-btn"
+                    type="button"
+                    onClick={() => {
+                        setIsCategoryActive(!isCategoryActive);
+                        if (setIsOpen) {
+                            setIsOpen(!isOpen);
+                        }
+                    }}
+                >
+                    <span className="btn__text">
+                        {isShowCurrentOption
+                            ? selectedValue || selectTitle
+                            : selectTitle}
+                    </span>{' '}
+                </button>
+            )}
             <fieldset className="custom-select__fields">
                 {fieldValues.map((category) => {
                     const id = nextId(`${category}`);

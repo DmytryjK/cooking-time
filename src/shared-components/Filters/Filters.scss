@@ -29,6 +29,7 @@
 
 @media screen and (max-width: 550px) {
     .filters {
+        column-gap: 20px;
         &__title {
             font-size: 20px;
         }

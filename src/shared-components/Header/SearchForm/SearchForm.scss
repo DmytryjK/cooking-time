@@ -11,10 +11,10 @@
         height: 100%;
     }
     &__searchByName {
-        padding: 10px 85px 10px 45px;
+        padding: 10px 40px;
         border-radius: 6px;
         background-color: #EDEDED;
-        width: 314px;
+        width: 280px;
         border: 1px solid transparent;
         outline: none;
         font-weight: 400;
@@ -42,7 +42,7 @@
         &_clear-btn {
             position: absolute;
             top: 50%;
-            right: 85px;
+            right: 15px;
             width: 20px;
             height: 20px;
             border: none;
@@ -55,7 +55,7 @@
         position: absolute;
         top: 50%;
         bottom: 0;
-        left: 20px;
+        left: 15px;
         transform: translateY(-50%);
         width: 18px;
         height: 18px;
@@ -70,10 +70,10 @@
     }
 
     .custom-select {
+        top: 100%;
+        width: 100%;
+        right: 0;
         position: absolute;
-        right: 3px;
-        top: 50%;
-        transform: translateY(-50%);
         z-index: 2;
         &__open-btn {
             min-width: 78px;
@@ -96,9 +96,6 @@
             display: none;
         }
         &__fields {
-            top: calc(100% + 3px);
-            left: -225px;
-            right: -3px;
             border: none;
         }
         &__label {
