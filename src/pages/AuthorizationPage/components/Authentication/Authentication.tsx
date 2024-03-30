@@ -104,58 +104,53 @@ const Authentication: FC<AuthorizationPageProps> = ({
         }
     }, [pathname]);
 
-    const handleCreateUser = useCallback(
-        (e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            setIsLoading(true);
-            createUserWithEmailAndPassword(auth, inputMail, inputPass)
-                .then(({ user }) => {
-                    sendEmailVerification(user).then(() => {
-                        setTextActions({
-                            text: [
-                                'На вашу пошту',
-                                <b key={nextId('bold')}>{user.email}</b>,
-                                'був відправлений лист для верифікації',
-                            ],
-                            status: 'SUCCESS',
-                        });
-                        signOut(auth);
-                        resetAuthForm();
+    const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        createUserWithEmailAndPassword(auth, inputMail, inputPass)
+            .then(({ user }) => {
+                sendEmailVerification(user).then(() => {
+                    setTextActions({
+                        text: [
+                            'На вашу пошту',
+                            <b key={nextId('bold')}>{user.email}</b>,
+                            'був відправлений лист для верифікації',
+                        ],
+                        status: 'SUCCESS',
                     });
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    if (errorCode === 'auth/email-already-in-use') {
-                        setTextActions({
-                            text: [`Даний емейл вже зареєстрований на сайті`],
-                            status: 'WARNING',
-                        });
-                    }
-                    if (errorCode === 'auth/invalid-email') {
-                        setTextActions({
-                            text: [
-                                'Введіть коректний емейл для реєстрації, наприклад:',
-                                <b key={nextId('bold')}>email@example.com</b>,
-                            ],
-                            status: 'WARNING',
-                        });
-                    }
-                    if (errorCode === 'auth/weak-password') {
-                        setTextActions({
-                            text: [
-                                `Пароль закороткий, введіть мінімум 6 символів`,
-                            ],
-                            status: 'WARNING',
-                        });
-                    }
-                })
-                .finally(() => {
-                    setIsLoading(false);
+                    signOut(auth);
+                    resetAuthForm();
                 });
-        },
-        [inputMail, inputPass]
-    );
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                if (errorCode === 'auth/email-already-in-use') {
+                    setTextActions({
+                        text: [`Даний емейл вже зареєстрований на сайті`],
+                        status: 'WARNING',
+                    });
+                }
+                if (errorCode === 'auth/invalid-email') {
+                    setTextActions({
+                        text: [
+                            'Введіть коректний емейл для реєстрації, наприклад:',
+                            <b key={nextId('bold')}>email@example.com</b>,
+                        ],
+                        status: 'WARNING',
+                    });
+                }
+                if (errorCode === 'auth/weak-password') {
+                    setTextActions({
+                        text: [`Пароль закороткий, введіть мінімум 6 символів`],
+                        status: 'WARNING',
+                    });
+                }
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
 
     const handleLogin = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
