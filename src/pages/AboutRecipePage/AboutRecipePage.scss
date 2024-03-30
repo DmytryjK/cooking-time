@@ -3,11 +3,12 @@
     .recipe-page {
         padding-top: 50px;
         position: relative;
-        min-height: 50dvh;
+        min-height: 60dvh;
         &__top{
             position: relative;
             display: flex;
             border-radius: 10px;
+            min-height: 425px;
             background-color: $bgInputs;
             overflow: hidden;
         }

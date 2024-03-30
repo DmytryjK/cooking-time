@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { easeOut, LazyMotion, m, domMax } from 'framer-motion';
 import RemoveRecipeByAdmin from './RemoveRecipeByAdmin/RemoveRecipeByAdmin';
 import { Recipe } from '../../types/type';
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import type { IngredientsType } from '../../types/type';
 import './RecipeListItem.scss';
 
@@ -17,19 +17,15 @@ type HandleAddToFavorite = (
 const RecipeListItem = ({
     recipe,
     addToFavorite,
-    isAnimate,
-    setIsAnimate,
     index,
     setIsCardAnimateEnd,
+    className,
 }: {
     recipe: Recipe;
     addToFavorite: HandleAddToFavorite;
-    isAnimate?: { id: string | number | null; animate: boolean };
-    setIsAnimate?: Dispatch<
-        SetStateAction<{ id: string | number | null; animate: boolean }>
-    >;
     index: number;
     setIsCardAnimateEnd?: Dispatch<SetStateAction<boolean>>;
+    className?: string;
 }) => {
     const { ingredients, id, title, time, imgDto, favorites, category } =
         recipe;
@@ -46,6 +42,7 @@ const RecipeListItem = ({
     const navigate = useNavigate();
     const noderef = useRef(null);
     const [emblaRef] = useEmblaCarousel({ dragFree: true, duration: 1 });
+    const dispatch = useAppDispatch();
 
     const renderedTags = () => {
         if (!ingredients) return '';
@@ -121,7 +118,7 @@ const RecipeListItem = ({
     return (
         <LazyMotion features={domMax} strict>
             <m.div
-                className="recipe-card"
+                className={`recipe-card ${className || ''}`}
                 ref={noderef}
                 initial={{ opacity: 0.5, y: 15, scale: 0.96, display: 'none' }}
                 layout

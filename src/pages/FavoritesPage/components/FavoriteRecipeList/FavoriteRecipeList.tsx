@@ -7,7 +7,6 @@ import {
     fetchFavoritesRecipes,
     manageFavoritesRecipes,
 } from '../../../../store/reducers/FavoritesRecipesSlice';
-
 import EmptyFavoriteList from '../EmptyFavoriteList/EmptyFavoriteList';
 import UnauthorizedFavoriteList from '../UnauthorizedFavoriteList/UnauthorizedFavoriteList';
 import renderServerData from '../../../../helpers/renderServerData';
@@ -30,10 +29,6 @@ const FavoriteRecipeList: FC = () => {
     );
     const error = useAppSelector((state) => state.favoriteRecipes.error);
     const { uid } = useAppSelector((state) => state.authentication.user);
-    const [isAnimate, setIsAnimate] = useState<{
-        id: string | number | null;
-        animate: boolean;
-    }>({ id: null, animate: false });
     const [animateOnLoading, setAnimateOnLoading] = useState(false);
     const [isCardAnimateEnd, setIsCardAnimateEnd] = useState(true);
     const dispatch = useAppDispatch();
@@ -84,8 +79,6 @@ const FavoriteRecipeList: FC = () => {
                     <RecipeListItem
                         recipe={item}
                         addToFavorite={handleAddFavorite}
-                        isAnimate={isAnimate}
-                        setIsAnimate={setIsAnimate}
                         index={index}
                         setIsCardAnimateEnd={setIsCardAnimateEnd}
                     />

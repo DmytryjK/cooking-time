@@ -4,6 +4,7 @@ import RecipesReducer from './reducers/RecipesListSlice';
 import AuthenticationReducer from './reducers/AuthenticationSlice';
 import FavoriteRecipesReducer from './reducers/FavoritesRecipesSlice';
 import CreateRecipeFormReducer from './reducers/CreateRecipeFormSlice';
+import RecenltyViewedReducer from './reducers/RecenltyViewedSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         authentication: AuthenticationReducer,
         favoriteRecipes: FavoriteRecipesReducer,
         createRecipeForm: CreateRecipeFormReducer,
+        recenltyViewed: RecenltyViewedReducer,
     },
 });
 
