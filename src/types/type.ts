@@ -21,6 +21,10 @@ export interface Recipe {
     category: string;
 }
 
+export interface RecipesFromServer {
+    [key: string]: Recipe;
+}
+
 export interface Recipes {
     recipes: Recipe[];
     fetchedRecepieInfo?: Recipe | null;

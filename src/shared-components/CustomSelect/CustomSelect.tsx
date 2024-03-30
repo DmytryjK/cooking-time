@@ -16,7 +16,7 @@ const CustomSelect = ({
     selectTitle,
     isShowCurrentOption,
     initialCheckedValue,
-    isOpen,
+    isOpen = false,
     setIsOpen,
     searchRef,
     isButtonVisible,
@@ -38,9 +38,7 @@ const CustomSelect = ({
     );
 
     useEffect(() => {
-        if (isOpen !== undefined) {
-            setIsCategoryActive(isOpen);
-        }
+        setIsCategoryActive(isOpen);
     }, [isOpen]);
 
     useEffect(() => {
