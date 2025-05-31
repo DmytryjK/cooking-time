@@ -1,59 +1,59 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .add-recepie {
-    .container {
-        overflow: hidden;
+  .container {
+    overflow: hidden;
+  }
+  &__title {
+    color: $bgcolor;
+    font-size: 25px;
+    font-weight: 600;
+    text-align: center;
+  }
+  &__descr {
+    margin-top: 40px;
+    color: $bgcolor;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  &__unauthorized-attention {
+    justify-content: center;
+    padding-top: 20px;
+    width: 100%;
+  }
+  &__unauthorized-inner {
+    max-width: 700px;
+    color: $accent-color;
+    font-weight: 500;
+    p {
+      display: inline-block;
+      text-align: center;
+      margin-right: 10px;
     }
-    &__title {
-        color: $bgcolor;
-        font-size: 25px;
-        font-weight: 600;
-        text-align: center;
+  }
+
+  &__unauthorized-accept {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 3px;
+    color: $text-color;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover {
+      color: $accent-color;
     }
-    &__descr {
-        margin-top: 40px;
-        color: $bgcolor;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    &__unauthorized-attention {
-        justify-content: center;
-        padding-top: 20px;
-        width: 100%;
-    }
-    &__unauthorized-inner {
-        max-width: 700px;
-        color: $accent-color;
-        font-weight: 500;
-        p {
-            display: inline-block;
-            text-align: center;
-            margin-right: 10px;
-        }
-    }
-    
-    &__unauthorized-accept {
-        display: block;
-        margin: 0 auto;
-        margin-top: 10px;
-        background-color: transparent;
-        border: none;
-        text-decoration: underline;
-        text-decoration-skip-ink: none;
-        text-underline-offset: 3px;
-        color: $text-color;
-        font-weight: 500;
-        cursor: pointer;
-        &:hover {
-            color: $accent-color;
-        }
-    }
+  }
 }
 
 @media screen and (max-width: 767px) {
-    .add-recepie {
-        &__descr {
-            margin-top: 20px;
-        }
+  .add-recepie {
+    &__descr {
+      margin-top: 20px;
     }
+  }
 }

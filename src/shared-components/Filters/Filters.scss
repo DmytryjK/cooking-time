@@ -1,37 +1,37 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .filters {
-    display: grid;
-    grid-template-columns: repeat(3, auto-fill, minmax(150px, 1fr));
-    grid-template-rows: repeat(2, auto);
-    column-gap: 30px;
-    &__title {
-        color: $text-color;
-        font-size: 25px;
-        font-weight: 700;
-        grid-column: 1 / 3;
-        grid-row: 1 / 1;
-    }
+  display: grid;
+  grid-template-columns: repeat(3, auto-fill, minmax(150px, 1fr));
+  grid-template-rows: repeat(2, auto);
+  column-gap: 30px;
+  &__title {
+    color: $text-color;
+    font-size: 25px;
+    font-weight: 700;
+    grid-column: 1 / 3;
+    grid-row: 1 / 1;
+  }
 
-    .sort {
-        grid-column: 3 / 4;
-        grid-row: 1 / 1;
-    }
+  .sort {
+    grid-column: 3 / 4;
+    grid-row: 1 / 1;
+  }
 
-    .search-results {
-        grid-column: 1 / 4;
-        grid-row: 2;
-    }
+  .search-results {
+    grid-column: 1 / 4;
+    grid-row: 2;
+  }
 
-    .tagsForm {
-        grid-column: 1 / 4;
-    }
+  .tagsForm {
+    grid-column: 1 / 4;
+  }
 }
 
 @media screen and (max-width: 550px) {
-    .filters {
-        column-gap: 20px;
-        &__title {
-            font-size: 20px;
-        }
+  .filters {
+    column-gap: 20px;
+    &__title {
+      font-size: 20px;
     }
+  }
 }

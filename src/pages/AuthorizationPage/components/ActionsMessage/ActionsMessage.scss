@@ -1,38 +1,38 @@
-@use '../../../../styles/variables' as *;
+@use "../../../../styles/variables" as *;
 .auth-action-message {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-top: 15px;
-    padding-bottom: 7px;
-    font-size: 14px;
-    font-weight: 500;
-    &.success {
-        border-bottom: 1px solid rgba(26, 161, 26, 0.5);
-        svg {
-            #SVGRepo_bgCarrier path {
-                fill: rgb(26, 161, 26);
-            }
-            #ic_fluent_important_24_regular {
-                fill: white;
-            }
-        }
-    }  
-    &.warning {
-        border-bottom: 1px solid rgba($accent-color, 0.5);
-        svg {
-            #SVGRepo_bgCarrier path {
-                fill: $accent-color;
-            }
-            #ic_fluent_important_24_regular {
-                fill: white;
-            }
-        }
-    } 
-    
-    &__icon {
-        width: 30px;
-        height: 30px;
-        flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 15px;
+  padding-bottom: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  &.success {
+    border-bottom: 1px solid rgba(26, 161, 26, 0.5);
+    svg {
+      #SVGRepo_bgCarrier path {
+        fill: rgb(26, 161, 26);
+      }
+      #ic_fluent_important_24_regular {
+        fill: white;
+      }
     }
+  }
+  &.warning {
+    border-bottom: 1px solid rgba($accent-color, 0.5);
+    svg {
+      #SVGRepo_bgCarrier path {
+        fill: $accent-color;
+      }
+      #ic_fluent_important_24_regular {
+        fill: white;
+      }
+    }
+  }
+
+  &__icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
 }

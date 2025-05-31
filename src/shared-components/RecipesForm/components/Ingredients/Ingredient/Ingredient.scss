@@ -1,201 +1,201 @@
-@use '../../../../../styles/variables' as *;
+@use "../../../../../styles/variables" as *;
 .createdTag {
-    padding: 5px 5px 5px 0;
-    background-color: transparent;
-    border-radius: 8px;
-    display: inline-flex;
+  padding: 5px 5px 5px 0;
+  background-color: transparent;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  color: $text-color;
+  transition: 0.3s ease-out background-color;
+  &:not(:first-child) {
+    margin-top: 8px;
+  }
+  &:hover {
+    background-color: $light-color;
+    .createdTag__move-ingredient {
+      opacity: 1;
+      visibility: visible;
+    }
+    .createdTag__delete-ingredient {
+      opacity: 1;
+      visibility: visible;
+      user-select: auto;
+      pointer-events: all;
+    }
+  }
+  &__left-wrapper {
+    display: flex;
     align-items: center;
     width: 100%;
-    height: auto;
+    column-gap: 10px;
+    row-gap: 5px;
+  }
+  &__input-title {
+    display: block;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    padding: 5px 2px;
+    outline: none;
+    border-bottom: 1px solid transparent;
+    font-size: 14px;
+    transition: 0.3s ease-out border-color;
+    &:focus {
+      border-color: $ingredients;
+    }
+  }
+  &__move-ingredient {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background-color: transparent;
+    border: none;
+    color: $bgcolor;
+    cursor: grab;
+    touch-action: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s ease-out background-color, 0.2s ease-out color, 0.2s ease-out visibility, 0.2s ease-out opacity;
+    &:hover {
+      background-color: $light-color;
+      color: $accent-color;
+    }
+  }
+  &.dragged {
+    position: relative;
+    background-color: $light-color;
+    box-shadow: 0px 0px 10px rgb(207, 207, 207);
+    &:hover {
+      background-color: $light-color;
+    }
+    .createdTag__move-ingredient {
+      opacity: 1;
+      visibility: visible;
+    }
+    .createdTag__delete-ingredient {
+      opacity: 1;
+      visibility: visible;
+      user-select: auto;
+      pointer-events: all;
+    }
+  }
+  &.moved {
+    background-color: $light-color;
+  }
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+  }
+  &__input {
+    text-align: center;
+    height: 100%;
+    max-width: 100px;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: 1px solid $border-input;
+    font-size: 16px;
+    font-weight: 500;
+    background: $light-color;
     color: $text-color;
-    transition: 0.3s ease-out background-color;
-    &:not(:first-child) {
-        margin-top: 8px;
+    outline: none;
+    -moz-appearance: textfield;
+    &::placeholder {
+      color: $border-input;
+    }
+    &:focus {
+      border-color: $accent-color;
+      &::placeholder {
+        color: transparent;
+      }
+    }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+  &__delete-ingredient {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    height: 20px;
+    margin-left: 4px;
+    background-color: transparent;
+    visibility: hidden;
+    user-select: none;
+    opacity: 0;
+    pointer-events: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease-out visibility, 0.2s ease-out user-select, 0.2s ease-out opacity, 0.2s ease-out pointer-events;
+    svg path {
+      transition: 0.2s ease-out fill;
     }
     &:hover {
-        background-color: $light-color;
-        .createdTag__move-ingredient {
-            opacity: 1;
-            visibility: visible;
-        }
-        .createdTag__delete-ingredient {
-            opacity: 1;
-            visibility: visible;
-            user-select: auto;
-            pointer-events: all;
-        }
+      svg path {
+        fill: $accent-color;
+      }
     }
-    &__left-wrapper {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        column-gap: 10px;
-        row-gap: 5px;
-    }
-    &__input-title {
-        display: block;
-        border: none;
-        background-color: transparent;
-        width: 100%;
-        padding: 5px 2px;
-        outline: none;
-        border-bottom: 1px solid transparent;
-        font-size: 14px;
-        transition: 0.3s ease-out border-color;
-        &:focus {
-            border-color: $ingredients;
-        }
-    }
-    &__move-ingredient {
-        width: 30px;
-        height: 30px;
-        flex-shrink: 0;
-        border-radius: 8px;
-        background-color: transparent;
-        border: none;
-        color: $bgcolor;
-        cursor: grab;
-        touch-action: none;
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.2s ease-out background-color, 0.2s ease-out color, 0.2s ease-out visibility, 0.2s ease-out opacity;
-        &:hover {
-            background-color: $light-color;
-            color: $accent-color;
-        }
-    }
-    &.dragged {
-        position: relative;
-        background-color: $light-color;
-        box-shadow: 0px 0px 10px rgb(207, 207, 207);
-        &:hover {
-            background-color: $light-color;
-        }
-        .createdTag__move-ingredient {
-            opacity: 1;
-            visibility: visible;
-        }
-        .createdTag__delete-ingredient {
-            opacity: 1;
-            visibility: visible;
-            user-select: auto;
-            pointer-events: all;
-        }
-    }
-    &.moved {
-        background-color: $light-color;
+  }
+  .sort {
+    &__open-btn {
+      padding: 8px 26px 8px 12px;
+      max-width: 100px;
+      width: 100%;
+      min-width: 68px;
+      height: 42px;
+      &::after {
+        right: -10px;
+      }
     }
     &__label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        height: 100%;
+      padding: 5px 8px;
+      border: 1px solid transparent;
+      transition: 0.2s ease-out border-color;
+      &:hover {
+        border-color: rgba($border-input, 0.7);
+      }
     }
-    &__input {
-        text-align: center;
-        height: 100%;
-        max-width: 100px;
-        padding: 8px 24px;
-        border-radius: 8px;
-        border: 1px solid $border-input;
-        font-size: 16px;
-        font-weight: 500;
-        background: $light-color;
-        color: $text-color;
-        outline: none;
-        -moz-appearance: textfield;
-        &::placeholder {
-            color: $border-input;
-        }
-        &:focus {
-            border-color: $accent-color;
-            &::placeholder {
-                color: transparent;
-            }
-        }
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+    &__input-custom {
+      display: none;
     }
-    &__delete-ingredient {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        padding: 5px;
-        height: 20px;
-        margin-left: 4px;
-        background-color: transparent;
-        visibility: hidden;
-        user-select: none;
-        opacity: 0;
-        pointer-events: none;
-        border: none;
-        cursor: pointer;
-        transition: 0.2s ease-out visibility, 0.2s ease-out user-select, 0.2s ease-out opacity, 0.2s ease-out pointer-events;
-        svg path {
-            transition: 0.2s ease-out fill;
-        }
-        &:hover {
-            svg path {
-                fill: $accent-color;
-            }
-        }
-    }
-    .sort {
-        &__open-btn {
-            padding: 8px 26px 8px 12px;
-            max-width: 100px;
-            width: 100%;
-            min-width: 68px;
-            height: 42px;
-            &::after {
-                right: -10px
-            }
-        }
-        &__label {
-            padding: 5px 8px;
-            border: 1px solid transparent;
-            transition: 0.2s ease-out border-color;
-            &:hover {
-                border-color: rgba($border-input, 0.7);
-            }
-        }
-        &__input-custom {
-            display: none;
-        }
-    }
+  }
 }
 
 @media screen and (max-width: 991px) {
-    .createdTag {
-        &:hover {
-            background-color: transparent;
-        }
-        &__move-ingredient {
-            visibility: visible;
-            opacity: 1;
-        }
-        &__delete-ingredient {
-            opacity: 1;
-            visibility: visible;
-            user-select: auto;
-            pointer-events: all;
-        }
+  .createdTag {
+    &:hover {
+      background-color: transparent;
     }
+    &__move-ingredient {
+      visibility: visible;
+      opacity: 1;
+    }
+    &__delete-ingredient {
+      opacity: 1;
+      visibility: visible;
+      user-select: auto;
+      pointer-events: all;
+    }
+  }
 }
 @media screen and (max-width: 550px) {
-    .createdTag {
-        gap: 10px;
-        &:not(:first-child) {
-            margin-top: 20px;
-        }
-        &__left-wrapper {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: auto;
-        }
+  .createdTag {
+    gap: 10px;
+    &:not(:first-child) {
+      margin-top: 20px;
     }
+    &__left-wrapper {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: auto;
+    }
+  }
 }

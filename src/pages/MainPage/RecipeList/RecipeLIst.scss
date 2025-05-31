@@ -1,38 +1,37 @@
 .recipe-list {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  list-style-type: none;
+  gap: 40px 20px;
+  &__item {
+    display: flex;
     list-style-type: none;
-    gap: 40px 20px;
-    &__item {
-        display: flex;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
+    margin: 0;
+    padding: 0;
 
-        &.enter {
-            transform: scale(0.9);
-            opacity: 0.5;
-        }
-        &.enter-done {
-            transform: scale(1);
-            opacity: 1;
-            transition: 0.2s ease-out transform, 0.2s ease-out opacity;
-        }
-        &.exit-active {
-            transform: scale(1);
-            opacity: 1;
-            transition: 0.2s ease-out transform, 0.2s ease-out opacity;
-        }
-        &.exit {
-            transform: scale(0.9);
-            opacity: 0.5;
-        }
-
-        &_not-show {
-            opacity: 0;
-            visibility: hidden;
-        }
+    &.enter {
+      transform: scale(0.9);
+      opacity: 0.5;
     }
-}
+    &.enter-done {
+      transform: scale(1);
+      opacity: 1;
+      transition: 0.2s ease-out transform, 0.2s ease-out opacity;
+    }
+    &.exit-active {
+      transform: scale(1);
+      opacity: 1;
+      transition: 0.2s ease-out transform, 0.2s ease-out opacity;
+    }
+    &.exit {
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
 
+    &_not-show {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}

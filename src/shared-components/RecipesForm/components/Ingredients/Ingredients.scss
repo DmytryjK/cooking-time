@@ -1,26 +1,26 @@
-@use '../../../../styles/variables' as *;
+@use "../../../../styles/variables" as *;
 .tagsForm {
-    .duplicated-block {
-        font-size: 14px;
-        color: $bgcolor;
-        p {
-            margin: 0;
-            &:last-child {
-                margin-top: 10px;
-            }
-        }
-        .duplicated-list {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 6px;
-            color: $bgcolor;
-            &__item {
-                font-weight: 600;
-                text-decoration: underline;
-                text-decoration-skip-ink: none;
-            }
-        }
+  .duplicated-block {
+    font-size: 14px;
+    color: $bgcolor;
+    p {
+      margin: 0;
+      &:last-child {
+        margin-top: 10px;
+      }
     }
+    .duplicated-list {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 6px;
+      color: $bgcolor;
+      &__item {
+        font-weight: 600;
+        text-decoration: underline;
+        text-decoration-skip-ink: none;
+      }
+    }
+  }
 }

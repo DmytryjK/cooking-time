@@ -1,3 +1,3 @@
-import renderServerData from './renderServerData';
+import renderServerData from "./renderServerData";
 
 export default renderServerData;
