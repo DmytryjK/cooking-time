@@ -1,118 +1,122 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .success-window {
-    position: fixed;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba($text-color, 0.4);
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding: 10px 30px;
+  opacity: 0;
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  transition: 0.2s ease-out visibility, 0.2s ease-out opacity;
+  z-index: 1001;
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    user-select: auto;
+    pointer-events: all;
+    z-index: 1001;
+  }
+  &__block {
+    position: relative;
+    max-width: 500px;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 6px;
+  }
+  &__title,
+  &__subtitle {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+    color: $text-color;
+    max-width: 420px;
+  }
+  &__subtitle {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  &__links {
+    display: flex;
+    align-self: center;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  &__back,
+  &__back-main {
+    margin-top: 25px;
+    display: inline-block;
+    background-color: $accent-color;
+    padding: 15px 45px;
+    border-radius: 6px;
+    color: $light-color;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease-out background-color;
+    &:hover {
+      background-color: $second-accent-color;
+    }
+  }
+  &__close {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba($text-color, 0.4);
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    padding: 10px 30px;
-    opacity: 0;
-    visibility: hidden;
-    user-select: none;
-    pointer-events: none;
-    transition: 0.2s ease-out visibility, 0.2s ease-out opacity;
-    z-index: 1001;
-    &.active {
-        opacity: 1;
-        visibility: visible;
-        user-select: auto;
-        pointer-events: all;
-        z-index: 1001;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 5px;
+    width: 25px;
+    height: 25px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    &-icon {
+      fill: $text-color;
+      width: 20px;
+      height: 20px;
+      transition: 0.2s ease-out fill;
     }
-    &__block {
-        position: relative;
-        max-width: 500px;
-        padding: 60px 40px;
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        border-radius: 6px;
+    &:hover {
+      .success-window__close-icon {
+        fill: $accent-color;
+      }
     }
-    &__title, &__subtitle {
-        text-align: center;
-        font-size: 25px;
-        font-weight: 600;
-        color: $text-color;
-        max-width: 420px;
-    }
-    &__subtitle {
-        margin-top: 15px;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    &__links {
-        display: flex;
-        align-self: center;
-        justify-content: space-around;
-        gap: 20px;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-    &__back, &__back-main {
-        margin-top: 25px;
-        display: inline-block;
-        background-color: $accent-color;
-        padding: 15px 45px;
-        border-radius: 6px;
-        color: $light-color;
-        text-decoration: none;
-        text-transform: uppercase;
-        font-weight: 600;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        transition: 0.2s ease-out background-color;
-        &:hover {
-            background-color: $second-accent-color
-        }
-    }
-    &__close {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        padding: 5px;
-        width: 25px;
-        height: 25px;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        &-icon {
-            fill: $text-color;
-            width: 20px;
-            height: 20px;
-            transition: 0.2s ease-out fill;
-        }
-        &:hover {
-            .success-window__close-icon {
-                fill: $accent-color;
-            }
-        }
-    }
+  }
 }
 
 @media screen and (max-width: 550px) {
-    .success-window {
-        padding: 10px 15px;
-        &__block {
-            padding: 60px 30px;
-            max-width: 400px;
-        }
-        &__title, &__subtitle {
-            font-size: 20px;
-        }
-        &__subtitle {
-            font-size: 16px;
-        }
-        &__back, &__back-main {
-            font-size: 14px;
-            padding: 15px 35px;
-        }
+  .success-window {
+    padding: 10px 15px;
+    &__block {
+      padding: 60px 30px;
+      max-width: 400px;
     }
+    &__title,
+    &__subtitle {
+      font-size: 20px;
+    }
+    &__subtitle {
+      font-size: 16px;
+    }
+    &__back,
+    &__back-main {
+      font-size: 14px;
+      padding: 15px 35px;
+    }
+  }
 }

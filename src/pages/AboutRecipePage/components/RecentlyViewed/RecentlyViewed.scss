@@ -1,22 +1,21 @@
-
-@use '../../../../styles/variables' as *;
+@use "../../../../styles/variables" as *;
 .recently-views {
-    position: relative;
-    &__title {
-        margin-top: 60px;
-        margin-left: 10px;
-        margin-bottom: 20px;
-        font-size: 22px;
-        color: $text-color;
-        padding-right: 110px;
-    }
+  position: relative;
+  &__title {
+    margin-top: 60px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: $text-color;
+    padding-right: 110px;
+  }
 }
 @media screen and (max-width: 767px) {
-    .recently-views {
-        margin-top: 50px;
-        &__title {
-            font-size: 18px;
-            padding-right: 90px;
-        }
+  .recently-views {
+    margin-top: 50px;
+    &__title {
+      font-size: 18px;
+      padding-right: 90px;
     }
+  }
 }

@@ -1,74 +1,74 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .embla-recipes {
-    // height: 451px;
-    max-width: 100%;
-    --slide-spacing: 1rem;
-    --slide-size: 320px;
-    --slide-spacing-sm: 1rem;
-    --slide-size-sm: 320px;
-    --slide-spacing-lg: 1rem;
-    --slide-size-lg: 320px;
-    .embla__viewport {
-      padding: 5px;
-      overflow: hidden;
-    }
-    .embla__container-recipes {
-      backface-visibility: hidden;
+  // height: 451px;
+  max-width: 100%;
+  --slide-spacing: 1rem;
+  --slide-size: 320px;
+  --slide-spacing-sm: 1rem;
+  --slide-size-sm: 320px;
+  --slide-spacing-lg: 1rem;
+  --slide-size-lg: 320px;
+  .embla__viewport {
+    padding: 5px;
+    overflow: hidden;
+  }
+  .embla__container-recipes {
+    backface-visibility: hidden;
+    display: flex;
+    gap: 20px;
+    touch-action: pan-y;
+  }
+  .embla__slide-recipes {
+    width: 316px;
+    min-width: 316px;
+  }
+  .embla-recipes__controls {
+    position: absolute;
+    top: -10px;
+    right: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: space-between;
+  }
+  .embla-recipes__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    align-items: center;
+    .embla__button {
+      -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: transparent;
+      touch-action: manipulation;
+      display: inline-flex;
+      text-decoration: none;
+      cursor: pointer;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
+      width: 3rem;
+      height: 3rem;
+      z-index: 1;
+      border-radius: 50%;
+      color: $accent-color;
       display: flex;
-      gap: 20px;
-      touch-action: pan-y;
-    }
-    .embla__slide-recipes {
-      width: 316px;
-      min-width: 316px;
-    }
-    .embla-recipes__controls {
-      position: absolute;
-      top: -10px;
-      right: 0;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      justify-content: space-between;
-    }
-    .embla-recipes__buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.6rem;
       align-items: center;
-      .embla__button {
-        -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
-        -webkit-appearance: none;
-        appearance: none;
-        background-color: transparent;
-        touch-action: manipulation;
-        display: inline-flex;
-        text-decoration: none;
-        cursor: pointer;
-        border: 0;
-        padding: 0;
-        margin: 0;
-        box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
-        width: 3rem;
-        height: 3rem;
-        z-index: 1;
-        border-radius: 50%;
-        color: $accent-color;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .embla__button:disabled {
-        color: $border-input;
-      }
-      .embla__button__svg {
-        width: 35%;
-        height: 35%;
-      }
+      justify-content: center;
     }
-    .recipe-card__product-tags-slider {
-      pointer-events: none;
-      cursor: auto;
+    .embla__button:disabled {
+      color: $border-input;
     }
+    .embla__button__svg {
+      width: 35%;
+      height: 35%;
+    }
+  }
+  .recipe-card__product-tags-slider {
+    pointer-events: none;
+    cursor: auto;
+  }
 }
 
 @media screen and (max-width: 767px) {

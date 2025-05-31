@@ -1,191 +1,191 @@
-@use '../../../styles/variables' as *;
+@use "../../../styles/variables" as *;
 .sort {
-    margin-left: auto;
-    display: inline-block;
-    &__content {
-        display: flex;
-        align-items: center;
-        gap: 27px;
-    }
-    &__list {
-        display: flex;
-        padding: 0;
-        margin: 0;
-        row-gap: 15px;
-        column-gap: 10px;
-        list-style-type: none;
-    }
-    &__item {
-        position: relative;
-        min-width: 50px;
-        text-align: center;
-        padding: 5px 24px 5px 10px;
-        border: 1px solid $accent-color;
-        border-radius: 50px;
-        background-color: transparent;
-        color: $accent-color;
-        font-size: 15px;
-        font-weight: 500;
-        line-height: 16px;
-        cursor: default;
-    }
-    &__item-close {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        width: 10px;
-        height: 10px;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        transition: 0.3s ease background-color;
-    }
+  margin-left: auto;
+  display: inline-block;
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 27px;
+  }
+  &__list {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    row-gap: 15px;
+    column-gap: 10px;
+    list-style-type: none;
+  }
+  &__item {
+    position: relative;
+    min-width: 50px;
+    text-align: center;
+    padding: 5px 24px 5px 10px;
+    border: 1px solid $accent-color;
+    border-radius: 50px;
+    background-color: transparent;
+    color: $accent-color;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 16px;
+    cursor: default;
+  }
+  &__item-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.3s ease background-color;
+  }
 
-    &__clear-btn {
-        text-decoration: underline;
-        background-color: transparent;
-        text-decoration-skip-ink: none;
-        white-space: nowrap;
-        border: none;
-        cursor: pointer;
-    }
+  &__clear-btn {
+    text-decoration: underline;
+    background-color: transparent;
+    text-decoration-skip-ink: none;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+  }
 
-    &__custom-select {
-        position: relative;
-        &.active {
-            .sort__custom-fields {
-                display: flex;
-            }
-            .sort__open-btn::after {
-                transform: translateX(-50%) translateY(-50%) rotate(0deg);
-            }
-        }
-    }
-    &__open-btn {
-        position: relative;
-        padding: 10px 36px 10px 12px;
-        min-width: 200px;
-        text-align: left;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid $border-input;
-        background-color: $light-color;
-        user-select: none;
-        cursor: pointer;
-        .btn__text {
-            font-weight: 500;
-            color: $text-color;
-        }
-        &:after {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateX(-50%) translateY(-50%) rotate(-180deg);
-            width: 24px;
-            height: 24px;
-            background: url('../../../assets/icons/sort/select-arrow.svg') center center/cover no-repeat;
-        }
-    }
-    &__custom-fields {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        padding: 4px;
-        row-gap: 2px;
-        left: 0;
-        right: 0;
-        border-radius: 4px;
-        border: 1px solid $border-input;
-        background-color: $light-color;
-        box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.1);
-        z-index: 3;
-    }
-    &__field {
-        position: relative;
+  &__custom-select {
+    position: relative;
+    &.active {
+      .sort__custom-fields {
         display: flex;
-        border-radius: 4px;
-        transition: 0.2s ease-out background-color;
+      }
+      .sort__open-btn::after {
+        transform: translateX(-50%) translateY(-50%) rotate(0deg);
+      }
     }
-    &__label {
-        padding: 8px 12px 8px 38px;
-        display: block;
-        width: 100%;
-        color: $text-color;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        user-select: none;
-        background-color: transparent;
-        transition: 0.2s ease-out background-color;
-        &:hover ~ .sort__input-custom {
-            border-color: $text-color;
-        }
+  }
+  &__open-btn {
+    position: relative;
+    padding: 10px 36px 10px 12px;
+    min-width: 200px;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid $border-input;
+    background-color: $light-color;
+    user-select: none;
+    cursor: pointer;
+    .btn__text {
+      font-weight: 500;
+      color: $text-color;
     }
-    &__input {
-        appearance: none;
-        position: absolute;
-        top: 50%;
-        left: 12px;
-        width: 20px;
-        height: 20px;
-        transform: translateY(-50%);
-        z-index: 1;
-        cursor: pointer;
-        &:hover ~ .sort__input-custom {
-            border-color: $text-color;
-        }
-        &:checked ~ .sort__label {
-            background-color: #FAEDEB;
-        }
-        &:checked ~ .sort__input-custom {
-            background-color: $accent-color;
-            border-color: $accent-color;
-        }
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateX(-50%) translateY(-50%) rotate(-180deg);
+      width: 24px;
+      height: 24px;
+      background: url("../../../assets/icons/sort/select-arrow.svg") center center/cover no-repeat;
     }
-    &__input-custom {
-        position: absolute;
-        display: block;
-        top: 50%;
-        left: 12px;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        background: url('../../../assets/icons/sort/checkbox_checked.svg') center center/cover no-repeat;
-        background-color: transparent;
-        border-radius: 4px;
-        border: 1px solid #B9B9B9;
-        cursor: pointer;
-        transition: 0.2s ease-out border-color, 0.2s ease-out background-color;
+  }
+  &__custom-fields {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    padding: 4px;
+    row-gap: 2px;
+    left: 0;
+    right: 0;
+    border-radius: 4px;
+    border: 1px solid $border-input;
+    background-color: $light-color;
+    box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+  }
+  &__field {
+    position: relative;
+    display: flex;
+    border-radius: 4px;
+    transition: 0.2s ease-out background-color;
+  }
+  &__label {
+    padding: 8px 12px 8px 38px;
+    display: block;
+    width: 100%;
+    color: $text-color;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    transition: 0.2s ease-out background-color;
+    &:hover ~ .sort__input-custom {
+      border-color: $text-color;
     }
-    &__accept-btn {
-        padding: 8px 20px;
-        border-radius: 6px;
-        border: none;
-        background: $accent-color;
-        font-size: 14px;
-        font-weight: 600;
-        color: $light-color;
-        user-select: none;
-        cursor: pointer;
-        transition: 0.2s ease-out background-color;
-        &:hover {
-            background-color: $second-accent-color;
-        }
+  }
+  &__input {
+    appearance: none;
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+    z-index: 1;
+    cursor: pointer;
+    &:hover ~ .sort__input-custom {
+      border-color: $text-color;
     }
+    &:checked ~ .sort__label {
+      background-color: #faedeb;
+    }
+    &:checked ~ .sort__input-custom {
+      background-color: $accent-color;
+      border-color: $accent-color;
+    }
+  }
+  &__input-custom {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: url("../../../assets/icons/sort/checkbox_checked.svg") center center/cover no-repeat;
+    background-color: transparent;
+    border-radius: 4px;
+    border: 1px solid #b9b9b9;
+    cursor: pointer;
+    transition: 0.2s ease-out border-color, 0.2s ease-out background-color;
+  }
+  &__accept-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    background: $accent-color;
+    font-size: 14px;
+    font-weight: 600;
+    color: $light-color;
+    user-select: none;
+    cursor: pointer;
+    transition: 0.2s ease-out background-color;
+    &:hover {
+      background-color: $second-accent-color;
+    }
+  }
 }
 
 @media screen and (max-width: 767px) {
-    .sort {
-        &__open-btn {
-            min-width: 180px;
-        }
+  .sort {
+    &__open-btn {
+      min-width: 180px;
     }
+  }
 }

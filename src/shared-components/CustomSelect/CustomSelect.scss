@@ -1,127 +1,127 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .custom-select {
-    display: inline-block;
+  display: inline-block;
+  position: relative;
+  &.active {
+    .custom-select__fields {
+      display: flex;
+    }
+    .custom-select__open-btn::after {
+      transform: translateX(-50%) translateY(-50%) rotate(0deg);
+    }
+  }
+  &__open-btn {
     position: relative;
-    &.active {
-        .custom-select__fields {
-            display: flex;
-        }
-        .custom-select__open-btn::after {
-            transform: translateX(-50%) translateY(-50%) rotate(0deg);
-        }
+    padding: 8px 36px 8px 12px;
+    font-size: 14px;
+    min-width: 180px;
+    text-align: left;
+    border-radius: 6px;
+    border: 1px solid $border-input;
+    background-color: $light-color;
+    user-select: none;
+    cursor: pointer;
+    .btn__text {
+      font-weight: 500;
+      color: $text-color;
     }
-    &__open-btn {
-        position: relative;
-        padding: 8px 36px 8px 12px;
-        font-size: 14px;
-        min-width: 180px;
-        text-align: left;
-        border-radius: 6px;
-        border: 1px solid $border-input;
-        background-color: $light-color;
-        user-select: none;
-        cursor: pointer;
-        .btn__text {
-            font-weight: 500;
-            color: $text-color;
-        }
-        &:after {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateX(-50%) translateY(-50%) rotate(-180deg);
-            width: 24px;
-            height: 24px;
-            background: url('../../assets/icons/sort/select-arrow.svg') center center/cover no-repeat;
-        }
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateX(-50%) translateY(-50%) rotate(-180deg);
+      width: 24px;
+      height: 24px;
+      background: url("../../assets/icons/sort/select-arrow.svg") center center/cover no-repeat;
     }
-    &__fields {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        padding: 4px;
-        row-gap: 2px;
-        left: 0;
-        right: 0;
-        border-radius: 4px;
-        border: 1px solid $border-input;
-        background-color: $light-color;
-        box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.1);
-        z-index: 3;
+  }
+  &__fields {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    padding: 4px;
+    row-gap: 2px;
+    left: 0;
+    right: 0;
+    border-radius: 4px;
+    border: 1px solid $border-input;
+    background-color: $light-color;
+    box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+  }
+  &__field {
+    position: relative;
+    display: flex;
+    border-radius: 4px;
+    transition: 0.2s ease-out background-color;
+  }
+  &__label {
+    padding: 8px 12px 8px 38px;
+    display: block;
+    width: 100%;
+    color: $text-color;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s ease-out background-color;
+    &:hover ~ .custom-select__input-custom {
+      border-color: $text-color;
     }
-    &__field {
-        position: relative;
-        display: flex;
-        border-radius: 4px;
-        transition: 0.2s ease-out background-color;
+  }
+  &__input {
+    appearance: none;
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+    z-index: 1;
+    cursor: pointer;
+    &:hover ~ .custom-select__input-custom {
+      border-color: $text-color;
     }
-    &__label {
-        padding: 8px 12px 8px 38px;
-        display: block;
-        width: 100%;
-        color: $text-color;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        user-select: none;
-        transition: 0.2s ease-out background-color;
-        &:hover ~ .custom-select__input-custom {
-            border-color: $text-color;
-        }
+    &:checked ~ .custom-select__label {
+      background-color: #faedeb;
     }
-    &__input {
-        appearance: none;
-        position: absolute;
-        top: 50%;
-        left: 12px;
-        width: 20px;
-        height: 20px;
-        transform: translateY(-50%);
-        z-index: 1;
-        cursor: pointer;
-        &:hover ~ .custom-select__input-custom {
-            border-color: $text-color;
-        }
-        &:checked ~ .custom-select__label {
-            background-color: #FAEDEB;
-        }
-        &:checked ~ .custom-select__input-custom {
-            background-color: $accent-color;
-            border-color: $accent-color;
-        }
+    &:checked ~ .custom-select__input-custom {
+      background-color: $accent-color;
+      border-color: $accent-color;
     }
-    &__input-custom {
-        position: absolute;
-        display: block;
-        top: 50%;
-        left: 12px;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        background: url('../../assets/icons/sort/checkbox_checked.svg') center center/cover no-repeat;
-        background-color: transparent;
-        border-radius: 4px;
-        border: 1px solid #B9B9B9;
-        cursor: pointer;
-        transition: 0.2s ease-out border-color, 0.2s ease-out background-color;
+  }
+  &__input-custom {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: url("../../assets/icons/sort/checkbox_checked.svg") center center/cover no-repeat;
+    background-color: transparent;
+    border-radius: 4px;
+    border: 1px solid #b9b9b9;
+    cursor: pointer;
+    transition: 0.2s ease-out border-color, 0.2s ease-out background-color;
+  }
+  &__accept-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    background: $accent-color;
+    font-size: 14px;
+    font-weight: 600;
+    color: $light-color;
+    user-select: none;
+    cursor: pointer;
+    transition: 0.2s ease-out background-color;
+    &:hover {
+      background-color: $second-accent-color;
     }
-    &__accept-btn {
-        padding: 8px 20px;
-        border-radius: 6px;
-        border: none;
-        background: $accent-color;
-        font-size: 14px;
-        font-weight: 600;
-        color: $light-color;
-        user-select: none;
-        cursor: pointer;
-        transition: 0.2s ease-out background-color;
-        &:hover {
-            background-color: $second-accent-color;
-        }
-    }
+  }
 }

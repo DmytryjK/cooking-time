@@ -1,67 +1,66 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .loading-data-btn {
-    // margin-top: 20px;
-    // height: 52px;
-    width: 100%;
-    padding: 15px 20px;
-    background: #D24A34;
-    border: none;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 22px;
-    color: #FDFDFD;
-    cursor: pointer;
-    transition: 0.2s ease-out background-color;
-    &:hover {
-        background-color: $second-accent-color;
+  // margin-top: 20px;
+  // height: 52px;
+  width: 100%;
+  padding: 15px 20px;
+  background: #d24a34;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  color: #fdfdfd;
+  cursor: pointer;
+  transition: 0.2s ease-out background-color;
+  &:hover {
+    background-color: $second-accent-color;
+  }
+  &__loading-dots {
+    display: none;
+  }
+  &__loading-dot {
+    animation-delay: 0.1s;
+    margin: 0 5px;
+    animation: {
+      direction: alternate;
+      duration: 0.5s;
+      iteration-count: infinite;
+      name: loadingDataAnimation;
+      play-state: running;
+      timing-function: ease-out;
     }
-    &__loading-dots {
-        display: none
+    border-radius: 100%;
+    display: block;
+    height: 10px;
+    margin: 0 5px;
+    width: 10px;
+    &:first-child {
+      animation-delay: 0s;
+      margin: 0;
     }
-    &__loading-dot {
-        animation-delay: .1s;
-        margin: 0 5px;
-        animation: {
-            direction: alternate;
-            duration: .5s;
-            iteration-count: infinite;
-            name: loadingDataAnimation;
-            play-state: running;
-            timing-function: ease-out;
-        }
-        border-radius: 100%;
-        display: block;
-        height: 10px;
-        margin: 0 5px;
-        width: 10px;
-        &:first-child {
-            animation-delay: 0s;
-            margin: 0;
-        }
-    
-        &:last-child {
-            animation-delay: .2s;
-            margin: 0;
-        }
+
+    &:last-child {
+      animation-delay: 0.2s;
+      margin: 0;
     }
-    &__loading-dots {
-        display: flex;
-        justify-content: center;
-    }
+  }
+  &__loading-dots {
+    display: flex;
+    justify-content: center;
+  }
 }
 
-
 @keyframes loadingDataAnimation {
-	0% {
-        transform: scale(.5);
-        background-color: white;
-    }
-    50% {
-        background-color: rgb(238, 238, 238);
-    }
-    100% {
-        transform: scale(1);
-        background-color: white;
-    }
+  0% {
+    transform: scale(0.5);
+    background-color: white;
+  }
+  50% {
+    background-color: rgb(238, 238, 238);
+  }
+  100% {
+    transform: scale(1);
+    background-color: white;
+  }
 }

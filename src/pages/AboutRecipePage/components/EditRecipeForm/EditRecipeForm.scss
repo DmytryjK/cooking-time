@@ -1,52 +1,52 @@
-@use '../../../../styles/variables' as *;
+@use "../../../../styles/variables" as *;
 .edit-recipe {
-    &__back-btn {
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        gap: 13px;
-        position: absolute;
-        left: 0px;
-        width: auto;
-        background-color: transparent;
-        font-size: 14px;
-        font-weight: 600;
-        border: none;
-        color: $accent-color;
-        cursor: pointer;
-        text-decoration: underline;
-        text-decoration-skip-ink: none;
-        text-underline-offset: 3px;
-        text-decoration-color: transparent;
-        transition: 0.2s ease-out text-decoration-color;
-        &:hover {
-            text-decoration-color: $accent-color;
-        }
+  &__back-btn {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 13px;
+    position: absolute;
+    left: 0px;
+    width: auto;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    color: $accent-color;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 3px;
+    text-decoration-color: transparent;
+    transition: 0.2s ease-out text-decoration-color;
+    &:hover {
+      text-decoration-color: $accent-color;
     }
-    &__title {
-        color: $bgcolor;
-        font-size: 25px;
-        font-weight: 600;
-        text-align: center;
-    }
-    &__descr {
-        margin-top: 40px;
-        color: $bgcolor;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-    }
+  }
+  &__title {
+    color: $bgcolor;
+    font-size: 25px;
+    font-weight: 600;
+    text-align: center;
+  }
+  &__descr {
+    margin-top: 40px;
+    color: $bgcolor;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
 }
 
 @media screen and (max-width: 767px) {
-    .edit-recipe {
-        position: relative;
-        padding-top: 40px;
-        &__back-btn {
-            top: 0;
-        }
-        &__descr {
-            margin-top: 20px;
-        }
+  .edit-recipe {
+    position: relative;
+    padding-top: 40px;
+    &__back-btn {
+      top: 0;
     }
+    &__descr {
+      margin-top: 20px;
+    }
+  }
 }

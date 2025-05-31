@@ -1,335 +1,338 @@
-@use '../../styles/variables' as *;
+@use "../../styles/variables" as *;
 .form {
-    margin-top: 50px;
-    margin-bottom: auto;
-    max-width: 100%;
-    &__fields-wrapper {
-        padding: 50px;
-        border-radius: 8px;
-        background-color: $bgInputs;
-        &:not(:first-child) {
-            margin-top: 10px;
+  margin-top: 50px;
+  margin-bottom: auto;
+  max-width: 100%;
+  &__fields-wrapper {
+    padding: 50px;
+    border-radius: 8px;
+    background-color: $bgInputs;
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+  }
+  &__label {
+    color: $accent-color;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 140%;
+  }
+  &__input {
+    display: block;
+    max-width: 508px;
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 8px;
+    padding: 14px 14px 14px 12px;
+    border: 1px solid $border-input;
+    background: $light-color;
+    color: $bgcolor;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 140%;
+    outline: none;
+    transition: 0.2s ease-out border-color;
+    &:focus {
+      border-color: $accent-color;
+    }
+  }
+  &__name-recepie {
+    margin-bottom: 20px;
+  }
+  &__field-category {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .custom-select {
+    max-width: 508px;
+    &__open-btn {
+      font-size: 16px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      width: 100%;
+    }
+  }
+  &__upload-label {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 150px;
+    background-color: white;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .timer {
+    margin-top: 30px;
+    border: none;
+    &__wrapper {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    &__label-hours,
+    &__label-minutes {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: $text-color;
+    }
+    &__input-hours,
+    &__input-minutes {
+      margin: 0;
+      padding: 10px 24px;
+      text-align: center;
+      max-width: 90px;
+      color: $text-color;
+      -moz-appearance: textfield;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      &::placeholder {
+        color: $border-input;
+      }
+      &:focus {
+        &::placeholder {
+          color: transparent;
         }
+      }
     }
-    &__label {
-        color: $accent-color;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 140%;
+  }
+
+  .tagsForm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    border: none;
+    &__tagList {
+      max-width: 490px;
+      width: 100%;
+      list-style-type: none;
     }
-    &__input {
+    &__tagName {
+      margin: 0;
+    }
+    &__top-wrapper {
+      margin-top: 8px;
+      max-width: 508px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    &__search-btn {
+      position: relative;
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 6px;
+      border: 1px solid $border-input;
+      background: $light-color;
+      cursor: pointer;
+      &:after {
+        content: "";
+        position: absolute;
         display: block;
-        max-width: 508px;
-        width: 100%;
-        margin-top: 8px;
-        border-radius: 8px;
-        padding: 14px 14px 14px 12px;
-        border: 1px solid $border-input;
-        background: $light-color;
-        color: $bgcolor;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 140%;
+        top: 50%;
+        right: 50%;
+        transform: translateX(50%) translateY(-50%);
+        background: url("../../assets/icons/plus.svg") center center/cover no-repeat;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  &-descr {
+    &__editor {
+      max-width: 792px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid grey;
+      color: $text-color;
+      font-size: inherit;
+    }
+    .ql-editor {
+      max-height: 350px;
+      &::-webkit-scrollbar {
+        width: 9px;
         outline: none;
-        transition: 0.2s ease-out border-color;
-        &:focus {
-            border-color: $accent-color;
-        }
-    }
-    &__name-recepie {
-        margin-bottom: 20px;
-    }
-    &__field-category {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .custom-select {
-        max-width: 508px;
-        &__open-btn {
-            font-size: 16px;
-            padding-top: 14px;
-            padding-bottom: 14px;
-            width: 100%;
-        }
-    }
-    &__upload-label {
-        position: relative;
-        margin-top: 20px;
-        margin-bottom: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 150px;
-        background-color: white;
-        border-radius: 10px;
+        border: none;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: $light-color;
+        outline: none;
+        border: none;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: $border-input;
+        outline: none;
+        border-radius: 5px;
+        border: 2px solid $light-color;
         cursor: pointer;
+      }
     }
-    .timer {
-        margin-top: 30px;
-        border: none;
-        &__wrapper {
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-        &__label-hours, &__label-minutes {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: $text-color;
-        }
-        &__input-hours, &__input-minutes {
-            margin: 0;
-            padding: 10px 24px;
-            text-align: center;
-            max-width: 90px;
-            color: $text-color;
-            -moz-appearance: textfield;
-            &::-webkit-outer-spin-button,
-            &::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-            &::placeholder {
-                color: $border-input;
-            }
-            &:focus {
-                &::placeholder {
-                    color: transparent;
-                }
-            }
-        }
+    .quill.form-descr__editor,
+    .ql-toolbar.ql-snow {
+      border-color: $border-input;
     }
-    
-    .tagsForm {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
-        width: 100%;
-        height: 100%;
-        border: none;
-        &__tagList {
-            max-width: 490px;
-            width: 100%;
-            list-style-type: none;
-        }
-        &__tagName {
-            margin: 0;
-        }
-        &__top-wrapper {
-            margin-top: 8px;
-            max-width: 508px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        &__search-btn {
-            position: relative;
-            flex-shrink: 0;
-            width: 52px;
-            height: 52px;
-            border-radius: 6px;
-            border: 1px solid $border-input;
-            background: $light-color;
-            cursor: pointer;
-            &:after {
-                content: '';
-                position: absolute;
-                display: block;
-                top: 50%;
-                right: 50%;
-                transform: translateX(50%) translateY(-50%);
-                background: url('../../assets/icons/plus.svg') center center/cover no-repeat;
-                width: 18px;
-                height: 18px;
-                
-            }
-        }
+    .ql-container.ql-snow {
+      padding: 20px;
+      border: none;
+      border-radius: 0 0 10px 10px;
+      background-color: #fdfdfd;
     }
-    
+    .ql-editor,
+    .ql-blank {
+      padding: 0;
+      font-size: 16px;
+    }
+    .ql-editor.ql-blank::before {
+      color: $border-input;
+      font-family: Manrope;
+      left: 20px;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 140%;
+      font-style: normal;
+    }
+  }
 
-    &-descr{
-        &__editor {
-            max-width: 792px;
-            margin-top: 10px;
-            border-radius: 10px;
-            border: 1px solid grey;
-            color: $text-color;
-            font-size: inherit;
-        }
-        .ql-editor {
-            max-height: 350px;
-            &::-webkit-scrollbar {
-                width: 9px;
-                outline: none;
-                border: none;
-            }
-            &::-webkit-scrollbar-track {
-                background-color: $light-color;
-                outline: none;
-                border: none;
-            }
-            &::-webkit-scrollbar-thumb {
-                background-color: $border-input;
-                outline: none;
-                border-radius: 5px;
-                border: 2px solid $light-color;
-                cursor: pointer;
-            }
-        }
-        .quill.form-descr__editor, .ql-toolbar.ql-snow {
-            border-color: $border-input;
-        }
-        .ql-container.ql-snow {
-            padding: 20px;
-            border: none;
-            border-radius: 0 0 10px 10px;
-            background-color: #FDFDFD;
-        }
-        .ql-editor, .ql-blank {
-            padding: 0;
-            font-size: 16px;
-        }
-        .ql-editor.ql-blank::before {
-            color: $border-input;
-            font-family: Manrope;
-            left: 20px ;
-            font-size: 16px;
-            font-weight: 500;
-            line-height: 140%;
-            font-style: normal;
-        }
+  &__submit {
+    margin: 0 auto;
+    margin-top: 40px;
+    display: block;
+    text-align: center;
+    border-radius: 6px;
+    border: none;
+    max-width: 250px;
+    width: 100%;
+    padding: 15px 20px;
+    background: $accent-color;
+    color: $light-color;
+    font-family: Manrope;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    cursor: pointer;
+    transition: 0.2s ease-out background-color;
+    &:hover {
+      background-color: $second-accent-color;
+    }
+  }
+
+  .addRecipe-btn {
+    &__loading-dot {
+      animation-delay: 0.1s;
+      margin: 0 5px;
+      animation: {
+        direction: alternate;
+        duration: 0.5s;
+        iteration-count: infinite;
+        name: loadingAnimation;
+        play-state: running;
+        timing-function: ease-out;
+      }
+      border-radius: 100%;
+      display: block;
+      height: 10px;
+      margin: 0 5px;
+      width: 10px;
+      &:first-child {
+        animation-delay: 0s;
+        margin: 0;
+      }
+
+      &:last-child {
+        animation-delay: 0.2s;
+        margin: 0;
+      }
+    }
+    &__loading-dots {
+      display: flex;
+      justify-content: center;
     }
 
-    &__submit {
-        margin: 0 auto;
-        margin-top: 40px;
-        display: block;
-        text-align: center;
-        border-radius: 6px;
-        border: none;
-        max-width: 250px;
-        width: 100%;
-        padding: 15px 20px;
-        background: $accent-color;
-        color: $light-color;
-        font-family: Manrope;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-        cursor: pointer;
-        transition: 0.2s ease-out background-color;
-        &:hover {
-            background-color: $second-accent-color;
-        }
+    &.loading {
+      font-size: 0px;
+      padding: 21px 10px;
     }
-
-    .addRecipe-btn {
-        &__loading-dot {
-            animation-delay: .1s;
-            margin: 0 5px;
-            animation: {
-                direction: alternate;
-                duration: .5s;
-                iteration-count: infinite;
-                name: loadingAnimation;
-                play-state: running;
-                timing-function: ease-out;
-            }
-            border-radius: 100%;
-            display: block;
-            height: 10px;
-            margin: 0 5px;
-            width: 10px;
-            &:first-child {
-                animation-delay: 0s;
-                margin: 0;
-            }
-    
-            &:last-child {
-                animation-delay: .2s;
-                margin: 0;
-            }
-        }
-        &__loading-dots {
-            display: flex;
-			justify-content: center;
-        }
-
-        &.loading {
-            font-size: 0px;
-            padding: 21px 10px;
-        }
-    }   
+  }
 }
 
 @keyframes loadingAnimation {
-	0% {
-        transform: scale(.5);
-        background-color: white;
-    }
-    50% {
-        background-color: white;
-    }
-    100% {
-        transform: scale(1);
-        background-color: white;
-    }
+  0% {
+    transform: scale(0.5);
+    background-color: white;
+  }
+  50% {
+    background-color: white;
+  }
+  100% {
+    transform: scale(1);
+    background-color: white;
+  }
 }
 
 @media screen and (max-width: 767px) {
-    .form {
-        margin-top: 25px;
-        &__fields-wrapper{
-            padding: 25px;
-        }
-        &__label {
-            font-size: 16px;
-        }
+  .form {
+    margin-top: 25px;
+    &__fields-wrapper {
+      padding: 25px;
     }
+    &__label {
+      font-size: 16px;
+    }
+  }
 }
 
 @media screen and (max-width: 550px) {
-    .form {
-        &__input {
-            font-size: 14px;
-        }
-        &__fields-wrapper{
-            padding: 20px 10px;
-        }
-        .upload-photo {
-            flex-direction: column;
-            &__wrapper {
-                min-width: 100%;
-            }
-        }
-        &-descr{
-            .ql-editor {
-                height: 250px;
-                min-height: 250px;
-            }
-            .ql-container.ql-snow {
-                padding: 8px;
-            }
-            .ql-editor, .ql-blank {
-                font-size: 14px;
-            }
-            .ql-editor.ql-blank::before {
-                left: 8px ;
-                font-size: 14px;
-            }
-        }
-        .timer__wrapper {
-            gap: 10px;
-        }
-        .sort-unit__label {
-            padding: 5px 8px;
-        }
+  .form {
+    &__input {
+      font-size: 14px;
     }
+    &__fields-wrapper {
+      padding: 20px 10px;
+    }
+    .upload-photo {
+      flex-direction: column;
+      &__wrapper {
+        min-width: 100%;
+      }
+    }
+    &-descr {
+      .ql-editor {
+        height: 250px;
+        min-height: 250px;
+      }
+      .ql-container.ql-snow {
+        padding: 8px;
+      }
+      .ql-editor,
+      .ql-blank {
+        font-size: 14px;
+      }
+      .ql-editor.ql-blank::before {
+        left: 8px;
+        font-size: 14px;
+      }
+    }
+    .timer__wrapper {
+      gap: 10px;
+    }
+    .sort-unit__label {
+      padding: 5px 8px;
+    }
+  }
 }
